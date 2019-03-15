@@ -48,7 +48,7 @@ void Motor_task(void* pvParameters);
 /*----------------------------Configuration----------------------------------*/
 
 // Robot registors
-extern int16_t usRegHoldingBuf[REG_HOLDING_NREGS];
+extern int32_t usRegHoldingBuf[REG_HOLDING_NREGS];
 extern int32_t MotorSpeed[4];
 u8 MoveInteval = 5;
 
