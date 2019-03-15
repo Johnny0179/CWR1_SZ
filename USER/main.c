@@ -53,9 +53,6 @@ u8 MoveInteval = 5;
 
 const u8 RefreshRate = 50;
 
-// CAN
-extern u8 canbuf[8];
-
 /*----------------------------Start Implemention-------------------------*/
 
 int main(void) {

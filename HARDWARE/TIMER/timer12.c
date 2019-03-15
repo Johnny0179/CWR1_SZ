@@ -49,8 +49,8 @@ void TIM12_CH1_Cap_Init(u32 arr, u16 psc) {
   TIM_Cmd(TIM12, ENABLE);
 
   NVIC_InitStructure.NVIC_IRQChannel = TIM8_BRK_TIM12_IRQn;
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;  //抢占优先级3
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;         //子优先级3
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 15;  //preemption priority 15
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;         //FreeRTOS doesn't have subpriority
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;            // IRQ通道使能
   NVIC_Init(&NVIC_InitStructure);  //根据指定的参数初始化VIC寄存器、
 }
