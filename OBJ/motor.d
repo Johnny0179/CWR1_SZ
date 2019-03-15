@@ -36,3 +36,5 @@
 ..\obj\motor.o: ..\FWLIB\inc\stm32f4xx_dac.h
 ..\obj\motor.o: ..\FWLIB\inc\stm32f4xx_dcmi.h
 ..\obj\motor.o: ..\FWLIB\inc\stm32f4xx_fsmc.h
+..\obj\motor.o: ..\PID\PID.h
+..\obj\motor.o: ..\HARDWARE\TIMER\timer.h

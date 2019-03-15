@@ -52,13 +52,13 @@ vMBPortSerialEnable( BOOL xRxEnable, BOOL xTxEnable )
     //使能接收和接收中断
     USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
     //MAX485操作 低电平为接收模式
-    GPIO_ResetBits(GPIOG,GPIO_Pin_8);
+    //GPIO_ResetBits(GPIOG,GPIO_Pin_8);
   }
   else
   {
     USART_ITConfig(USART1, USART_IT_RXNE, DISABLE); 
     //MAX485操作 高电平为发送模式
-    GPIO_SetBits(GPIOG,GPIO_Pin_8);
+    //GPIO_SetBits(GPIOG,GPIO_Pin_8);
   }
 
   if(xTxEnable)
@@ -130,14 +130,14 @@ xMBPortSerialInit( UCHAR ucPORT, ULONG ulBaudRate, UCHAR ucDataBits, eMBParity e
   NVIC_Init(&NVIC_InitStructure);
   
   //最后配置485发送和接收模式
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOG,ENABLE); //使能GPIOD时钟
+/*	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOG,ENABLE); //使能GPIOD时钟
 	//GPIOG8初始化设置
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8; 
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//普通输出模式
   GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//推挽输出
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;	//速度100MHz
   GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//上拉
-  GPIO_Init(GPIOG, &GPIO_InitStructure); 
+  GPIO_Init(GPIOG, &GPIO_InitStructure); */
 
   return TRUE; 
 }

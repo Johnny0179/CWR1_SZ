@@ -1,4 +1,8 @@
 #include "motor.h"
+#include "PID.h"
+
+extern pidData_t PIDMotor1;
+extern pidData_t PIDMotor3;
 
 /*Init TIM1 in PWM mode*/
 /*Frequency in Hz*/
@@ -70,6 +74,9 @@ void TIM1_PWM_Init(u32 freq) {
 
   /* Main Output Enable */
   TIM_CtrlPWMOutputs(TIM1, ENABLE);
+
+  // Initialize the motor with speed = 0.
+  TIM1_PWM_SET(freq, 100);
 }
 
 /**
@@ -117,14 +124,12 @@ void Motor_Init(void) {
 
   GPIO_SetBits(GPIOD, GPIO_Pin_2 | GPIO_Pin_3);
   GPIO_ResetBits(GPIOD, GPIO_Pin_0 | GPIO_Pin_1);
-
-  // Initialize the motor with speed = 0.
-  TIM1_PWM_SET(20000, 100);
 }
 
 void TIM1_PWM_SET(u32 freq, u32 Duty) {
   TIM1->CCR1 = (((168000000 / 1) / freq) - 1) * Duty / 100;
   TIM1->CCR2 = (((168000000 / 1) / freq) - 1) * Duty / 100;
+
   TIM1->CCR3 = (((168000000 / 1) / freq) - 1) * Duty / 100;
   TIM1->CCR4 = (((168000000 / 1) / freq) - 1) * Duty / 100;
 }
@@ -139,18 +144,3 @@ void MoveDown(void) {
   GPIO_SetBits(GPIOD, GPIO_Pin_0 | GPIO_Pin_1);
 }
 
-void MotorCrl(u32 direction, u32 speed) {
-  switch (direction) {
-    case moveup:
-      MoveUp();
-      break;
-      // TIM1_PWM_SET(20000, (100 - speed));
-    case movedown:
-      MoveDown();
-      break;
-      // TIM1_PWM_SET(20000, (100 - speed));
-    case stop:;
-    default:;
-  }
-  TIM1_PWM_SET(20000, (100 - speed));
-}

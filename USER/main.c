@@ -1,8 +1,14 @@
+/*-------------------------------Includes-------------------------------*/
 /*STM32*/
 #include "Motor.h"
+#include "can.h"
 #include "delay.h"
 #include "led.h"
 #include "sys.h"
+#include "timer.h"
+
+/*PID*/
+#include "PID.h"
 
 /*FreeRTOS*/
 #include "FreeRTOS.h"
@@ -11,10 +17,7 @@
 /*FreeModbus*/
 #include "FreeModbus.h"
 
-/************************************************
-
-************************************************/
-
+/*--------------------------------TASK---------------------------------*/
 //任务优先级
 #define START_TASK_PRIO 1
 //任务堆栈大小
@@ -25,16 +28,25 @@ TaskHandle_t StartTask_Handler;
 void start_task(void* pvParameters);
 
 //任务优先级
-#define Modbus_TASK_PRIO 4
+#define Modbus_TASK_PRIO 2
 //任务堆栈大小
-#define Modbus_STK_SIZE 128
+#define Modbus_STK_SIZE 50
 //任务句柄
 TaskHandle_t ModbusTask_Handler;
 //任务函数
 void Modbus_task(void* pvParameters);
 
 //任务优先级
-#define Motor_TASK_PRIO 3
+#define CAN_TASK_PRIO 3
+//任务堆栈大小
+#define CAN_STK_SIZE 50
+//任务句柄
+TaskHandle_t CANTask_Handler;
+//任务函数
+void CAN_task(void* pvParameters);
+
+//任务优先级
+#define Motor_TASK_PRIO 4
 //任务堆栈大小
 #define Motor_STK_SIZE 50
 //任务句柄
@@ -42,23 +54,19 @@ TaskHandle_t MotorTask_Handler;
 //任务函数
 void Motor_task(void* pvParameters);
 
-
-
-/*//任务优先级
-#define LED0_TASK_PRIO 2
-//任务堆栈大小
-#define LED0_STK_SIZE 50
-//任务句柄
-TaskHandle_t LED0Task_Handler;
-//任务函数
-void led0_task(void* pvParameters);*/
+/*----------------------------Configuration----------------------------------*/
 
 // Robot registors
-extern uint16_t usRegHoldingBuf[REG_HOLDING_NREGS];
-
+extern int32_t usRegHoldingBuf[REG_HOLDING_NREGS];
+extern int32_t MotorSpeed[4];
 u8 MoveInteval = 5;
 
-const int freq = 20000;  // Freq
+const u8 RefreshRate = 50;
+
+// CAN
+extern u8 canbuf[8];
+
+/*----------------------------Start Implemention-------------------------*/
 
 int main(void) {
   //设置系统中断优先级分组4
@@ -69,15 +77,9 @@ int main(void) {
   //初始化LED端口
   LED_Init();
 
-  // Freq=20k,DutyRatio=50
-  TIM1_PWM_Init(freq);
-  Motor_Init();
+  // Motor Init
+  MotorInit();
 
-  // Set the Motor speed.
-  usRegHoldingBuf[0] = moveup;  // Direction
-  usRegHoldingBuf[1] = 0;       // Speed
-  usRegHoldingBuf[2] = ModeManual;
-  usRegHoldingBuf[3] = MoveInteval;
 
   //创建开始任务
   xTaskCreate((TaskFunction_t)start_task,    //任务函数
@@ -90,13 +92,15 @@ int main(void) {
   return 0;
 }
 
+/*------------------------------TASK Functions------------------------------*/
+
 //开始任务任务函数
 static void start_task(void* pvParameters) {
   taskENTER_CRITICAL();  //进入临界区
-/*  //创建LED0任务
-  xTaskCreate((TaskFunction_t)led0_task, (const char*)"led0_task",
-              (uint16_t)LED0_STK_SIZE, (void*)NULL, (UBaseType_t)LED0_TASK_PRIO,
-              (TaskHandle_t*)&LED0Task_Handler);*/
+  //创建CAN任务
+  xTaskCreate((TaskFunction_t)CAN_task, (const char*)"CAN_task",
+              (uint16_t)CAN_STK_SIZE, (void*)NULL, (UBaseType_t)CAN_TASK_PRIO,
+              (TaskHandle_t*)&CANTask_Handler);
   //创建Modbus任务
   xTaskCreate((TaskFunction_t)Modbus_task, (const char*)"Modbus_task",
               (uint16_t)Modbus_STK_SIZE, (void*)NULL,
@@ -111,40 +115,80 @@ static void start_task(void* pvParameters) {
   taskEXIT_CRITICAL();             //退出临界区
 }
 
-/*// LED0任务函数
-static void led0_task(void* pvParameters) {
+// CAN任务函数
+static void CAN_task(void* pvParameters) {
+  static u8 i = 0;
+  static u8 canbuf[8];
+  CAN1_Mode_Init(CAN_SJW_1tq, CAN_BS2_6tq, CAN_BS1_7tq, 6,
+                 CAN_Mode_Normal);  // CAN初始化正常模式,波特率500Kbps
   while (1) {
-    LED0 = ~LED0;
-		vTaskDelay(200);
+    for (i = 0; i < 8; i++) {
+      //填充发送缓冲区
+      canbuf[i] = usRegHoldingBuf[i];
+    }
+
+    //发送8个字节
+    if (!CAN1_Send_Msg(canbuf, 8)) LED0 = !LED0;
+
+    //接收
+    if (CAN1_Receive_Msg(canbuf)) LED1 = !LED1;
+
+    vTaskDelay(RefreshRate);  // 20ms刷新一次
   }
-}*/
+}
 
 // Modbus任务函数
 static void Modbus_task(void* pvParameters) {
   // Modbus Init
-  eMBInit(MB_RTU, 0x0A, 0x01, 9600, MB_PAR_NONE);
+  eMBInit(MB_RTU, 0x0A, 0x01, 19200, MB_PAR_NONE);
   eMBEnable();
   while (1) {
     eMBPoll();
-		vTaskDelay(1);//?为什么需要Delay?
+    // 20ms刷新一次，Delay期间任务被BLOCK，可以执行其他任务
+    vTaskDelay(RefreshRate);
   }
 }
 
 // Motor任务
 static void Motor_task(void* pvParameters) {
-  while (1) {
-    /*Mannual Mode*/
-    if(usRegHoldingBuf[2]==0){
-    MotorCrl(usRegHoldingBuf[0], usRegHoldingBuf[1]);
-    delay_ms(1);}
+  /*Motor*/
+  // Motor Define
+  MOTOR Motor1;
+  MOTOR Motor2;
+  MOTOR Motor3;
+  // MOTOR Motor4;
 
-    /*Auto Mode*/
-    if(usRegHoldingBuf[2]==1){
-      MotorCrl(2, usRegHoldingBuf[1]);//MoveUp
-      delay_ms(usRegHoldingBuf[3]*1000);
-      MotorCrl(1, usRegHoldingBuf[1]);//MoveUp
-      delay_ms(usRegHoldingBuf[3]*1000); 
-  }
+  // PID Define
+  pidData_t PIDMotor1;
+  pidData_t PIDMotor2;
+  pidData_t PIDMotor3;
+  // pidData_t PIDMotor4;
+
+  MotorInitConfig(1, &Motor1);
+  MotorInitConfig(2, &Motor2);
+  MotorInitConfig(3, &Motor3);
+
+  // PID Init
+  pid_Init(P, I, D, &PIDMotor1);
+  pid_Init(P, I, D, &PIDMotor2);
+  pid_Init(P, I, D, &PIDMotor3);
+
+  while (1) {
+    // usRegHoldingBuf[0]=Motor1.direction;
+    MotorCtrl(&Motor1,&PIDMotor1);
+    usRegHoldingBuf[3]=Motor1.MotorSpeed_mmps;
+
+  MotorCtrl(&Motor2,&PIDMotor2);
+  usRegHoldingBuf[4]=Motor2.MotorSpeed_mmps;
+
+  MotorCtrl(&Motor3,&PIDMotor3);
+  usRegHoldingBuf[5]=Motor3.MotorSpeed_mmps;
+
+  /*Debug*/
+  usRegHoldingBuf[7]=Motor3.PWM;
+  usRegHoldingBuf[8]=Motor3.CmdSpeed;
+  //MotorCtrl(Motor4,PIDMotor4);
+  vTaskDelay(10);  //Delay期间任务被BLOCK，可以执行其他任务
   }
 }
 
