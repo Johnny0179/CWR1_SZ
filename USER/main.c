@@ -11,8 +11,8 @@
 
 /*FreeRTOS*/
 #include "FreeRTOS.h"
+//#include "queue.h"
 #include "task.h"
-#include "queue.h"
 
 /*FreeModbus*/
 #include "FreeModbus.h"
@@ -48,30 +48,11 @@ void Motor_task(void* pvParameters);
 /*----------------------------Configuration----------------------------------*/
 
 // Robot registors
-extern int32_t usRegHoldingBuf[REG_HOLDING_NREGS];
+extern int16_t usRegHoldingBuf[REG_HOLDING_NREGS];
 extern int32_t MotorSpeed[4];
 u8 MoveInteval = 5;
 
 const u8 RefreshRate = 50;
-
-/*----------------------------Queue----------------------------------*/
-#define Message_Queue_SIZE
-
-#define Motor1_Queue_SIZE
-#define Motor2_Queue_SIZE
-#define Motor3_Queue_SIZE
-#define Motor4_Queue_SIZE
-#define Motor5_Queue_SIZE
-#define Motor6_Queue_SIZE
-
-QueueHandle_t Message_Queue;
-
-QueueHandle_t Motor1_Queue;
-QueueHandle_t Motor2_Queue;
-QueueHandle_t Motor3_Queue;
-QueueHandle_t Motor4_Queue;
-QueueHandle_t Motor5_Queue;
-QueueHandle_t Motor6_Queue;
 
 /*----------------------------Start Implemention-------------------------*/
 

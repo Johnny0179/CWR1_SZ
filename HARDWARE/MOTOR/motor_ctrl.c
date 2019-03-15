@@ -9,6 +9,7 @@ extern int32_t usRegHoldingBuf[REG_HOLDING_NREGS];
 void MotorInit(void) {
   // Freq=20k,DutyRatio=50
   TIM1_PWM_Init(PWMfreq);
+  TIM8_PWM_Init(PWMfreq);
 
   Motor_Init();
 
@@ -62,6 +63,18 @@ void MotorCtrl(struct MOTOR_DATA *motor, struct PID_DATA *pid) {
       break;
     case 3:
       TIM1->CCR2 = (((168000000 / 1) / PWMfreq) - 1) * (100 - motor->PWM) / 100;
+      break;
+    case 4:
+      TIM1->CCR1 = (((168000000 / 1) / PWMfreq) - 1) * (100 - motor->PWM) / 100;
+      break;
+    case 5:
+      TIM8->CCR1 = (((168000000 / 1) / PWMfreq) - 1) * (100 - motor->PWM) / 100;
+      break;
+    case 6:
+      TIM8->CCR2 = (((168000000 / 1) / PWMfreq) - 1) * (100 - motor->PWM) / 100;
+      break;
+    default:
+      break;
   }
 }
 

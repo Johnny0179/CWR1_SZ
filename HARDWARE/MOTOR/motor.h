@@ -34,7 +34,9 @@ void MoveDown(void);
 
 
 void TIM1_Config(void);
+void TIM8_Config(void);
 void TIM1_PWM_Init(u32 freq);
+void TIM8_PWM_Init(u32 freq);
 
 void TIM1_PWM_SET(u32 freq,u32 Duty);
 

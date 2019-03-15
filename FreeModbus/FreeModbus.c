@@ -1,6 +1,5 @@
 #include "FreeModbus.h"
 
-
 /* -------------------------Registors--------------------------------*/
 
 // InputBuf
@@ -11,13 +10,11 @@ uint16_t usRegInputBuf[REG_INPUT_NREGS] = {
 uint16_t usRegInputStart = REG_INPUT_START;
 
 // HoldingBuf, Robot State
-int32_t usRegHoldingBuf[REG_HOLDING_NREGS] = {
-    2, 0, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0,
+int16_t usRegHoldingBuf[REG_HOLDING_NREGS] = {
+    2,      0,      0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0,
     0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000};
 
 uint16_t usRegHoldingStart = REG_HOLDING_START;
-
-
 
 // CoilsBuf
 uint8_t ucRegCoilsBuf[REG_COILS_SIZE / 8] = {0x00, 0x00};
