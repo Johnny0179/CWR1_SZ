@@ -1,7 +1,6 @@
 /*-------------------------------Includes-------------------------------*/
 /*STM32*/
 #include "Motor.h"
-#include "can.h"
 #include "delay.h"
 #include "led.h"
 #include "sys.h"
@@ -35,15 +34,6 @@ void start_task(void* pvParameters);
 TaskHandle_t ModbusTask_Handler;
 //任务函数
 void Modbus_task(void* pvParameters);
-
-//任务优先级
-#define CAN_TASK_PRIO 3
-//任务堆栈大小
-#define CAN_STK_SIZE 50
-//任务句柄
-TaskHandle_t CANTask_Handler;
-//任务函数
-void CAN_task(void* pvParameters);
 
 //任务优先级
 #define Motor_TASK_PRIO 4
@@ -80,7 +70,6 @@ int main(void) {
   // Motor Init
   MotorInit();
 
-
   //创建开始任务
   xTaskCreate((TaskFunction_t)start_task,    //任务函数
               (const char*)"start_task",     //任务名称
@@ -113,28 +102,6 @@ static void start_task(void* pvParameters) {
 
   vTaskDelete(StartTask_Handler);  //删除开始任务
   taskEXIT_CRITICAL();             //退出临界区
-}
-
-// CAN任务函数
-static void CAN_task(void* pvParameters) {
-  static u8 i = 0;
-  static u8 canbuf[8];
-  CAN1_Mode_Init(CAN_SJW_1tq, CAN_BS2_6tq, CAN_BS1_7tq, 6,
-                 CAN_Mode_Normal);  // CAN初始化正常模式,波特率500Kbps
-  while (1) {
-    for (i = 0; i < 8; i++) {
-      //填充发送缓冲区
-      canbuf[i] = usRegHoldingBuf[i];
-    }
-
-    //发送8个字节
-    if (!CAN1_Send_Msg(canbuf, 8)) LED0 = !LED0;
-
-    //接收
-    if (CAN1_Receive_Msg(canbuf)) LED1 = !LED1;
-
-    vTaskDelay(RefreshRate);  // 20ms刷新一次
-  }
 }
 
 // Modbus任务函数
@@ -175,20 +142,19 @@ static void Motor_task(void* pvParameters) {
 
   while (1) {
     // usRegHoldingBuf[0]=Motor1.direction;
-    MotorCtrl(&Motor1,&PIDMotor1);
-    usRegHoldingBuf[3]=Motor1.MotorSpeed_mmps;
+    MotorCtrl(&Motor1, &PIDMotor1);
+    usRegHoldingBuf[3] = Motor1.MotorSpeed_mmps;
 
-  MotorCtrl(&Motor2,&PIDMotor2);
-  usRegHoldingBuf[4]=Motor2.MotorSpeed_mmps;
+    MotorCtrl(&Motor2, &PIDMotor2);
+    usRegHoldingBuf[4] = Motor2.MotorSpeed_mmps;
 
-  MotorCtrl(&Motor3,&PIDMotor3);
-  usRegHoldingBuf[5]=Motor3.MotorSpeed_mmps;
+    MotorCtrl(&Motor3, &PIDMotor3);
+    usRegHoldingBuf[5] = Motor3.MotorSpeed_mmps;
 
-  /*Debug*/
-  usRegHoldingBuf[7]=Motor3.PWM;
-  usRegHoldingBuf[8]=Motor3.CmdSpeed;
-  //MotorCtrl(Motor4,PIDMotor4);
-  vTaskDelay(10);  //Delay期间任务被BLOCK，可以执行其他任务
+    /*Debug*/
+    usRegHoldingBuf[7] = Motor3.PWM;
+    usRegHoldingBuf[8] = Motor3.CmdSpeed;
+    // MotorCtrl(Motor4,PIDMotor4);
+    vTaskDelay(10);  // Delay期间任务被BLOCK，可以执行其他任务
   }
 }
-
