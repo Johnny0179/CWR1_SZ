@@ -12,6 +12,7 @@
 /*FreeRTOS*/
 #include "FreeRTOS.h"
 #include "task.h"
+#include "queue.h"
 
 /*FreeModbus*/
 #include "FreeModbus.h"
@@ -29,16 +30,16 @@ void start_task(void* pvParameters);
 //任务优先级
 #define Modbus_TASK_PRIO 2
 //任务堆栈大小
-#define Modbus_STK_SIZE 50
+#define Modbus_STK_SIZE 256
 //任务句柄
 TaskHandle_t ModbusTask_Handler;
 //任务函数
 void Modbus_task(void* pvParameters);
 
 //任务优先级
-#define Motor_TASK_PRIO 4
+#define Motor_TASK_PRIO 3
 //任务堆栈大小
-#define Motor_STK_SIZE 50
+#define Motor_STK_SIZE 256
 //任务句柄
 TaskHandle_t MotorTask_Handler;
 //任务函数
@@ -52,6 +53,25 @@ extern int32_t MotorSpeed[4];
 u8 MoveInteval = 5;
 
 const u8 RefreshRate = 50;
+
+/*----------------------------Queue----------------------------------*/
+#define Message_Queue_SIZE
+
+#define Motor1_Queue_SIZE
+#define Motor2_Queue_SIZE
+#define Motor3_Queue_SIZE
+#define Motor4_Queue_SIZE
+#define Motor5_Queue_SIZE
+#define Motor6_Queue_SIZE
+
+QueueHandle_t Message_Queue;
+
+QueueHandle_t Motor1_Queue;
+QueueHandle_t Motor2_Queue;
+QueueHandle_t Motor3_Queue;
+QueueHandle_t Motor4_Queue;
+QueueHandle_t Motor5_Queue;
+QueueHandle_t Motor6_Queue;
 
 /*----------------------------Start Implemention-------------------------*/
 
@@ -83,10 +103,7 @@ int main(void) {
 //开始任务任务函数
 static void start_task(void* pvParameters) {
   taskENTER_CRITICAL();  //进入临界区
-  //创建CAN任务
-  xTaskCreate((TaskFunction_t)CAN_task, (const char*)"CAN_task",
-              (uint16_t)CAN_STK_SIZE, (void*)NULL, (UBaseType_t)CAN_TASK_PRIO,
-              (TaskHandle_t*)&CANTask_Handler);
+
   //创建Modbus任务
   xTaskCreate((TaskFunction_t)Modbus_task, (const char*)"Modbus_task",
               (uint16_t)Modbus_STK_SIZE, (void*)NULL,
