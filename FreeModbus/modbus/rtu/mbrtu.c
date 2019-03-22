@@ -71,9 +71,9 @@ static volatile eMBRcvState eRcvState;
 
 volatile UCHAR  ucRTUBuf[MB_SER_PDU_SIZE_MAX];
 
-//·¢ËÍ»º³å¶ÓÁÐ
+//ï¿½ï¿½ï¿½Í»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 static volatile UCHAR *pucSndBufferCur;
-//·¢ËÍ»º³å¶ÓÁÐÖÐ Êý¾Ý
+//ï¿½ï¿½ï¿½Í»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 static volatile USHORT usSndBufferCount;
 
 static volatile USHORT usRcvBufferPos;
@@ -98,8 +98,8 @@ eMBRTUInit( UCHAR ucSlaveAddress, UCHAR ucPort, ULONG ulBaudRate, eMBParity ePar
         /* If baudrate > 19200 then we should use the fixed timer values
          * t35 = 1750us. Otherwise t35 must be 3.5 times the character time.
          */
-        //Èç¹û²¨ÌØÂÊ³¬¹ý19200 Ê¹ÓÃ¹Ì¶¨µÄÊ±¼ä¼ä¸ô£¬1750us
-        //ÆäËûÇé¿ö£¬ÔòÒª½øÐÐ¼ÆËã¡£
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê³ï¿½ï¿½ï¿½19200 Ê¹ï¿½Ã¹Ì¶ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1750us
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½Ð¼ï¿½ï¿½ã¡£
         if( ulBaudRate > 19200 )
         {
             usTimerT35_50us = 35;       /* 1750us. */
@@ -114,12 +114,12 @@ eMBRTUInit( UCHAR ucSlaveAddress, UCHAR ucPort, ULONG ulBaudRate, eMBParity ePar
              * The reload for t3.5 is 1.5 times this value and similary
              * for t3.5.
              */
-            //Ticks_per_1s=20KHz£¬¶¨Ê±Æ÷¼ÆÊýÆµÂÊÓ¦¸ÃÎª20KHz.
+            //Ticks_per_1s=20KHzï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æµï¿½ï¿½Ó¦ï¿½ï¿½Îª20KHz.
             //3.5*ChTimeValue
             usTimerT35_50us = ( 7UL * 220000UL ) / ( 2UL * ulBaudRate );
         }
         
-        //³õÊ¼»¯¶¨Ê±Æ÷
+        //ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
         if( xMBPortTimersInit( ( USHORT ) usTimerT35_50us ) != TRUE )
         {
             eStatus = MB_EPORTERR;
@@ -139,11 +139,11 @@ eMBRTUStart( void )
      * to STATE_RX_IDLE. This makes sure that we delay startup of the
      * modbus protocol stack until the bus is free.
      */
-    //eRcvState ³õÊ¼»¯×´Ì¬
+    //eRcvState ï¿½ï¿½Ê¼ï¿½ï¿½×´Ì¬
     eRcvState = STATE_RX_INIT;
-    //Ê¹ÄÜ½ÓÊÕ£¬½ûÖ¹·¢ËÍ
+    //Ê¹ï¿½Ü½ï¿½ï¿½Õ£ï¿½ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½ï¿½
     vMBPortSerialEnable( TRUE, FALSE );
-    //Æô¶¯¶¨Ê±Æ÷
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
     vMBPortTimersEnable();
 
     EXIT_CRITICAL_SECTION( );
@@ -153,7 +153,7 @@ void
 eMBRTUStop( void )
 {
     ENTER_CRITICAL_SECTION(  );
-    //½ûÖ¹½ÓÊÕ£¬½ûÖ¹·¢ËÍ
+    //ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½Õ£ï¿½ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½ï¿½
     vMBPortSerialEnable( FALSE, FALSE );
     vMBPortTimersDisable(  );
     EXIT_CRITICAL_SECTION(  );
@@ -164,8 +164,8 @@ eMBRTUReceive( UCHAR * pucRcvAddress, UCHAR ** pucFrame, USHORT * pusLength )
 {
     BOOL            xFrameReceived = FALSE;
     eMBErrorCode    eStatus = MB_ENOERR;
-		xFrameReceived = xFrameReceived;	//±ÜÃâ±àÒëÆ÷±¨´í£¬Ìí¼Ó´Ë²½ÎÞÊµ¼ÊÓÃÍ¾Óï¾ä
-	
+        xFrameReceived = xFrameReceived;    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó´Ë²ï¿½ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½Í¾ï¿½ï¿½ï¿½
+    
     ENTER_CRITICAL_SECTION();
     assert( usRcvBufferPos < MB_SER_PDU_SIZE_MAX );
 
@@ -224,15 +224,15 @@ eMBRTUSend( UCHAR ucSlaveAddress, const UCHAR * pucFrame, USHORT usLength )
         ucRTUBuf[usSndBufferCount++] = ( UCHAR )( usCRC16 >> 8 );
 
         /* Activate the transmitter. */
-        //·¢ËÍ×´Ì¬×ª»»£¬ÔÚÖÐ¶ÏÖÐ²»¶Ï·¢ËÍ
+        //ï¿½ï¿½ï¿½ï¿½×´Ì¬×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½Ð²ï¿½ï¿½Ï·ï¿½ï¿½ï¿½
         eSndState = STATE_TX_XMIT;
         
-        //Æô¶¯µÚÒ»´Î·¢ËÍ£¬ÕâÑù²Å¿ÉÒÔ½øÈë·¢ËÍÍê³ÉÖÐ¶Ï
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½Î·ï¿½ï¿½Í£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¿ï¿½ï¿½Ô½ï¿½ï¿½ë·¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½
         xMBPortSerialPutByte( ( CHAR )*pucSndBufferCur );
         pucSndBufferCur++;  /* next byte in sendbuffer. */
         usSndBufferCount--;
         
-        //Ê¹ÄÜ·¢ËÍ×´Ì¬£¬½ûÖ¹½ÓÊÕ×´Ì¬
+        //Ê¹ï¿½Ü·ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½ï¿½×´Ì¬
         vMBPortSerialEnable( FALSE, TRUE );
     }
     else
@@ -251,10 +251,10 @@ xMBRTUReceiveFSM( void )
 
     assert( eSndState == STATE_TX_IDLE );
 
-    //¶Á´®¿Ú½ÓÊÕÊý¾Ý£¬Êµ¼ÊÉÏ¸Ãº¯ÊýÔÚ´®¿Ú½ÓÊÕÖÐ¶ÏÖÐ±»Ö´ÐÐ
+    //ï¿½ï¿½ï¿½ï¿½ï¿½Ú½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½Êµï¿½ï¿½ï¿½Ï¸Ãºï¿½ï¿½ï¿½ï¿½Ú´ï¿½ï¿½Ú½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½Ð±ï¿½Ö´ï¿½ï¿½
     ( void )xMBPortSerialGetByte( ( CHAR * ) & ucByte );
     
-    //¸ù¾Ý²»Í¬µÄ×´Ì¬×ªÒÆ
+    //ï¿½ï¿½ï¿½Ý²ï¿½Í¬ï¿½ï¿½×´Ì¬×ªï¿½ï¿½
     switch ( eRcvState )
     {
         /* If we have received a character in the init state we have to
@@ -276,14 +276,14 @@ xMBRTUReceiveFSM( void )
          * receiver is in the state STATE_RX_RECEIVCE.
          */
     case STATE_RX_IDLE:
-        //½ÓÊÕµ½Ò»¸öÊý¾Ý£¬±£´æ´®¿ÚÊý¾Ý£¬ÖØÆô¶¨Ê±Æ÷
+        //ï¿½ï¿½ï¿½Õµï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½ï¿½ï¿½ï¿½æ´®ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
         usRcvBufferPos = 0;
         ucRTUBuf[usRcvBufferPos++] = ucByte;
-        //×´Ì¬×ªÒÆ£¬Êý¾Ý½ÓÊÕÖÐ
+        //×´Ì¬×ªï¿½Æ£ï¿½ï¿½ï¿½ï¿½Ý½ï¿½ï¿½ï¿½ï¿½ï¿½
         eRcvState = STATE_RX_RCV;
 
         /* Enable t3.5 timers. */
-        //¿ªÆô¶¨Ê±Æ÷£¬Ïàµ±ÓÚÖØÆô¶¨Ê±Æ÷
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½àµ±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
         vMBPortTimersEnable();
         break;
 
@@ -301,7 +301,7 @@ xMBRTUReceiveFSM( void )
         {
             eRcvState = STATE_RX_ERROR;
         }
-        //¿ªÆô¶¨Ê±Æ÷£¬Ïàµ±ÓÚÖØÆô¶¨Ê±Æ÷
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½àµ±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
         vMBPortTimersEnable();
         break;
     }
@@ -321,29 +321,29 @@ xMBRTUTransmitFSM( void )
          * idle state.  */
     case STATE_TX_IDLE:
         /* enable receiver/disable transmitter. */
-        //·¢ËÍ´¦ÓÚ¿ÕÏÐ×´Ì¬£¬Ê¹ÄÜ½ÓÊÕ£¬½ûÖ¹·¢ËÍ
+        //ï¿½ï¿½ï¿½Í´ï¿½ï¿½Ú¿ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½Ê¹ï¿½Ü½ï¿½ï¿½Õ£ï¿½ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½ï¿½
         vMBPortSerialEnable( TRUE, FALSE );
         break;
 
     case STATE_TX_XMIT:
         /* check if we are finished. */
-        //¼ì²é·¢ËÍÊÇ·ñÍê³É
+        //ï¿½ï¿½é·¢ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½
         if( usSndBufferCount != 0 )
         {
-            //·¢ËÍÊý¾Ý
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             xMBPortSerialPutByte( ( CHAR )*pucSndBufferCur );
             pucSndBufferCur++;  /* next byte in sendbuffer. */
             usSndBufferCount--;
         }
         else
         {
-            //´«µÝÈÎÎñ£¬·¢ËÍÍê³É
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ñ£¬·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             xNeedPoll = xMBPortEventPost( EV_FRAME_SENT );
             /* Disable transmitter. This prevents another transmit buffer
              * empty interrupt. */
-            //½ÓÊÕÊ¹ÄÜ£¬·¢ËÍ½ûÖ¹
+            //ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½Ü£ï¿½ï¿½ï¿½ï¿½Í½ï¿½Ö¹
             vMBPortSerialEnable( TRUE, FALSE );
-            //×´Ì¬¸Ä±ä£¬·¢ËÍ¿ÕÏÐ
+            //×´Ì¬ï¿½Ä±ä£¬ï¿½ï¿½ï¿½Í¿ï¿½ï¿½ï¿½
             eSndState = STATE_TX_IDLE;
         }
         break;
@@ -360,16 +360,16 @@ xMBRTUTimerT35Expired( void )
     switch ( eRcvState )
     {
         /* Timer t35 expired. Startup phase is finished. */
-        //ÕâÊÇÒ»¸öÆô¶¯×´Ì¬£¬ÔËÐÐµ½ÕâÀïËµÃ÷Æô¶¯×´Ì¬Íê³É¡£
+        //ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½É¡ï¿½
     case STATE_RX_INIT:
         xNeedPoll = xMBPortEventPost( EV_READY );
         break;
 
         /* A frame was received and t35 expired. Notify the listener that
          * a new frame was received. */
-        //µ±´®¿Ú´¦ÓÚÊý¾Ý½ÓÊÕ×´Ì¬£¬´ËÊ±Èô½øÈë¶¨Ê±Æ÷³¬Ê±ÖÐ¶Ï£¬ËµÃ÷½ÓÊÕµ½ÍêÕûµÄmodbusÊý¾Ý
+        //ï¿½ï¿½ï¿½ï¿½ï¿½Ú´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ë¶¨Ê±ï¿½ï¿½ï¿½ï¿½Ê±ï¿½Ð¶Ï£ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½Õµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½modbusï¿½ï¿½ï¿½ï¿½
     case STATE_RX_RCV:
-        //·¢ËÍÊÂ¼þ£¬½ÓÊÕµ½ÍêÕûµÄmodbusÊý¾Ý
+        //ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½modbusï¿½ï¿½ï¿½ï¿½
         xNeedPoll = xMBPortEventPost( EV_FRAME_RECEIVED );
         break;
 
@@ -383,9 +383,9 @@ xMBRTUTimerT35Expired( void )
                 ( eRcvState == STATE_RX_RCV ) || ( eRcvState == STATE_RX_ERROR ) );
     }
     
-    //½ûÖ¹¶¨Ê±Æ÷
+    //ï¿½ï¿½Ö¹ï¿½ï¿½Ê±ï¿½ï¿½
     vMBPortTimersDisable(  );
-    //´®¿Ú½ÓÊÕ×´Ì¬ ±äÎª¿ÕÏÐ×´Ì¬¡£
+    //ï¿½ï¿½ï¿½Ú½ï¿½ï¿½ï¿½×´Ì¬ ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½
     eRcvState = STATE_RX_IDLE;
 
     return xNeedPoll;

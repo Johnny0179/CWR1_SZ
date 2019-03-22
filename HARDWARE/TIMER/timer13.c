@@ -3,7 +3,7 @@
 #include "motor.h"
 #include "FreeModbus.h"
 
-extern int32_t MotorSpeed[4];
+extern int32_t MotorSpeed[MotorNum];
 // extern int32_t usRegHoldingBuf[REG_HOLDING_NREGS];
 
 // TIM13通道1输入捕获配置
@@ -49,8 +49,8 @@ void TIM13_CH1_Cap_Init(u32 arr, u16 psc) {
   TIM_Cmd(TIM13, ENABLE);
 
   NVIC_InitStructure.NVIC_IRQChannel = TIM8_UP_TIM13_IRQn;
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 14;  //PreemptionPriority 14
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;         //FreeRTOS doesn't have subpriority
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;  //抢占优先级3
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;         //子优先级3
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;            // IRQ通道使能
   NVIC_Init(&NVIC_InitStructure);  //根据指定的参数初始化VIC寄存器、
 }

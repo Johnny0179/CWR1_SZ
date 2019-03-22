@@ -3,7 +3,7 @@
 #include "motor.h"
 #include "timer.h"
 
-int32_t MotorSpeed[4];
+int32_t MotorSpeed[MotorNum];
 extern int32_t usRegHoldingBuf[REG_HOLDING_NREGS];
 
 void MotorInit(void) {
@@ -15,6 +15,9 @@ void MotorInit(void) {
 
   // Capture Init
   TIM4_CH1_Cap_Init(0XFFFF, 84 - 1);   //以1Mhz的频率计数
+  TIM4_CH2_Cap_Init(0XFFFF, 84 - 1);   //以1Mhz的频率计数
+  TIM4_CH3_Cap_Init(0XFFFF, 84 - 1);   //以1Mhz的频率计数
+  TIM4_CH4_Cap_Init(0XFFFF, 84 - 1);   //以1Mhz的频率计数
   TIM12_CH1_Cap_Init(0XFFFF, 84 - 1);  //以1Mhz的频率计数
   TIM13_CH1_Cap_Init(0XFFFF, 84 - 1);  //以1Mhz的频率计数
 }

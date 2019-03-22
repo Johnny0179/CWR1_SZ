@@ -3,248 +3,152 @@
 <pre>
 <h1>µVision Build Log</h1>
 <h2>Project:</h2>
-E:\git\PID\USER\CWR2_FreeRTOS_PID.uvprojx
-Project File Date:  10/12/2018
+\\Vboxsvr\irim\ShenZhong\CWR_Shenzhong\Software\CWR1_SZ\USER\CWR_SZ.uvprojx
+Project File Date:  10/17/2018
 
 <h2>Output:</h2>
-Build target 'CWR2_FreeRTOS_PID'
+Rebuild target 'CWR_SZ'
+compiling main.c...
+..\HARDWARE\MOTOR\Motor.h(48): warning:  #1-D: last line of file ends without a newline
+  #endif
+main.c(118): warning:  #177-D: function "CAN_task" was declared but never referenced
+  static void CAN_task(void* pvParameters) {
+main.c: 2 warnings, 0 errors
+compiling stm32f4xx_it.c...
+compiling system_stm32f4xx.c...
+assembling startup_stm32f40_41xxx.s...
+compiling misc.c...
+compiling stm32f4xx_gpio.c...
+compiling stm32f4xx_rcc.c...
+compiling stm32f4xx_syscfg.c...
+compiling stm32f4xx_usart.c...
+compiling stm32f4xx_tim.c...
+compiling stm32f4xx_can.c...
+compiling delay.c...
+compiling sys.c...
+compiling led.c...
+compiling motor.c...
+..\HARDWARE\MOTOR\motor.h(48): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\HARDWARE\MOTOR\motor.c(227): warning:  #1-D: last line of file ends without a newline
+  }
+..\HARDWARE\MOTOR\motor.c: 2 warnings, 0 errors
+compiling can.c...
+compiling timer4.c...
+..\HARDWARE\MOTOR\motor.h(48): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\HARDWARE\TIMER\timer4.c(342): warning:  #1-D: last line of file ends without a newline
+  }
+..\HARDWARE\TIMER\timer4.c: 2 warnings, 0 errors
+compiling timer12.c...
+..\HARDWARE\MOTOR\motor.h(48): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\HARDWARE\TIMER\timer12.c: 1 warning, 0 errors
+compiling motor_ctrl.c...
+..\HARDWARE\MOTOR\motor.h(48): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\HARDWARE\MOTOR\motor_ctrl.c(90): warning:  #1-D: last line of file ends without a newline
+  }
+..\HARDWARE\MOTOR\motor_ctrl.c: 2 warnings, 0 errors
+compiling timer13.c...
+..\HARDWARE\MOTOR\motor.h(48): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\HARDWARE\TIMER\timer13.c: 1 warning, 0 errors
+compiling croutine.c...
+compiling event_groups.c...
+compiling list.c...
+compiling queue.c...
+compiling tasks.c...
+compiling timers.c...
+compiling port.c...
+compiling heap_4.c...
+compiling portevent.c...
+compiling portserial.c...
+compiling porttimer.c...
+compiling mb.c...
+compiling mbcrc.c...
+compiling mbrtu.c...
+..\FreeModbus\modbus\rtu\mbrtu.c(392): warning:  #1-D: last line of file ends without a newline
+  }
+..\FreeModbus\modbus\rtu\mbrtu.c: 1 warning, 0 errors
+compiling mbascii.c...
+compiling mbfunccoils.c...
+compiling mbfuncdiag.c...
+compiling mbfuncdisc.c...
+compiling mbfuncholding.c...
+compiling mbfuncinput.c...
+compiling mbfuncother.c...
+compiling mbutils.c...
+compiling FreeModbus.c...
+..\FreeModbus\FreeModbus.c(171): warning:  #1-D: last line of file ends without a newline
+  }
+..\FreeModbus\FreeModbus.c: 1 warning, 0 errors
+compiling PID.c...
 linking...
-Program Size: Code=34426 RO-data=1106 RW-data=468 ZI-data=79564  
+Program Size: Code=37238 RO-data=1106 RW-data=1060 ZI-data=79052  
 FromELF: creating hex file...
-"..\OBJ\CWR2_FreeRTOS_PID.axf" - 0 Error(s), 0 Warning(s).
-Load "..\\OBJ\\CWR2_FreeRTOS_PID.axf" 
-Set JLink Project File to "E:\git\PID\USER\JLinkSettings.ini"
-* JLink Info: Device "STM32F407ZE" selected (512 KB flash, 128 KB RAM).
- 
-JLink info:
-------------
-DLL: V4.80g, compiled Feb 13 2014 20:50:02
-Firmware: J-Link ARM-OB STM32 compiled Aug 22 2012 19:52:04
-Hardware: V7.00
-S/N : 20090928 
-Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull 
- 
-* JLink Info: Found SWD-DP with ID 0x2BA01477
-* JLink Info: Found SWD-DP with ID 0x2BA01477
-* JLink Info: Found Cortex-M4 r0p1, Little endian.
-* JLink Info: FPUnit: 6 code (BP) slots and 2 literal slots
-* JLink Info: TPIU fitted.
-* JLink Info: ETM fitted.
-ROMTableAddr = 0xE00FF003
- 
-Target info:
-------------
-Device: STM32F407ZE
-VTarget = 3.300V
-State of Pins: 
-TCK: 0, TDI: 0, TDO: 1, TMS: 0, TRES: 1, TRST: 1
-Hardware-Breakpoints: 6
-Software-Breakpoints: 8192
-Watchpoints:          4
-JTAG speed: 2000 kHz
- 
-Erase Done.
-Programming Done.
-Verify OK.
-Application running ...
+"..\OBJ\cwr_sz.axf" - 0 Error(s), 12 Warning(s).
 </pre>
 </body>
 </html>
-DP with ID 0x2BA01477
-* JLink Info: Found SWD-DP with ID 0x2BA01477
-* JLink Info: Found Cortex-M4 r0p1, Little endian.
-* JLink Info: FPUnit: 6 code (BP) slots and 2 literal slots
-* JLink Info: TPIU fitted.
-* JLink Info: ETM fitted.
-ROMTableAddr = 0xE00FF003
- 
-Target info:
-------------
-Device: STM32F407ZE
-VTarget = 3.300V
-State of Pins: 
-TCK: 0, TDI: 0, TDO: 1, TMS: 0, TRES: 1, TRST: 1
-Hardware-Breakpoints: 6
-Software-Breakpoints: 8192
-Watchpoints:          4
-JTAG speed: 2000 kHz
- 
-Erase Done.
-Programming Done.
-Verify OK.
-Application running ...
-Load "..\\OBJ\\CWR2_FreeRTOS_PID.axf" 
-Set JLink Project File to "E:\git\PID\USER\JLinkSettings.ini"
-* JLink Info: Device "STM32F407ZE" selected (512 KB flash, 128 KB RAM).
- 
-JLink info:
-------------
-DLL: V4.80g, compiled Feb 13 2014 20:50:02
-Firmware: J-Link ARM-OB STM32 compiled Aug 22 2012 19:52:04
-Hardware: V7.00
-S/N : 20090928 
-Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull 
- 
-* JLink Info: Found SWD-DP with ID 0x2BA01477
-* JLink Info: Found SWD-DP with ID 0x2BA01477
-* JLink Info: Found Cortex-M4 r0p1, Little endian.
-* JLink Info: FPUnit: 6 code (BP) slots and 2 literal slots
-* JLink Info: TPIU fitted.
-* JLink Info: ETM fitted.
-ROMTableAddr = 0xE00FF003
- 
-Target info:
-------------
-Device: STM32F407ZE
-VTarget = 3.300V
-State of Pins: 
-TCK: 0, TDI: 0, TDO: 1, TMS: 0, TRES: 1, TRST: 1
-Hardware-Breakpoints: 6
-Software-Breakpoints: 8192
-Watchpoints:          4
-JTAG speed: 2000 kHz
- 
-Erase Done.
-Programming Done.
-Verify OK.
-Application running ...
-Load "..\\OBJ\\CWR2_FreeRTOS_PID.axf" 
-Set JLink Project File to "E:\git\PID\USER\JLinkSettings.ini"
-* JLink Info: Device "STM32F407ZE" selected (512 KB flash, 128 KB RAM).
- 
-JLink info:
-------------
-DLL: V4.80g, compiled Feb 13 2014 20:50:02
-Firmware: J-Link ARM-OB STM32 compiled Aug 22 2012 19:52:04
-Hardware: V7.00
-S/N : 20090928 
-Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull 
- 
-* JLink Info: Found SWD-DP with ID 0x2BA01477
-* JLink Info: Found SWD-DP with ID 0x2BA01477
-* JLink Info: Found Cortex-M4 r0p1, Little endian.
-* JLink Info: FPUnit: 6 code (BP) slots and 2 literal slots
-* JLink Info: TPIU fitted.
-* JLink Info: ETM fitted.
-ROMTableAddr = 0xE00FF003
- 
-Target info:
-------------
-Device: STM32F407ZE
-VTarget = 3.300V
-State of Pins: 
-TCK: 0, TDI: 0, TDO: 1, TMS: 0, TRES: 1, TRST: 1
-Hardware-Breakpoints: 6
-Software-Breakpoints: 8192
-Watchpoints:          4
-JTAG speed: 2000 kHz
- 
-Erase Done.
-Programming Done.
-Verify OK.
-Application running ...
-Load "..\\OBJ\\CWR2_FreeRTOS_PID.axf" 
-Set JLink Project File to "E:\git\PID\USER\JLinkSettings.ini"
-* JLink Info: Device "STM32F407ZE" selected (512 KB flash, 128 KB RAM).
- 
-JLink info:
-------------
-DLL: V4.80g, compiled Feb 13 2014 20:50:02
-Firmware: J-Link ARM-OB STM32 compiled Aug 22 2012 19:52:04
-Hardware: V7.00
-S/N : 20090928 
-Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull 
- 
-* JLink Info: Found SWD-DP with ID 0x2BA01477
-* JLink Info: Found SWD-DP with ID 0x2BA01477
-* JLink Info: Found Cortex-M4 r0p1, Little endian.
-* JLink Info: FPUnit: 6 code (BP) slots and 2 literal slots
-* JLink Info: TPIU fitted.
-* JLink Info: ETM fitted.
-ROMTableAddr = 0xE00FF003
- 
-Target info:
-------------
-Device: STM32F407ZE
-VTarget = 3.300V
-State of Pins: 
-TCK: 0, TDI: 0, TDO: 1, TMS: 0, TRES: 1, TRST: 1
-Hardware-Breakpoints: 6
-Software-Breakpoints: 8192
-Watchpoints:          4
-JTAG speed: 2000 kHz
- 
-Erase Done.
-Programming Done.
-Verify OK.
-Application running ...
-Load "..\\OBJ\\CWR2_FreeRTOS_PID.axf" 
-Set JLink Project File to "E:\git\PID\USER\JLinkSettings.ini"
-* JLink Info: Device "STM32F407ZE" selected (512 KB flash, 128 KB RAM).
- 
-JLink info:
-------------
-DLL: V4.80g, compiled Feb 13 2014 20:50:02
-Firmware: J-Link ARM-OB STM32 compiled Aug 22 2012 19:52:04
-Hardware: V7.00
-S/N : 20090928 
-Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull 
- 
-* JLink Info: Found SWD-DP with ID 0x2BA01477
-* JLink Info: Found SWD-DP with ID 0x2BA01477
-* JLink Info: Found Cortex-M4 r0p1, Little endian.
-* JLink Info: FPUnit: 6 code (BP) slots and 2 literal slots
-* JLink Info: TPIU fitted.
-* JLink Info: ETM fitted.
-ROMTableAddr = 0xE00FF003
- 
-Target info:
-------------
-Device: STM32F407ZE
-VTarget = 3.300V
-State of Pins: 
-TCK: 0, TDI: 0, TDO: 1, TMS: 0, TRES: 1, TRST: 1
-Hardware-Breakpoints: 6
-Software-Breakpoints: 8192
-Watchpoints:          4
-JTAG speed: 2000 kHz
- 
-Erase Done.
-Programming Done.
-Verify OK.
-Application running ...
-Load "..\\OBJ\\CWR2_FreeRTOS_PID.axf" 
-Set JLink Project File to "E:\git\PID\USER\JLinkSettings.ini"
-* JLink Info: Device "STM32F407ZE" selected (512 KB flash, 128 KB RAM).
- 
-JLink info:
-------------
-DLL: V4.80g, compiled Feb 13 2014 20:50:02
-Firmware: J-Link ARM-OB STM32 compiled Aug 22 2012 19:52:04
-Hardware: V7.00
-S/N : 20090928 
-Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull 
- 
-* JLink Info: Found SWD-DP with ID 0x2BA01477
-* JLink Info: Found SWD-DP with ID 0x2BA01477
-* JLink Info: Found Cortex-M4 r0p1, Little endian.
-* JLink Info: FPUnit: 6 code (BP) slots and 2 literal slots
-* JLink Info: TPIU fitted.
-* JLink Info: ETM fitted.
-ROMTableAddr = 0xE00FF003
- 
-Target info:
-------------
-Device: STM32F407ZE
-VTarget = 3.300V
-State of Pins: 
-TCK: 0, TDI: 0, TDO: 1, TMS: 0, TRES: 1, TRST: 1
-Hardware-Breakpoints: 6
-Software-Breakpoints: 8192
-Watchpoints:          4
-JTAG speed: 2000 kHz
- 
-Erase Done.
-Programming Done.
-Verify OK.
-Application running ...
+RDWARE\MOTOR\Motor.h(48): warning:  #1-D: last line of file ends without a newline
+  #endif
+main.c(118): warning:  #177-D: function "CAN_task" was declared but never referenced
+  static void CAN_task(void* pvParameters) {
+main.c: 2 warnings, 0 errors
+"main.c" - 0 Error(s), 2 Warning(s).
+ng:  #177-D: variable "rps_e_3_Motor4" was declared but never referenced
+  static u32 rps_e_3_Motor4 = 0;
+..\HARDWARE\TIMER\timer4.c(134): warning:  #177-D: variable "rps_e_3_Motor5" was declared but never referenced
+  static u32 rps_e_3_Motor5 = 0;
+..\HARDWARE\TIMER\timer4.c(135): warning:  #177-D: variable "rps_e_3_Motor6" was declared but never referenced
+  static u32 rps_e_3_Motor6 = 0;
+..\HARDWARE\TIMER\timer4.c: 17 warnings, 0 errors
+compiling timer12.c...
+..\HARDWARE\MOTOR\motor.h(48): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\HARDWARE\TIMER\timer12.c: 1 warning, 0 errors
+compiling motor_ctrl.c...
+..\HARDWARE\MOTOR\motor.h(48): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\HARDWARE\MOTOR\motor_ctrl.c(88): warning:  #1-D: last line of file ends without a newline
+  }
+..\HARDWARE\MOTOR\motor_ctrl.c: 2 warnings, 0 errors
+compiling timer13.c...
+..\HARDWARE\MOTOR\motor.h(48): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\HARDWARE\TIMER\timer13.c: 1 warning, 0 errors
+compiling croutine.c...
+compiling event_groups.c...
+compiling list.c...
+compiling queue.c...
+compiling tasks.c...
+compiling timers.c...
+compiling port.c...
+compiling heap_4.c...
+compiling portevent.c...
+compiling portserial.c...
+compiling porttimer.c...
+compiling mb.c...
+compiling mbcrc.c...
+compiling mbrtu.c...
+..\FreeModbus\modbus\rtu\mbrtu.c(392): warning:  #1-D: last line of file ends without a newline
+  }
+..\FreeModbus\modbus\rtu\mbrtu.c: 1 warning, 0 errors
+compiling mbascii.c...
+compiling mbfunccoils.c...
+compiling mbfuncdiag.c...
+compiling mbfuncdisc.c...
+compiling mbfuncholding.c...
+compiling mbfuncinput.c...
+compiling mbfuncother.c...
+compiling mbutils.c...
+compiling FreeModbus.c...
+..\FreeModbus\FreeModbus.c(171): warning:  #1-D: last line of file ends without a newline
+  }
+..\FreeModbus\FreeModbus.c: 1 warning, 0 errors
+compiling PID.c...
+linking...
+Program Size: Code=35790 RO-data=1106 RW-data=1052 ZI-data=79044  
+FromELF: creating hex file...
+"..\OBJ\cwr_sz.axf" - 0 Error(s), 28 Warning(s).

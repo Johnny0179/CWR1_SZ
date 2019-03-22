@@ -1,5 +1,7 @@
 ..\obj\main.o: main.c
 ..\obj\main.o: ..\HARDWARE\MOTOR\Motor.h
+..\obj\main.o: ..\PID\PID.h
+..\obj\main.o: ..\HARDWARE\TIMER\timer.h
 ..\obj\main.o: ..\SYSTEM\sys\sys.h
 ..\obj\main.o: ..\USER\stm32f4xx.h
 ..\obj\main.o: ..\CORE\core_cm4.h
@@ -36,8 +38,6 @@
 ..\obj\main.o: ..\FWLIB\inc\stm32f4xx_dac.h
 ..\obj\main.o: ..\FWLIB\inc\stm32f4xx_dcmi.h
 ..\obj\main.o: ..\FWLIB\inc\stm32f4xx_fsmc.h
-..\obj\main.o: ..\PID\PID.h
-..\obj\main.o: ..\HARDWARE\TIMER\timer.h
 ..\obj\main.o: ..\HARDWARE\CAN\can.h
 ..\obj\main.o: ..\SYSTEM\delay\delay.h
 ..\obj\main.o: ..\HARDWARE\LED\led.h
