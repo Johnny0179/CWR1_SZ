@@ -2,6 +2,8 @@
 #define _MOTOR_H
 #include "PID.h"
 #include "sys.h"
+#include "stm32f4xx_exti.h"
+#include "timer.h"
 //////////////////////////////////////////////////////////////////////////////////
 // Copyright(C) IRIM 2018
 // All rights reserved
@@ -38,11 +40,16 @@ void TIM1_PWM_Init(u32 freq);
 void TIM8_PWM_Init(u32 freq);
 
 void TIM1_PWM_SET(u32 freq, u32 Duty);
-
 void TIM8_PWM_SET(u32 freq, u32 Duty);
+
+void EXTIX_Init(void);
+
+void MotorFGInit(void);
 
 void MotorInit(void);
 void MotorInitConfig(u8 num, struct MOTOR_DATA *motor);
 void MotorCtrl(struct MOTOR_DATA *motor, struct PID_DATA *pid);
 
+u32 DeltaTurnCalc(u32 *motor_turn,u8 motor_num);
+u32 MotorVelCalc(u32 delta_turn);
 #endif

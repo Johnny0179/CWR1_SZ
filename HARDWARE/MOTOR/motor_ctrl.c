@@ -3,8 +3,19 @@
 #include "motor.h"
 #include "timer.h"
 
-int32_t MotorSpeed[MotorNum];
+u32 MotorSpeed[MotorNum];
 extern int32_t usRegHoldingBuf[REG_HOLDING_NREGS];
+u32 delta_turn[MotorNum];
+/*ms*/
+const u16 kTimeInteval = 100;
+const float kPI = 3.14;
+// diameter
+const u8 kDiameter = 45;
+// reduction ratio
+const u8 kReductionRatio = 43;
+
+static volatile motor_turn_this_time[MotorNum] = {0};
+static volatile motor_turn_last_time[MotorNum] = {0};
 
 void MotorInit(void) {
   // Freq=20k,DutyRatio=50
@@ -14,19 +25,17 @@ void MotorInit(void) {
   Motor_Init();
 
   // Capture Init
-  TIM4_CH1_Cap_Init(0XFFFF, 84 - 1);   //以1Mhz的频率计数
-  TIM4_CH2_Cap_Init(0XFFFF, 84 - 1);   //以1Mhz的频率计数
-  TIM4_CH3_Cap_Init(0XFFFF, 84 - 1);   //以1Mhz的频率计数
-  TIM4_CH4_Cap_Init(0XFFFF, 84 - 1);   //以1Mhz的频率计数
-  TIM12_CH1_Cap_Init(0XFFFF, 84 - 1);  //以1Mhz的频率计数
-  TIM13_CH1_Cap_Init(0XFFFF, 84 - 1);  //以1Mhz的频率计数
+
+  MotorFGInit();
+
+  /*timer counter init*/
+  Tim5IntInit(kTimeInteval * 10 - 1, 8400 - 1);
 }
 
 void MotorCtrl(struct MOTOR_DATA *motor, struct PID_DATA *pid) {
   motor->direction = usRegHoldingBuf[0];
   motor->CmdSpeed = usRegHoldingBuf[2];
-
-  motor->MotorSpeed_mmps = MotorSpeed[motor->num - 1];
+  motor->MotorSpeed_mmps = MotorVelCalc(delta_turn[motor->num - 1]);
 
   motor->PWM = motor->PWM +
                pid_Controller(motor->CmdSpeed, motor->MotorSpeed_mmps, pid) / 2;
@@ -50,11 +59,6 @@ void MotorCtrl(struct MOTOR_DATA *motor, struct PID_DATA *pid) {
     case stop:;
     default:;
   }
-
-  /*  //清零
-    if (motor->CmdSpeed == 0) {
-      //motor->PWM = 0;
-    }*/
 
   // Speed
   switch (motor->num) {
@@ -87,4 +91,19 @@ void MotorInitConfig(u8 num, struct MOTOR_DATA *motor) {
   motor->CmdSpeed = 0;
   motor->PWM = 0;
   motor->MotorSpeed_mmps = 0;
+}
+
+u32 MotorVelCalc(u32 delta_turn) {
+  return (delta_turn * kPI * kDiameter * kTimeInteval) /
+         (kReductionRatio * 1000);
+}
+
+u32 DeltaTurnCalc(u32 *motor_turn,u8 motor_num) {
+	u8 i=0;
+  for (i = 0; i <= motor_num - 1; i++) {
+    motor_turn_this_time[i] = motor_turn[i];
+    delta_turn[i] = motor_turn_this_time[i] - motor_turn_last_time[i];
+    // update
+    motor_turn_last_time[i] = motor_turn_this_time[i];
+  }
 }

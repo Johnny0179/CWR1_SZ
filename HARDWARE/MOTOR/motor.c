@@ -1,8 +1,17 @@
 #include "motor.h"
+#include "FreeModbus.h"
 #include "PID.h"
 
 extern pidData_t PIDMotor1;
 extern pidData_t PIDMotor3;
+extern int32_t usRegHoldingBuf[REG_HOLDING_NREGS];
+u32 motor_turn[MotorNum];
+static u8 exit_int_time_motor1 = 0;
+static u8 exit_int_time_motor2 = 0;
+static u8 exit_int_time_motor3 = 0;
+static u8 exit_int_time_motor4 = 0;
+static u8 exit_int_time_motor5 = 0;
+static u8 exit_int_time_motor6 = 0;
 
 /*Init TIM1 in PWM mode*/
 /*Frequency in Hz*/
@@ -224,4 +233,154 @@ void MoveUp(void) {
 void MoveDown(void) {
   GPIO_ResetBits(GPIOD, GPIO_Pin_2 | GPIO_Pin_3);
   GPIO_SetBits(GPIOD, GPIO_Pin_0 | GPIO_Pin_1);
+}
+
+void MotorFGInit(void) {
+  NVIC_InitTypeDef NVIC_InitStructure;
+  EXTI_InitTypeDef EXTI_InitStructure;
+
+  EXTIX_Init();  //
+
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
+  /*FG1*/
+  // SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOB, EXTI_PinSource14);
+
+  // EXTI_InitStructure.EXTI_Line = EXTI_Line14;
+  // EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
+  // EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising;
+  // EXTI_InitStructure.EXTI_LineCmd = ENABLE;
+  // EXTI_Init(&EXTI_InitStructure);
+
+  // NVIC_InitStructure.NVIC_IRQChannel = EXTI15_10_IRQn;
+  // NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 15;
+  // NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+  // NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+  // NVIC_Init(&NVIC_InitStructure);
+  /*FG2*/
+  SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOA, EXTI_PinSource6);
+
+  EXTI_InitStructure.EXTI_Line = EXTI_Line6;
+  EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
+  EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising;
+  EXTI_InitStructure.EXTI_LineCmd = ENABLE;
+  EXTI_Init(&EXTI_InitStructure);
+
+  NVIC_InitStructure.NVIC_IRQChannel = EXTI9_5_IRQn;
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 14;
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+  NVIC_Init(&NVIC_InitStructure);
+  /*FG3~6*/
+  SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOD, EXTI_PinSource12);
+  SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOD, EXTI_PinSource13);
+  SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOD, EXTI_PinSource14);
+  SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOD, EXTI_PinSource15);
+
+  EXTI_InitStructure.EXTI_Line =
+      EXTI_Line12 | EXTI_Line13 | EXTI_Line14 | EXTI_Line15;
+  EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
+  EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising;
+  EXTI_InitStructure.EXTI_LineCmd = ENABLE;
+  EXTI_Init(&EXTI_InitStructure);
+
+  NVIC_InitStructure.NVIC_IRQChannel = EXTI15_10_IRQn;
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 13;
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+  NVIC_Init(&NVIC_InitStructure);
+}
+
+void EXTIX_Init(void) {
+  GPIO_InitTypeDef GPIO_InitStructure;
+
+  RCC_AHB1PeriphClockCmd(
+      RCC_AHB1Periph_GPIOB | RCC_AHB1Periph_GPIOA | RCC_AHB1Periph_GPIOD,
+      ENABLE);
+
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
+  GPIO_Init(GPIOB, &GPIO_InitStructure);
+
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
+  GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+  GPIO_InitStructure.GPIO_Pin =
+      GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
+  GPIO_Init(GPIOD, &GPIO_InitStructure);
+}
+
+void EXTI15_10_IRQHandler(void) {
+  /*motor 3*/
+  if (EXTI_GetITStatus(EXTI_Line12)) {
+    /*interrupted first time */
+    if (exit_int_time_motor3 == 0) {
+      motor_turn[2] = 6;
+      // Tim5Enable();
+      exit_int_time_motor3 = 1;
+    } else {
+      motor_turn[2] = motor_turn[2] + 6;
+    }
+    // usRegHoldingBuf[9] = motor_turn[2];
+    EXTI_ClearITPendingBit(EXTI_Line12);
+  }
+  /*motor 4*/
+  if (EXTI_GetITStatus(EXTI_Line13)) {
+    /*interrupted first time */
+    if (exit_int_time_motor4 == 0) {
+      motor_turn[3] = 6;
+      // Tim5Enable();
+      exit_int_time_motor4 = 1;
+    } else {
+      motor_turn[3] = motor_turn[3] + 6;
+    }
+    // usRegHoldingBuf[9] = motor_turn[0];
+    EXTI_ClearITPendingBit(EXTI_Line13);
+  }
+  /*motor 5*/
+  if (EXTI_GetITStatus(EXTI_Line14)) {
+    /*interrupted first time */
+    if (exit_int_time_motor5 == 0) {
+      motor_turn[4] = 6;
+      // Tim5Enable();
+      exit_int_time_motor5 = 1;
+    } else {
+      motor_turn[4] = motor_turn[4] + 6;
+    }
+    // usRegHoldingBuf[9] = motor_turn[0];
+    EXTI_ClearITPendingBit(EXTI_Line14);
+  }
+  /*motor 6*/
+  if (EXTI_GetITStatus(EXTI_Line15)) {
+    /*interrupted first time */
+    if (exit_int_time_motor6 == 0) {
+      motor_turn[5] = 6;
+      // Tim5Enable();
+      exit_int_time_motor6 = 1;
+    } else {
+      motor_turn[5] = motor_turn[5] + 6;
+    }
+    // usRegHoldingBuf[9] = motor_turn[0];
+    EXTI_ClearITPendingBit(EXTI_Line15);
+  }
+}
+
+void EXTI9_5_IRQHandler(void) {
+  /*interrupted first time */
+  if (exit_int_time_motor2 == 0) {
+    motor_turn[1] = 6;
+    Tim5Enable();
+    exit_int_time_motor2 = 1;
+  } else {
+    motor_turn[1] = motor_turn[1] + 6;
+  }
+
+  EXTI_ClearITPendingBit(EXTI_Line6);
 }

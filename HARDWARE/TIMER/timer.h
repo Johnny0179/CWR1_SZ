@@ -12,6 +12,9 @@ void TIM4_CH4_Cap_Init(u32 arr,u16 psc);
 void TIM12_CH1_Cap_Init(u32 arr,u16 psc);
 void TIM13_CH1_Cap_Init(u32 arr,u16 psc);
 
+void Tim5IntInit(u16 arr,u16 psc);
+void Tim5Enable(void);
+
 #endif
 
 

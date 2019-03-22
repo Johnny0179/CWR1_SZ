@@ -38,3 +38,11 @@
 ..\obj\motor.o: ..\FWLIB\inc\stm32f4xx_dac.h
 ..\obj\motor.o: ..\FWLIB\inc\stm32f4xx_dcmi.h
 ..\obj\motor.o: ..\FWLIB\inc\stm32f4xx_fsmc.h
+..\obj\motor.o: ..\FreeModbus\FreeModbus.h
+..\obj\motor.o: ..\FreeModbus\modbus\include\mb.h
+..\obj\motor.o: ..\FreeModbus\port\port.h
+..\obj\motor.o: D:\Keil_v5\ARM\ARMCC\bin\..\include\assert.h
+..\obj\motor.o: D:\Keil_v5\ARM\ARMCC\bin\..\include\inttypes.h
+..\obj\motor.o: ..\FreeModbus\modbus\include\mbport.h
+..\obj\motor.o: ..\FreeModbus\modbus\include\mbproto.h
+..\obj\motor.o: ..\FreeModbus\modbus\include\mbutils.h

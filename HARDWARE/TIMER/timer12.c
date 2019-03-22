@@ -1,10 +1,11 @@
-#include "PID.h"
-#include "timer.h"
-#include "motor.h"
 #include "FreeModbus.h"
+#include "PID.h"
+#include "motor.h"
+#include "timer.h"
 
 extern int32_t MotorSpeed[MotorNum];
-// extern int32_t usRegHoldingBuf[REG_HOLDING_NREGS];
+// extern u8 motor_turn[MotorNum];
+extern int32_t usRegHoldingBuf[REG_HOLDING_NREGS];
 
 // TIM12通道1输入捕获配置
 // arr：自动重装值(TIM2,TIM5是32位的!!)
@@ -63,7 +64,6 @@ static u16 CaptureNumber_Motor1 = 0;
 static u32 TIM12Capture = 0;
 //转速，单位0.001r/s
 static u32 rps_e_3_Motor1 = 0;
-
 
 // TIM12中断服务程序
 void TIM8_BRK_TIM12_IRQHandler(void) {

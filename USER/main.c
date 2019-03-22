@@ -175,17 +175,17 @@ static void Motor_task(void* pvParameters) {
   MotorInitConfig(6, &Motor6);
 
   // PID Init
-  pid_Init(P, 0 * I, 0 * D, &PIDMotor1);
-  pid_Init(P, 0 * I, 0 * D, &PIDMotor2);
-  pid_Init(P, 0 * I, 0 * D, &PIDMotor3);
-  pid_Init(P, 0 * I, 0 * D, &PIDMotor4);
-  pid_Init(P, 0 * I, 0 * D, &PIDMotor5);
-  pid_Init(P, 0 * I, 0 * D, &PIDMotor6);
+  pid_Init(2*P, 1 * I, 0 * D, &PIDMotor1);
+  pid_Init(2*P, 1 * I, 0 * D, &PIDMotor2);
+  pid_Init(2*P, 1 * I, 0 * D, &PIDMotor3);
+  pid_Init(2*P, 1 * I, 0 * D, &PIDMotor4);
+  pid_Init(2*P, 1 * I, 0 * D, &PIDMotor5);
+  pid_Init(2*P, 1 * I, 0 * D, &PIDMotor6);
 
   while (1) {
     // usRegHoldingBuf[0]=Motor1.direction;
-    MotorCtrl(&Motor1, &PIDMotor1);
-    usRegHoldingBuf[3] = Motor1.MotorSpeed_mmps;
+    // MotorCtrl(&Motor1, &PIDMotor1);
+    // usRegHoldingBuf[3] = Motor1.MotorSpeed_mmps;
 
     MotorCtrl(&Motor2, &PIDMotor2);
     usRegHoldingBuf[4] = Motor2.MotorSpeed_mmps;
@@ -203,9 +203,9 @@ static void Motor_task(void* pvParameters) {
     usRegHoldingBuf[8] = Motor6.MotorSpeed_mmps;
 
     /*Debug*/
-    usRegHoldingBuf[9]=Motor5.PWM;
+    usRegHoldingBuf[10]=Motor2.PWM;
     // usRegHoldingBuf[8]=Motor4.CmdSpeed;
     // MotorCtrl(Motor4,PIDMotor4);
-    vTaskDelay(10);  // Delay期间任务被BLOCK，可以执行其他任务
+    vTaskDelay(100);  // Delay期间任务被BLOCK，可以执行其他任务
   }
 }
