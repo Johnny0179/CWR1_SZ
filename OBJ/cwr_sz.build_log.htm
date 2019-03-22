@@ -8,26 +8,33 @@ Project File Date:  03/21/2019
 
 <h2>Output:</h2>
 Build target 'CWR_SZ'
-compiling main.c...
-..\HARDWARE\MOTOR\Motor.h(55): warning:  #1-D: last line of file ends without a newline
+compiling motor.c...
+..\HARDWARE\MOTOR\motor.h(55): warning:  #1-D: last line of file ends without a newline
   #endif
-main.c(118): warning:  #177-D: function "CAN_task" was declared but never referenced
-  static void CAN_task(void* pvParameters) {
-main.c: 2 warnings, 0 errors
-linking...
-Program Size: Code=38446 RO-data=1106 RW-data=1068 ZI-data=79148  
-FromELF: creating hex file...
-"..\OBJ\cwr_sz.axf" - 0 Error(s), 2 Warning(s).
-:  #1-D: last line of file ends without a newline
+..\HARDWARE\MOTOR\motor.c(376): warning:  #1-D: last line of file ends without a newline
   }
-..\HARDWARE\MOTOR\motor.c(9): warning:  #177-D: variable "exit_int_time_motor1" was declared but never referenced
-  static u8 exit_int_time_motor1 = 0;
-..\HARDWARE\MOTOR\motor.c: 3 warnings, 0 errors
+..\HARDWARE\MOTOR\motor.c: 2 warnings, 0 errors
+compiling timer12.c...
+..\HARDWARE\MOTOR\motor.h(55): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\HARDWARE\TIMER\timer12.c: 1 warning, 0 errors
+compiling timer5.c...
+..\HARDWARE\MOTOR\motor.h(55): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\HARDWARE\TIMER\timer5.c(39): warning:  #1-D: last line of file ends without a newline
+  }
+..\HARDWARE\TIMER\timer5.c: 2 warnings, 0 errors
 linking...
-Program Size: Code=38446 RO-data=1106 RW-data=1068 ZI-data=79148  
+Program Size: Code=38242 RO-data=1106 RW-data=1056 ZI-data=79144  
 FromELF: creating hex file...
 "..\OBJ\cwr_sz.axf" - 0 Error(s), 5 Warning(s).
-ng:  #1-D: last line of file ends without a newline
+ast line of file ends without a newline
+  }
+..\HARDWARE\MOTOR\motor.c: 2 warnings, 3 errors
+compiling timer4.c...
+..\HARDWARE\MOTOR\motor.h(55): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\HARDWARE\TIMER\timer4.c(342): warning:  #1-D: last line of file ends without a newline
   }
 ..\HARDWARE\TIMER\timer4.c: 2 warnings, 0 errors
 compiling timer12.c...
@@ -56,13 +63,9 @@ compiling timer5.c...
 ..\HARDWARE\TIMER\timer5.c(40): warning:  #1-D: last line of file ends without a newline
   }
 ..\HARDWARE\TIMER\timer5.c: 2 warnings, 0 errors
-linking...
-Program Size: Code=38442 RO-data=1106 RW-data=1068 ZI-data=79148  
-FromELF: creating hex file...
-"..\OBJ\cwr_sz.axf" - 0 Error(s), 16 Warning(s).
-D: explicit type is missing ("int" assumed)
-  static volatile motor_turn_this_time[MotorNum] = {0};
-..\HARDWARE\MOTOR\motor_ctrl.c(18): warning:  #260-D: explicit type is missing ("int" assumed)
+"..\OBJ\cwr_sz.axf" - 3 Error(s), 15 Warning(s).
+Target not created
+e is missing ("int" assumed)
   static volatile motor_turn_last_time[MotorNum] = {0};
 ..\HARDWARE\MOTOR\motor_ctrl.c(102): error:  #254: type name is not allowed
     for (u8 i = 0; i <= motor_num - 1; i++) {

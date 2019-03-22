@@ -2,10 +2,13 @@
 #include "PID.h"
 #include "motor.h"
 #include "timer.h"
+#include "led.h"
 
 extern int32_t MotorSpeed[MotorNum];
 // extern u8 motor_turn[MotorNum];
 extern int32_t usRegHoldingBuf[REG_HOLDING_NREGS];
+static u8 exit_int_time_motor1 = 0;
+extern u32 motor_turn[MotorNum];
 
 // TIM12通道1输入捕获配置
 // arr：自动重装值(TIM2,TIM5是32位的!!)
@@ -50,20 +53,11 @@ void TIM12_CH1_Cap_Init(u32 arr, u16 psc) {
   TIM_Cmd(TIM12, ENABLE);
 
   NVIC_InitStructure.NVIC_IRQChannel = TIM8_BRK_TIM12_IRQn;
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;  //抢占优先级3
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;         //子优先级3
-  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;            // IRQ通道使能
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 15;  //抢占优先级3
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;          //子优先级3
+  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;             // IRQ通道使能
   NVIC_Init(&NVIC_InitStructure);  //根据指定的参数初始化VIC寄存器、
 }
-
-// 捕获值记录1、2，捕获次数
-static u16 IC_ReadValue1_Motor1 = 0;
-static u16 IC_ReadValue2_Motor1 = 0;
-static u16 CaptureNumber_Motor1 = 0;
-//最终值
-static u32 TIM12Capture = 0;
-//转速，单位0.001r/s
-static u32 rps_e_3_Motor1 = 0;
 
 // TIM12中断服务程序
 void TIM8_BRK_TIM12_IRQHandler(void) {
@@ -74,26 +68,15 @@ void TIM8_BRK_TIM12_IRQHandler(void) {
 
   else if (TIM_GetITStatus(TIM12, TIM_IT_CC1) != RESET)  //捕获发生
   {
-    TIM_ClearITPendingBit(TIM12, TIM_IT_CC1);
-    if (CaptureNumber_Motor1 == 0) {
-      IC_ReadValue1_Motor1 = TIM_GetCapture1(TIM12);
-      CaptureNumber_Motor1 = 1;
-    } else if (CaptureNumber_Motor1 == 1) {
-      IC_ReadValue2_Motor1 = TIM_GetCapture1(TIM12);
-      if (IC_ReadValue2_Motor1 > IC_ReadValue1_Motor1) {
-        TIM12Capture = (IC_ReadValue2_Motor1 - IC_ReadValue1_Motor1);
-      } else {
-        TIM12Capture = (0xFFFF - IC_ReadValue2_Motor1 + IC_ReadValue1_Motor1);
-      }
-      CaptureNumber_Motor1 = 0;
+    LED1=!LED1;
+    /*interrupted first time */
+    if (exit_int_time_motor1 == 0) {
+      motor_turn[0] = 6;
+      Tim5Enable();
+      exit_int_time_motor1 = 1;
+    } else {
+      motor_turn[0] = motor_turn[0] + 6;
     }
-  }
-
-  //剔除不正常数据
-  if (((u32)10000000 / TIM12Capture) > 150) {
-    //转速
-    rps_e_3_Motor1 = (u32)1000000000 / TIM12Capture / (6 * ReductionRatio);
-    //速度
-    MotorSpeed[0] = rps_e_3_Motor1 * 3.14 * 45 / 1000;
+    TIM_ClearITPendingBit(TIM12, TIM_IT_CC1);
   }
 }

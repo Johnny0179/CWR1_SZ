@@ -184,8 +184,8 @@ static void Motor_task(void* pvParameters) {
 
   while (1) {
     // usRegHoldingBuf[0]=Motor1.direction;
-    // MotorCtrl(&Motor1, &PIDMotor1);
-    // usRegHoldingBuf[3] = Motor1.MotorSpeed_mmps;
+    MotorCtrl(&Motor1, &PIDMotor1);
+    usRegHoldingBuf[3] = Motor1.MotorSpeed_mmps;
 
     MotorCtrl(&Motor2, &PIDMotor2);
     usRegHoldingBuf[4] = Motor2.MotorSpeed_mmps;

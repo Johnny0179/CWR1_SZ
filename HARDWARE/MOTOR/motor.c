@@ -1,12 +1,10 @@
 #include "motor.h"
 #include "FreeModbus.h"
 #include "PID.h"
+#include "timer.h"
 
-extern pidData_t PIDMotor1;
-extern pidData_t PIDMotor3;
 extern int32_t usRegHoldingBuf[REG_HOLDING_NREGS];
 u32 motor_turn[MotorNum];
-static u8 exit_int_time_motor1 = 0;
 static u8 exit_int_time_motor2 = 0;
 static u8 exit_int_time_motor3 = 0;
 static u8 exit_int_time_motor4 = 0;
@@ -238,7 +236,7 @@ void MoveDown(void) {
 void MotorFGInit(void) {
   NVIC_InitTypeDef NVIC_InitStructure;
   EXTI_InitTypeDef EXTI_InitStructure;
-
+  TIM12_CH1_Cap_Init(0XFFFF, 84 - 1);
   EXTIX_Init();  //
 
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
@@ -293,15 +291,7 @@ void MotorFGInit(void) {
 void EXTIX_Init(void) {
   GPIO_InitTypeDef GPIO_InitStructure;
 
-  RCC_AHB1PeriphClockCmd(
-      RCC_AHB1Periph_GPIOB | RCC_AHB1Periph_GPIOA | RCC_AHB1Periph_GPIOD,
-      ENABLE);
-
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
-  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
-  GPIO_Init(GPIOB, &GPIO_InitStructure);
+  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA | RCC_AHB1Periph_GPIOD, ENABLE);
 
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;

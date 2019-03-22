@@ -33,7 +33,6 @@ void Tim5Enable(void) { TIM_Cmd(TIM5, ENABLE); }
 void TIM5_IRQHandler(void) {
   if (TIM_GetITStatus(TIM5, TIM_IT_Update) == SET) {
     LED0 = !LED0;
-
     DeltaTurnCalc(motor_turn, MotorNum);
   }
   TIM_ClearITPendingBit(TIM5, TIM_IT_Update);

@@ -46,3 +46,4 @@
 ..\obj\timer12.o: ..\PID\PID.h
 ..\obj\timer12.o: ..\HARDWARE\TIMER\timer.h
 ..\obj\timer12.o: ..\HARDWARE\MOTOR\motor.h
+..\obj\timer12.o: ..\HARDWARE\LED\led.h
