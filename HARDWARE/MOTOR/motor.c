@@ -5,6 +5,7 @@
 
 extern int32_t usRegHoldingBuf[REG_HOLDING_NREGS];
 u32 motor_turn[MotorNum];
+u8 timer5_enabled = 0;
 static u8 exit_int_time_motor2 = 0;
 static u8 exit_int_time_motor3 = 0;
 static u8 exit_int_time_motor4 = 0;
@@ -206,8 +207,9 @@ void Motor_Init(void) {
   GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;        //上拉
   GPIO_Init(GPIOD, &GPIO_InitStructure);              //初始化GPIO
 
-  GPIO_SetBits(GPIOD, GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4);
-  GPIO_ResetBits(GPIOD, GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_5);
+  // GPIO_ResetBits(GPIOD, GPIO_Pin_0 | GPIO_Pin_3 );
+  GPIO_SetBits(GPIOD, GPIO_Pin_0 | GPIO_Pin_3 | GPIO_Pin_1 | GPIO_Pin_2 |
+                          GPIO_Pin_4 | GPIO_Pin_5);
 }
 
 void TIM1_PWM_SET(u32 freq, u32 Duty) {
@@ -224,13 +226,13 @@ void TIM8_PWM_SET(u32 freq, u32 Duty) {
 }
 
 void MoveUp(void) {
-  GPIO_SetBits(GPIOD, GPIO_Pin_2 | GPIO_Pin_3);
-  GPIO_ResetBits(GPIOD, GPIO_Pin_0 | GPIO_Pin_1);
+  GPIO_SetBits(GPIOD, GPIO_Pin_0 | GPIO_Pin_3 | GPIO_Pin_1 | GPIO_Pin_2 |
+                          GPIO_Pin_4 | GPIO_Pin_5);
 }
 
 void MoveDown(void) {
-  GPIO_ResetBits(GPIOD, GPIO_Pin_2 | GPIO_Pin_3);
-  GPIO_SetBits(GPIOD, GPIO_Pin_0 | GPIO_Pin_1);
+  GPIO_ResetBits(GPIOD, GPIO_Pin_0 | GPIO_Pin_3 | GPIO_Pin_1 | GPIO_Pin_2 |
+                            GPIO_Pin_4 | GPIO_Pin_5);
 }
 
 void MotorFGInit(void) {
@@ -312,11 +314,11 @@ void EXTI15_10_IRQHandler(void) {
   if (EXTI_GetITStatus(EXTI_Line12)) {
     /*interrupted first time */
     if (exit_int_time_motor3 == 0) {
-      motor_turn[2] = 6;
+      motor_turn[2] = 1;
       // Tim5Enable();
       exit_int_time_motor3 = 1;
     } else {
-      motor_turn[2] = motor_turn[2] + 6;
+      motor_turn[2] = motor_turn[2] + 1;
     }
     // usRegHoldingBuf[9] = motor_turn[2];
     EXTI_ClearITPendingBit(EXTI_Line12);
@@ -325,11 +327,11 @@ void EXTI15_10_IRQHandler(void) {
   if (EXTI_GetITStatus(EXTI_Line13)) {
     /*interrupted first time */
     if (exit_int_time_motor4 == 0) {
-      motor_turn[3] = 6;
+      motor_turn[3] = 1;
       // Tim5Enable();
       exit_int_time_motor4 = 1;
     } else {
-      motor_turn[3] = motor_turn[3] + 6;
+      motor_turn[3] = motor_turn[3] + 1;
     }
     // usRegHoldingBuf[9] = motor_turn[0];
     EXTI_ClearITPendingBit(EXTI_Line13);
@@ -338,11 +340,11 @@ void EXTI15_10_IRQHandler(void) {
   if (EXTI_GetITStatus(EXTI_Line14)) {
     /*interrupted first time */
     if (exit_int_time_motor5 == 0) {
-      motor_turn[4] = 6;
+      motor_turn[4] = 1;
       // Tim5Enable();
       exit_int_time_motor5 = 1;
     } else {
-      motor_turn[4] = motor_turn[4] + 6;
+      motor_turn[4] = motor_turn[4] + 1;
     }
     // usRegHoldingBuf[9] = motor_turn[0];
     EXTI_ClearITPendingBit(EXTI_Line14);
@@ -351,11 +353,11 @@ void EXTI15_10_IRQHandler(void) {
   if (EXTI_GetITStatus(EXTI_Line15)) {
     /*interrupted first time */
     if (exit_int_time_motor6 == 0) {
-      motor_turn[5] = 6;
+      motor_turn[5] = 1;
       // Tim5Enable();
       exit_int_time_motor6 = 1;
     } else {
-      motor_turn[5] = motor_turn[5] + 6;
+      motor_turn[5] = motor_turn[5] + 1;
     }
     // usRegHoldingBuf[9] = motor_turn[0];
     EXTI_ClearITPendingBit(EXTI_Line15);
@@ -365,12 +367,11 @@ void EXTI15_10_IRQHandler(void) {
 void EXTI9_5_IRQHandler(void) {
   /*interrupted first time */
   if (exit_int_time_motor2 == 0) {
-    motor_turn[1] = 6;
+    motor_turn[1] = 1;
     Tim5Enable();
     exit_int_time_motor2 = 1;
   } else {
-    motor_turn[1] = motor_turn[1] + 6;
+    motor_turn[1] = motor_turn[1] + 1;
   }
-
   EXTI_ClearITPendingBit(EXTI_Line6);
 }

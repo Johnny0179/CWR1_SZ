@@ -1,7 +1,7 @@
 Dependencies for Project 'CWR_SZ', Target 'CWR_SZ': (DO NOT MODIFY !)
-F (.\main.c)(0x5C94C2E6)(-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork -I..\CORE -I..\USER -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\HARDWARE\LED -I..\FreeRTOS\include -I..\FreeRTOS\portable\RVDS\ARM_CM4F -I..\FreeModbus\port -I..\FreeModbus\modbus\rtu -I..\FreeModbus\modbus\include -I..\FreeModbus\modbus\ascii -I..\FreeModbus -I..\HARDWARE\MOTOR -I..\HARDWARE\CAN -I..\FWLIB\inc -I..\HARDWARE\TIMER -I..\PID-I D:\Keil_v5\ARM\RV31\INC-I D:\Keil_v5\ARM\PACK\ARM\CMSIS\4.1.1\CMSIS\Include-I D:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\1.0.8\Device\Include-DSTM32F40_41xxx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER -DSTM32F40_41xxx-o ..\obj\main.o --omf_browse ..\obj\main.crf --depend ..\obj\main.d)
-I (..\HARDWARE\MOTOR\Motor.h)(0x5C94C300)
-I (..\PID\PID.h)(0x5BC68884)
+F (.\main.c)(0x5C987550)(-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork -I..\CORE -I..\USER -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\HARDWARE\LED -I..\FreeRTOS\include -I..\FreeRTOS\portable\RVDS\ARM_CM4F -I..\FreeModbus\port -I..\FreeModbus\modbus\rtu -I..\FreeModbus\modbus\include -I..\FreeModbus\modbus\ascii -I..\FreeModbus -I..\HARDWARE\MOTOR -I..\HARDWARE\CAN -I..\FWLIB\inc -I..\HARDWARE\TIMER -I..\PID-I D:\Keil_v5\ARM\RV31\INC-I D:\Keil_v5\ARM\PACK\ARM\CMSIS\4.1.1\CMSIS\Include-I D:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\1.0.8\Device\Include-DSTM32F40_41xxx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER -DSTM32F40_41xxx-o ..\obj\main.o --omf_browse ..\obj\main.crf --depend ..\obj\main.d)
+I (..\HARDWARE\MOTOR\Motor.h)(0x5C987548)
+I (..\PID\PID.h)(0x5C98415C)
 I (..\HARDWARE\TIMER\timer.h)(0x5C943E14)
 I (..\SYSTEM\sys\sys.h)(0x5BBDBD9B)
 I (..\USER\stm32f4xx.h)(0x5BBDBD9B)
@@ -533,9 +533,9 @@ I (..\FWLIB\inc\stm32f4xx_can.h)(0x5BBDBD9B)
 I (..\FWLIB\inc\stm32f4xx_dac.h)(0x5BBDBD9B)
 I (..\FWLIB\inc\stm32f4xx_dcmi.h)(0x5BBDBD9B)
 I (..\FWLIB\inc\stm32f4xx_fsmc.h)(0x5BBDBD9B)
-F (..\HARDWARE\MOTOR\motor.c)(0x5C94C5B7)(-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork -I..\CORE -I..\USER -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\HARDWARE\LED -I..\FreeRTOS\include -I..\FreeRTOS\portable\RVDS\ARM_CM4F -I..\FreeModbus\port -I..\FreeModbus\modbus\rtu -I..\FreeModbus\modbus\include -I..\FreeModbus\modbus\ascii -I..\FreeModbus -I..\HARDWARE\MOTOR -I..\HARDWARE\CAN -I..\FWLIB\inc -I..\HARDWARE\TIMER -I..\PID-I D:\Keil_v5\ARM\RV31\INC-I D:\Keil_v5\ARM\PACK\ARM\CMSIS\4.1.1\CMSIS\Include-I D:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\1.0.8\Device\Include-DSTM32F40_41xxx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER -DSTM32F40_41xxx-o ..\obj\motor.o --omf_browse ..\obj\motor.crf --depend ..\obj\motor.d)
-I (..\HARDWARE\MOTOR\motor.h)(0x5C94C300)
-I (..\PID\PID.h)(0x5BC68884)
+F (..\HARDWARE\MOTOR\motor.c)(0x5C987E7D)(-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork -I..\CORE -I..\USER -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\HARDWARE\LED -I..\FreeRTOS\include -I..\FreeRTOS\portable\RVDS\ARM_CM4F -I..\FreeModbus\port -I..\FreeModbus\modbus\rtu -I..\FreeModbus\modbus\include -I..\FreeModbus\modbus\ascii -I..\FreeModbus -I..\HARDWARE\MOTOR -I..\HARDWARE\CAN -I..\FWLIB\inc -I..\HARDWARE\TIMER -I..\PID-I D:\Keil_v5\ARM\RV31\INC-I D:\Keil_v5\ARM\PACK\ARM\CMSIS\4.1.1\CMSIS\Include-I D:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\1.0.8\Device\Include-DSTM32F40_41xxx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER -DSTM32F40_41xxx-o ..\obj\motor.o --omf_browse ..\obj\motor.crf --depend ..\obj\motor.d)
+I (..\HARDWARE\MOTOR\motor.h)(0x5C987548)
+I (..\PID\PID.h)(0x5C98415C)
 I (..\HARDWARE\TIMER\timer.h)(0x5C943E14)
 I (..\SYSTEM\sys\sys.h)(0x5BBDBD9B)
 I (..\USER\stm32f4xx.h)(0x5BBDBD9B)
@@ -661,10 +661,10 @@ I (..\FWLIB\inc\stm32f4xx_fsmc.h)(0x5BBDBD9B)
 I (..\FreeModbus\modbus\include\mbport.h)(0x5BBDBD9B)
 I (..\FreeModbus\modbus\include\mbproto.h)(0x5BBDBD9B)
 I (..\FreeModbus\modbus\include\mbutils.h)(0x5BBDBD9B)
-I (..\PID\PID.h)(0x5BC68884)
+I (..\PID\PID.h)(0x5C98415C)
 I (..\HARDWARE\TIMER\timer.h)(0x5C943E14)
-I (..\HARDWARE\MOTOR\motor.h)(0x5C94C300)
-F (..\HARDWARE\TIMER\timer12.c)(0x5C94C551)(-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork -I..\CORE -I..\USER -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\HARDWARE\LED -I..\FreeRTOS\include -I..\FreeRTOS\portable\RVDS\ARM_CM4F -I..\FreeModbus\port -I..\FreeModbus\modbus\rtu -I..\FreeModbus\modbus\include -I..\FreeModbus\modbus\ascii -I..\FreeModbus -I..\HARDWARE\MOTOR -I..\HARDWARE\CAN -I..\FWLIB\inc -I..\HARDWARE\TIMER -I..\PID-I D:\Keil_v5\ARM\RV31\INC-I D:\Keil_v5\ARM\PACK\ARM\CMSIS\4.1.1\CMSIS\Include-I D:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\1.0.8\Device\Include-DSTM32F40_41xxx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER -DSTM32F40_41xxx-o ..\obj\timer12.o --omf_browse ..\obj\timer12.crf --depend ..\obj\timer12.d)
+I (..\HARDWARE\MOTOR\motor.h)(0x5C987548)
+F (..\HARDWARE\TIMER\timer12.c)(0x5C987561)(-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork -I..\CORE -I..\USER -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\HARDWARE\LED -I..\FreeRTOS\include -I..\FreeRTOS\portable\RVDS\ARM_CM4F -I..\FreeModbus\port -I..\FreeModbus\modbus\rtu -I..\FreeModbus\modbus\include -I..\FreeModbus\modbus\ascii -I..\FreeModbus -I..\HARDWARE\MOTOR -I..\HARDWARE\CAN -I..\FWLIB\inc -I..\HARDWARE\TIMER -I..\PID-I D:\Keil_v5\ARM\RV31\INC-I D:\Keil_v5\ARM\PACK\ARM\CMSIS\4.1.1\CMSIS\Include-I D:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\1.0.8\Device\Include-DSTM32F40_41xxx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER -DSTM32F40_41xxx-o ..\obj\timer12.o --omf_browse ..\obj\timer12.crf --depend ..\obj\timer12.d)
 I (..\FreeModbus\FreeModbus.h)(0x5BBDBD9B)
 I (..\FreeModbus\modbus\include\mb.h)(0x5BBDBD9B)
 I (..\FreeModbus\port\port.h)(0x5BBDBD9B)
@@ -708,11 +708,11 @@ I (..\FWLIB\inc\stm32f4xx_fsmc.h)(0x5BBDBD9B)
 I (..\FreeModbus\modbus\include\mbport.h)(0x5BBDBD9B)
 I (..\FreeModbus\modbus\include\mbproto.h)(0x5BBDBD9B)
 I (..\FreeModbus\modbus\include\mbutils.h)(0x5BBDBD9B)
-I (..\PID\PID.h)(0x5BC68884)
+I (..\PID\PID.h)(0x5C98415C)
 I (..\HARDWARE\TIMER\timer.h)(0x5C943E14)
-I (..\HARDWARE\MOTOR\motor.h)(0x5C94C300)
 I (..\HARDWARE\LED\led.h)(0x5BBDBD9B)
-F (..\HARDWARE\MOTOR\motor_ctrl.c)(0x5C94AC12)(-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork -I..\CORE -I..\USER -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\HARDWARE\LED -I..\FreeRTOS\include -I..\FreeRTOS\portable\RVDS\ARM_CM4F -I..\FreeModbus\port -I..\FreeModbus\modbus\rtu -I..\FreeModbus\modbus\include -I..\FreeModbus\modbus\ascii -I..\FreeModbus -I..\HARDWARE\MOTOR -I..\HARDWARE\CAN -I..\FWLIB\inc -I..\HARDWARE\TIMER -I..\PID-I D:\Keil_v5\ARM\RV31\INC-I D:\Keil_v5\ARM\PACK\ARM\CMSIS\4.1.1\CMSIS\Include-I D:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\1.0.8\Device\Include-DSTM32F40_41xxx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER -DSTM32F40_41xxx-o ..\obj\motor_ctrl.o --omf_browse ..\obj\motor_ctrl.crf --depend ..\obj\motor_ctrl.d)
+I (..\HARDWARE\MOTOR\motor.h)(0x5C987548)
+F (..\HARDWARE\MOTOR\motor_ctrl.c)(0x5C987E92)(-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork -I..\CORE -I..\USER -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\HARDWARE\LED -I..\FreeRTOS\include -I..\FreeRTOS\portable\RVDS\ARM_CM4F -I..\FreeModbus\port -I..\FreeModbus\modbus\rtu -I..\FreeModbus\modbus\include -I..\FreeModbus\modbus\ascii -I..\FreeModbus -I..\HARDWARE\MOTOR -I..\HARDWARE\CAN -I..\FWLIB\inc -I..\HARDWARE\TIMER -I..\PID-I D:\Keil_v5\ARM\RV31\INC-I D:\Keil_v5\ARM\PACK\ARM\CMSIS\4.1.1\CMSIS\Include-I D:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\1.0.8\Device\Include-DSTM32F40_41xxx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER -DSTM32F40_41xxx-o ..\obj\motor_ctrl.o --omf_browse ..\obj\motor_ctrl.crf --depend ..\obj\motor_ctrl.d)
 I (..\FreeModbus\FreeModbus.h)(0x5BBDBD9B)
 I (..\FreeModbus\modbus\include\mb.h)(0x5BBDBD9B)
 I (..\FreeModbus\port\port.h)(0x5BBDBD9B)
@@ -756,11 +756,11 @@ I (..\FWLIB\inc\stm32f4xx_fsmc.h)(0x5BBDBD9B)
 I (..\FreeModbus\modbus\include\mbport.h)(0x5BBDBD9B)
 I (..\FreeModbus\modbus\include\mbproto.h)(0x5BBDBD9B)
 I (..\FreeModbus\modbus\include\mbutils.h)(0x5BBDBD9B)
-I (..\PID\PID.h)(0x5BC68884)
+I (..\PID\PID.h)(0x5C98415C)
 I (..\HARDWARE\TIMER\timer.h)(0x5C943E14)
-I (..\HARDWARE\MOTOR\motor.h)(0x5C94C300)
+I (..\HARDWARE\MOTOR\motor.h)(0x5C987548)
 F (..\HARDWARE\TIMER\timer13.c)(0x5C933EBF)(-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork -I..\CORE -I..\USER -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\HARDWARE\LED -I..\FreeRTOS\include -I..\FreeRTOS\portable\RVDS\ARM_CM4F -I..\FreeModbus\port -I..\FreeModbus\modbus\rtu -I..\FreeModbus\modbus\include -I..\FreeModbus\modbus\ascii -I..\FreeModbus -I..\HARDWARE\MOTOR -I..\HARDWARE\CAN -I..\FWLIB\inc -I..\HARDWARE\TIMER -I..\PID-I D:\Keil_v5\ARM\RV31\INC-I D:\Keil_v5\ARM\PACK\ARM\CMSIS\4.1.1\CMSIS\Include-I D:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\1.0.8\Device\Include-DSTM32F40_41xxx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER -DSTM32F40_41xxx-o ..\obj\timer13.o --omf_browse ..\obj\timer13.crf --depend ..\obj\timer13.d)
-I (..\PID\PID.h)(0x5BC68884)
+I (..\PID\PID.h)(0x5C98415C)
 I (..\HARDWARE\TIMER\timer.h)(0x5C943E14)
 I (..\SYSTEM\sys\sys.h)(0x5BBDBD9B)
 I (..\USER\stm32f4xx.h)(0x5BBDBD9B)
@@ -797,7 +797,7 @@ I (..\FWLIB\inc\stm32f4xx_can.h)(0x5BBDBD9B)
 I (..\FWLIB\inc\stm32f4xx_dac.h)(0x5BBDBD9B)
 I (..\FWLIB\inc\stm32f4xx_dcmi.h)(0x5BBDBD9B)
 I (..\FWLIB\inc\stm32f4xx_fsmc.h)(0x5BBDBD9B)
-I (..\HARDWARE\MOTOR\motor.h)(0x5C94C300)
+I (..\HARDWARE\MOTOR\motor.h)(0x5C987548)
 I (..\FreeModbus\FreeModbus.h)(0x5BBDBD9B)
 I (..\FreeModbus\modbus\include\mb.h)(0x5BBDBD9B)
 I (..\FreeModbus\port\port.h)(0x5BBDBD9B)
@@ -851,8 +851,8 @@ I (..\FreeModbus\modbus\include\mbport.h)(0x5BBDBD9B)
 I (..\FreeModbus\modbus\include\mbproto.h)(0x5BBDBD9B)
 I (..\FreeModbus\modbus\include\mbutils.h)(0x5BBDBD9B)
 I (..\HARDWARE\LED\led.h)(0x5BBDBD9B)
-I (..\HARDWARE\MOTOR\motor.h)(0x5C94C300)
-I (..\PID\PID.h)(0x5BC68884)
+I (..\HARDWARE\MOTOR\motor.h)(0x5C987548)
+I (..\PID\PID.h)(0x5C98415C)
 I (..\HARDWARE\TIMER\timer.h)(0x5C943E14)
 F (..\FreeRTOS\croutine.c)(0x5BBDBD9B)(-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork -I..\CORE -I..\USER -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\HARDWARE\LED -I..\FreeRTOS\include -I..\FreeRTOS\portable\RVDS\ARM_CM4F -I..\FreeModbus\port -I..\FreeModbus\modbus\rtu -I..\FreeModbus\modbus\include -I..\FreeModbus\modbus\ascii -I..\FreeModbus -I..\HARDWARE\MOTOR -I..\HARDWARE\CAN -I..\FWLIB\inc -I..\HARDWARE\TIMER -I..\PID-I D:\Keil_v5\ARM\RV31\INC-I D:\Keil_v5\ARM\PACK\ARM\CMSIS\4.1.1\CMSIS\Include-I D:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\1.0.8\Device\Include-DSTM32F40_41xxx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER -DSTM32F40_41xxx-o ..\obj\croutine.o --omf_browse ..\obj\croutine.crf --depend ..\obj\croutine.d)
 I (..\FreeRTOS\include\FreeRTOS.h)(0x5BBDBD9B)
@@ -1596,7 +1596,7 @@ I (..\FreeModbus\modbus\include\mbport.h)(0x5BBDBD9B)
 I (..\FreeModbus\modbus\include\mbproto.h)(0x5BBDBD9B)
 I (..\FreeModbus\modbus\include\mbutils.h)(0x5BBDBD9B)
 F (..\PID\PID.c)(0x5BC6E550)(-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork -I..\CORE -I..\USER -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\HARDWARE\LED -I..\FreeRTOS\include -I..\FreeRTOS\portable\RVDS\ARM_CM4F -I..\FreeModbus\port -I..\FreeModbus\modbus\rtu -I..\FreeModbus\modbus\include -I..\FreeModbus\modbus\ascii -I..\FreeModbus -I..\HARDWARE\MOTOR -I..\HARDWARE\CAN -I..\FWLIB\inc -I..\HARDWARE\TIMER -I..\PID-I D:\Keil_v5\ARM\RV31\INC-I D:\Keil_v5\ARM\PACK\ARM\CMSIS\4.1.1\CMSIS\Include-I D:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\1.0.8\Device\Include-DSTM32F40_41xxx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER -DSTM32F40_41xxx-o ..\obj\pid.o --omf_browse ..\obj\pid.crf --depend ..\obj\pid.d)
-I (..\PID\pid.h)(0x5BC68884)
+I (..\PID\pid.h)(0x5C98415C)
 I (..\HARDWARE\TIMER\timer.h)(0x5C943E14)
 I (..\SYSTEM\sys\sys.h)(0x5BBDBD9B)
 I (..\USER\stm32f4xx.h)(0x5BBDBD9B)

@@ -7,7 +7,7 @@
 
   <Targets>
     <Target>
-      <TargetName>CWR2_FreeRTOS_PID</TargetName>
+      <TargetName>CWR_SZ</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <TargetOption>
@@ -45,7 +45,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>..\OBJ\</OutputDirectory>
-          <OutputName>CWR2_FreeRTOS_PID</OutputName>
+          <OutputName>cwr_sz</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>1</CreateHexFile>

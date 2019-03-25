@@ -3,7 +3,7 @@
 <title>Static Call Graph - [..\OBJ\cwr_sz.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ..\OBJ\cwr_sz.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Fri Mar 22 19:23:45 2019
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Mon Mar 25 15:09:59 2019
 <BR><P>
 <H3>Maximum Stack Usage =        344 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -286,8 +286,7 @@ Global Symbols
 <P><STRONG><a name="[1cc]"></a>WFI_SET</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, sys.o(.emb_text), UNUSED)
 
 <P><STRONG><a name="[185]"></a>INTX_DISABLE</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, sys.o(.emb_text))
-<BR><BR>[Called By]<UL><LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eMBRTUStop
-<LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eMBRTUStart
+<BR><BR>[Called By]<UL><LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eMBRTUStart
 <LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eMBRTUSend
 <LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eMBRTUReceive
 <LI><a href="#[181]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eMBRTUInit
@@ -297,11 +296,11 @@ Global Symbols
 <LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eMBASCIIReceive
 <LI><a href="#[182]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eMBASCIIInit
 <LI><a href="#[184]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eMBRegisterCB
+<LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eMBRTUStop
 </UL>
 
 <P><STRONG><a name="[186]"></a>INTX_ENABLE</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, sys.o(.emb_text))
-<BR><BR>[Called By]<UL><LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eMBRTUStop
-<LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eMBRTUStart
+<BR><BR>[Called By]<UL><LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eMBRTUStart
 <LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eMBRTUSend
 <LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eMBRTUReceive
 <LI><a href="#[181]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eMBRTUInit
@@ -311,6 +310,7 @@ Global Symbols
 <LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eMBASCIIReceive
 <LI><a href="#[182]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eMBASCIIInit
 <LI><a href="#[184]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eMBRegisterCB
+<LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eMBRTUStop
 </UL>
 
 <P><STRONG><a name="[1cd]"></a>MSR_MSP</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, sys.o(.emb_text), UNUSED)
@@ -673,15 +673,12 @@ Global Symbols
 
 <P><STRONG><a name="[cb]"></a>GPIO_SetBits</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32f4xx_gpio.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LED_Init
-<LI><a href="#[de]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MoveDown
-<LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MoveUp
+<LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MoveUp
 <LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Motor_Init
 </UL>
 
-<P><STRONG><a name="[dc]"></a>GPIO_ResetBits</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32f4xx_gpio.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[de]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MoveDown
-<LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MoveUp
-<LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Motor_Init
+<P><STRONG><a name="[de]"></a>GPIO_ResetBits</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32f4xx_gpio.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MoveDown
 </UL>
 
 <P><STRONG><a name="[1d7]"></a>GPIO_WriteBit</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, stm32f4xx_gpio.o(.text), UNUSED)
@@ -1466,31 +1463,28 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorInit
 </UL>
 
-<P><STRONG><a name="[db]"></a>Motor_Init</STRONG> (Thumb, 64 bytes, Stack size 16 bytes, motor.o(.text))
+<P><STRONG><a name="[db]"></a>Motor_Init</STRONG> (Thumb, 56 bytes, Stack size 16 bytes, motor.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 36<LI>Call Chain = Motor_Init &rArr; GPIO_Init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_AHB1PeriphClockCmd
-<LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_ResetBits
 <LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_SetBits
 <LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
 </UL>
 <BR>[Called By]<UL><LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorInit
 </UL>
 
-<P><STRONG><a name="[dd]"></a>MoveUp</STRONG> (Thumb, 20 bytes, Stack size 8 bytes, motor.o(.text))
+<P><STRONG><a name="[dc]"></a>MoveUp</STRONG> (Thumb, 12 bytes, Stack size 8 bytes, motor.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = MoveUp
 </UL>
-<BR>[Calls]<UL><LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_ResetBits
-<LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_SetBits
+<BR>[Calls]<UL><LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_SetBits
 </UL>
 <BR>[Called By]<UL><LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorCtrl
 </UL>
 
-<P><STRONG><a name="[de]"></a>MoveDown</STRONG> (Thumb, 20 bytes, Stack size 8 bytes, motor.o(.text))
+<P><STRONG><a name="[dd]"></a>MoveDown</STRONG> (Thumb, 12 bytes, Stack size 8 bytes, motor.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = MoveDown
 </UL>
-<BR>[Calls]<UL><LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_ResetBits
-<LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_SetBits
+<BR>[Calls]<UL><LI><a href="#[de]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_ResetBits
 </UL>
 <BR>[Called By]<UL><LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorCtrl
 </UL>
@@ -1517,7 +1511,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorInit
 </UL>
 
-<P><STRONG><a name="[3e]"></a>EXTI15_10_IRQHandler</STRONG> (Thumb, 238 bytes, Stack size 8 bytes, motor.o(.text))
+<P><STRONG><a name="[3e]"></a>EXTI15_10_IRQHandler</STRONG> (Thumb, 228 bytes, Stack size 8 bytes, motor.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = EXTI15_10_IRQHandler
 </UL>
 <BR>[Calls]<UL><LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EXTI_ClearITPendingBit
@@ -1668,8 +1662,8 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[100]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pid_Controller
 <LI><a href="#[ff]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorVelCalc
-<LI><a href="#[de]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MoveDown
-<LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MoveUp
+<LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MoveDown
+<LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MoveUp
 </UL>
 <BR>[Called By]<UL><LI><a href="#[69]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Motor_task
 </UL>
@@ -1678,7 +1672,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[69]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Motor_task
 </UL>
 
-<P><STRONG><a name="[102]"></a>DeltaTurnCalc</STRONG> (Thumb, 66 bytes, Stack size 8 bytes, motor_ctrl.o(.text))
+<P><STRONG><a name="[102]"></a>DeltaTurnCalc</STRONG> (Thumb, 134 bytes, Stack size 8 bytes, motor_ctrl.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = DeltaTurnCalc
 </UL>
 <BR>[Called By]<UL><LI><a href="#[48]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM5_IRQHandler
@@ -2566,14 +2560,14 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[170]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_ITConfig
 </UL>
-<BR>[Called By]<UL><LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eMBRTUStop
-<LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eMBRTUStart
+<BR>[Called By]<UL><LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eMBRTUStart
 <LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eMBRTUSend
 <LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eMBASCIIStop
 <LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eMBASCIIStart
 <LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eMBASCIISend
 <LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xMBRTUTransmitFSM
 <LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xMBASCIITransmitFSM
+<LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eMBRTUStop
 </UL>
 
 <P><STRONG><a name="[171]"></a>xMBPortSerialInit</STRONG> (Thumb, 170 bytes, Stack size 48 bytes, portserial.o(.text))
@@ -2657,11 +2651,11 @@ Global Symbols
 <LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_Cmd
 <LI><a href="#[17e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_SetCounter
 </UL>
-<BR>[Called By]<UL><LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eMBRTUStop
-<LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eMBASCIIStop
+<BR>[Called By]<UL><LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eMBASCIIStop
 <LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xMBRTUTimerT35Expired
 <LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xMBASCIITimerT1SExpired
 <LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xMBASCIIReceiveFSM
+<LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eMBRTUStop
 </UL>
 
 <P><STRONG><a name="[33]"></a>TIM3_IRQHandler</STRONG> (Thumb, 26 bytes, Stack size 8 bytes, porttimer.o(.text))

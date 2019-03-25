@@ -1,13 +1,14 @@
 #include "FreeModbus.h"
 #include "PID.h"
+#include "led.h"
 #include "motor.h"
 #include "timer.h"
-#include "led.h"
 
 extern int32_t MotorSpeed[MotorNum];
 // extern u8 motor_turn[MotorNum];
 extern int32_t usRegHoldingBuf[REG_HOLDING_NREGS];
 static u8 exit_int_time_motor1 = 0;
+extern u8 timer5_enabled;
 extern u32 motor_turn[MotorNum];
 
 // TIM12通道1输入捕获配置
@@ -68,14 +69,30 @@ void TIM8_BRK_TIM12_IRQHandler(void) {
 
   else if (TIM_GetITStatus(TIM12, TIM_IT_CC1) != RESET)  //捕获发生
   {
-    LED1=!LED1;
+    // LED1=!LED1;
+    /*interrupted first time */
+    // if (exit_int_time_motor1 == 0) {
+    //   // motor_turn[0] = 6;
+    //   Tim5Enable();
+    //   timer5_enabled = 1;
+    //   exit_int_time_motor1++;
+    // } else {
+    //   exit_int_time_motor1++;
+    // }
+    // /*one turn*/
+    // if (exit_int_time_motor1 == 5 ) {
+    //   motor_turn[0] = motor_turn[0] + 1;
+    //   exit_int_time_motor1=0;
+    // }
+
+    LED1 = !LED1;
     /*interrupted first time */
     if (exit_int_time_motor1 == 0) {
-      motor_turn[0] = 6;
+      motor_turn[0] = 1;
       Tim5Enable();
       exit_int_time_motor1 = 1;
     } else {
-      motor_turn[0] = motor_turn[0] + 6;
+      motor_turn[0] = motor_turn[0] + 1;
     }
     TIM_ClearITPendingBit(TIM12, TIM_IT_CC1);
   }

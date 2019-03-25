@@ -7,15 +7,15 @@ u32 MotorSpeed[MotorNum];
 extern int32_t usRegHoldingBuf[REG_HOLDING_NREGS];
 u32 delta_turn[MotorNum];
 /*ms*/
-const u16 kTimeInteval = 100;
+const u8 kTimeInteval = 100;
 const float kPI = 3.14;
 // diameter
 const u8 kDiameter = 45;
 // reduction ratio
 const u8 kReductionRatio = 43;
 
-static volatile motor_turn_this_time[MotorNum] = {0};
-static volatile motor_turn_last_time[MotorNum] = {0};
+static volatile u32 motor_turn_this_time[MotorNum] = {0};
+static volatile u32 motor_turn_last_time[MotorNum] = {0};
 
 void MotorInit(void) {
   // Freq=20k,DutyRatio=50
@@ -94,16 +94,30 @@ void MotorInitConfig(u8 num, struct MOTOR_DATA *motor) {
 }
 
 u32 MotorVelCalc(u32 delta_turn) {
-  return (delta_turn * kPI * kDiameter * kTimeInteval) /
-         (kReductionRatio * 1000);
+  // 6 pulses per turn
+  return (delta_turn * kPI * kDiameter * 1000) /
+         (6 * kReductionRatio * kTimeInteval);
 }
 
-u32 DeltaTurnCalc(u32 *motor_turn,u8 motor_num) {
-	u8 i=0;
+u32 DeltaTurnCalc(u32 *motor_turn, u8 motor_num) {
+  u8 i = 0;
+
   for (i = 0; i <= motor_num - 1; i++) {
-    motor_turn_this_time[i] = motor_turn[i];
-    delta_turn[i] = motor_turn_this_time[i] - motor_turn_last_time[i];
-    // update
-    motor_turn_last_time[i] = motor_turn_this_time[i];
+    // protect full
+    if (motor_turn[i] < 0x1FFFFFFF) {
+      motor_turn_this_time[i] = motor_turn[i];
+      delta_turn[i] = motor_turn_this_time[i] - motor_turn_last_time[i];
+      // update
+      motor_turn_last_time[i] = motor_turn_this_time[i];
+    } else {
+      motor_turn_this_time[i] = motor_turn[i];
+      delta_turn[i] = motor_turn_this_time[i] - motor_turn_last_time[i];
+      // update, reset the counter
+      motor_turn_last_time[i] = 0;
+      // empty the turn counter
+      motor_turn[i] = 0;
+    }
   }
+  usRegHoldingBuf[9] = motor_turn[0];
+  usRegHoldingBuf[10] = delta_turn[0];
 }
