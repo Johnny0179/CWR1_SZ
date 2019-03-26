@@ -17,6 +17,9 @@
 /*FreeModbus*/
 #include "FreeModbus.h"
 
+/*robot*/
+#include "robot.h"
+
 /*--------------------------------TASK---------------------------------*/
 //任务优先级
 #define START_TASK_PRIO 1
@@ -69,6 +72,9 @@ extern u8 canbuf[8];
 /*----------------------------Start Implemention-------------------------*/
 
 int main(void) {
+  // robot class
+  robot cwr;
+
   //设置系统中断优先级分组4
   NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
   //初始化延时函数
@@ -76,6 +82,8 @@ int main(void) {
 
   //初始化LED端口
   LED_Init();
+  robot_new(&cwr);
+  cwr.init();
 
   // Motor Init
   MotorInit();
@@ -175,12 +183,12 @@ static void Motor_task(void* pvParameters) {
   MotorInitConfig(6, &Motor6);
 
   // PID Init
-  pid_Init(1*P, 1 * I, 0 * D, &PIDMotor1);
-  pid_Init(1*P, 1 * I, 0 * D, &PIDMotor2);
-  pid_Init(1*P, 1 * I, 0 * D, &PIDMotor3);
-  pid_Init(1*P, 1 * I, 0 * D, &PIDMotor4);
-  pid_Init(1*P, 1 * I, 0 * D, &PIDMotor5);
-  pid_Init(1*P, 1 * I, 0 * D, &PIDMotor6);
+  pid_Init(1 * P, 1 * I, 0 * D, &PIDMotor1);
+  pid_Init(1 * P, 1 * I, 0 * D, &PIDMotor2);
+  pid_Init(1 * P, 1 * I, 0 * D, &PIDMotor3);
+  pid_Init(1 * P, 1 * I, 0 * D, &PIDMotor4);
+  pid_Init(1 * P, 1 * I, 0 * D, &PIDMotor5);
+  pid_Init(1 * P, 1 * I, 0 * D, &PIDMotor6);
 
   while (1) {
     // usRegHoldingBuf[0]=Motor1.direction;
@@ -204,8 +212,7 @@ static void Motor_task(void* pvParameters) {
 
     /*Debug*/
     usRegHoldingBuf[11]=Motor3.PWM;
-    // usRegHoldingBuf[8]=Motor4.CmdSpeed;
-    // MotorCtrl(Motor4,PIDMotor4);
+
     vTaskDelay(100);  // Delay期间任务被BLOCK，可以执行其他任务
   }
 }

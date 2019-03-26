@@ -59,3 +59,4 @@
 ..\obj\main.o: ..\FreeModbus\modbus\include\mbport.h
 ..\obj\main.o: ..\FreeModbus\modbus\include\mbproto.h
 ..\obj\main.o: ..\FreeModbus\modbus\include\mbutils.h
+..\obj\main.o: ..\ROBOT\robot.h

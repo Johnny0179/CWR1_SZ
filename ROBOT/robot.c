@@ -1,9 +1,11 @@
-
+#include "led.h"
 
 #include "robot.h"
 
-robot* new_robot(void) {
-  robot* rObj;
-  // Initializing interface for access to functions
-  rObj->init = Robot_Init;
+static void RobotInit(void) { 
+	LED1 = 0; }
+
+void robot_new(robot *r) {
+  r->no_ = 0;
+  r->init = RobotInit;
 }

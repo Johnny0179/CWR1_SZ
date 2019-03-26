@@ -7,14 +7,22 @@
 #ifndef _ROBOT_H_
 #define _ROBOT_H_
 
-/*typedef struct {
-  void (*RobotInit)(void);
-} RobotInit;
-typedef void (*RobotEnable)(void);*/
-typedef struct _robot {
+// typedef struct {
+//   void (*RobotInit)(void);
+// } RobotInit;
+
+void RobotInit(void);
+// function pointer
+typedef void (*robot_init)(void);
+
+// robot class definition
+typedef struct {
+  u8 no_;
   /*functions*/
-  RobotInit init;
+  robot_init init;
 } robot;
 
-robot* new_robot(void);
-void Robot_Init(void);
+// constructor
+void robot_new(robot *r);
+
+#endif
