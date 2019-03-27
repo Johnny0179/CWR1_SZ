@@ -4,7 +4,7 @@
 <h1>µVision Build Log</h1>
 <h2>Project:</h2>
 \\Vboxsvr\irim\ShenZhong\CWR_Shenzhong\Software\CWR1_SZ\USER\CWR_SZ.uvprojx
-Project File Date:  03/22/2019
+Project File Date:  03/27/2019
 
 <h2>Output:</h2>
 Build target 'CWR_SZ'
@@ -13,30 +13,66 @@ compiling main.c...
   #endif
 ..\ROBOT\robot.h(28): warning:  #1-D: last line of file ends without a newline
   #endif
-main.c(127): warning:  #177-D: function "CAN_task" was declared but never referenced
-  static void CAN_task(void* pvParameters) {
-main.c: 3 warnings, 0 errors
+main.c: 2 warnings, 0 errors
 linking...
-Program Size: Code=38310 RO-data=1106 RW-data=1056 ZI-data=79144  
+Program Size: Code=37094 RO-data=1106 RW-data=1048 ZI-data=79144  
 FromELF: creating hex file...
-"..\OBJ\cwr_sz.axf" - 0 Error(s), 3 Warning(s).
-without a newline
-  #endif
-..\ROBOT\robot.c(10): warning:  #1-D: last line of file ends without a newline
+"..\OBJ\cwr_sz.axf" - 0 Error(s), 2 Warning(s).
+of file ends without a newline
   }
 ..\ROBOT\robot.c: 2 warnings, 0 errors
-"..\OBJ\cwr_sz.axf" - 1 Error(s), 5 Warning(s).
+linking...
+Program Size: Code=37070 RO-data=1106 RW-data=1048 ZI-data=79144  
+FromELF: creating hex file...
+"..\OBJ\cwr_sz.axf" - 0 Error(s), 4 Warning(s).
+fig(5, &Motor5);
+main.c(174): error:  #20: identifier "Motor5" is undefined
+      MotorInitConfig(5, &Motor5);
+main.c(175): error:  #20: identifier "Motor6" is undefined
+      MotorInitConfig(6, &Motor6);
+main.c(178): error:  #20: identifier "PIDMotor1" is undefined
+      pid_Init(1 * P, 1 * I, 0 * D, &PIDMotor1);
+main.c(179): error:  #20: identifier "PIDMotor2" is undefined
+      pid_Init(1 * P, 1 * I, 0 * D, &PIDMotor2);
+main.c(180): error:  #20: identifier "PIDMotor3" is undefined
+      pid_Init(1 * P, 1 * I, 0 * D, &PIDMotor3);
+main.c(181): error:  #20: identifier "PIDMotor4" is undefined
+      pid_Init(1 * P, 1 * I, 0 * D, &PIDMotor4);
+main.c(182): error:  #20: identifier "PIDMotor5" is undefined
+      pid_Init(1 * P, 1 * I, 0 * D, &PIDMotor5);
+main.c(183): error:  #20: identifier "PIDMotor6" is undefined
+      pid_Init(1 * P, 1 * I, 0 * D, &PIDMotor6);
+main.c(187): error:  #20: identifier "Motor1" is undefined
+        MotorCtrl(&Motor1, &PIDMotor1);
+main.c(190): error:  #20: identifier "Motor2" is undefined
+        MotorCtrl(&Motor2, &PIDMotor2);
+main.c(193): error:  #20: identifier "Motor3" is undefined
+        MotorCtrl(&Motor3, &PIDMotor3);
+main.c(196): error:  #20: identifier "Motor4" is undefined
+        MotorCtrl(&Motor4, &PIDMotor4);
+main.c(41): error:  #114: function "Modbus_task" was referenced but not defined
+  void Modbus_task(void* pvParameters);
+main.c: 4 warnings, 15 errors
+"..\OBJ\cwr_sz.axf" - 15 Error(s), 4 Warning(s).
 Target not created
-ctive is missing
-  #ifndef _ROBOT_H_
-..\ROBOT\robot.c(10): warning:  #1-D: last line of file ends without a newline
-  }
-..\ROBOT\robot.c: 2 warnings, 1 error
-"..\OBJ\cwr_sz.axf" - 3 Error(s), 5 Warning(s).
-Target not created
-ng(s).
-Target not created
-st line of file ends without a newline
+DC_task(void* pvParameters) {
+main.c: 5 warnings, 15 errors
+compiling stm32f4xx_it.c...
+compiling system_stm32f4xx.c...
+compiling misc.c...
+compiling stm32f4xx_gpio.c...
+compiling stm32f4xx_rcc.c...
+compiling stm32f4xx_syscfg.c...
+compiling stm32f4xx_usart.c...
+compiling stm32f4xx_tim.c...
+compiling stm32f4xx_can.c...
+compiling stm32f4xx_exti.c...
+compiling stm32f4xx_adc.c...
+compiling delay.c...
+compiling sys.c...
+compiling led.c...
+compiling motor.c...
+..\HARDWARE\MOTOR\motor.h(55): warning:  #1-D: last line of file ends without a newline
   #endif
 ..\HARDWARE\MOTOR\motor.c(377): warning:  #1-D: last line of file ends without a newline
   }
@@ -70,6 +106,7 @@ compiling timer5.c...
 ..\HARDWARE\TIMER\timer5.c(39): warning:  #1-D: last line of file ends without a newline
   }
 ..\HARDWARE\TIMER\timer5.c: 2 warnings, 0 errors
+compiling adc.c...
 compiling croutine.c...
 compiling event_groups.c...
 compiling list.c...
@@ -100,13 +137,5 @@ compiling FreeModbus.c...
   }
 ..\FreeModbus\FreeModbus.c: 1 warning, 0 errors
 compiling PID.c...
-compiling robot.c...
-..\ROBOT\robot.h(19): error:  #20: identifier "robot" is undefined
-  void robot_new(robot *r);
-..\ROBOT\robot.h(7): error:  #37: the #endif for this directive is missing
-  #ifndef _ROBOT_H_
-..\ROBOT\robot.c(10): warning:  #1-D: last line of file ends without a newline
-  }
-..\ROBOT\robot.c: 1 warning, 2 errors
-"..\OBJ\cwr_sz.axf" - 5 Error(s), 16 Warning(s).
+"..\OBJ\cwr_sz.axf" - 15 Error(s), 18 Warning(s).
 Target not created

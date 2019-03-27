@@ -1,14 +1,15 @@
 /*-------------------------------Includes-------------------------------*/
 /*STM32*/
 #include "Motor.h"
-#include "can.h"
+#include "adc.h"
 #include "delay.h"
 #include "led.h"
+#include "pid.h"
 #include "sys.h"
 #include "timer.h"
 
 /*PID*/
-#include "PID.h"
+#include "pid.h"
 
 /*FreeRTOS*/
 #include "FreeRTOS.h"
@@ -40,13 +41,13 @@ TaskHandle_t ModbusTask_Handler;
 void Modbus_task(void* pvParameters);
 
 //任务优先级
-#define CAN_TASK_PRIO 3
+#define ADC_TASK_PRIO 3
 //任务堆栈大小
-#define CAN_STK_SIZE 256
+#define ADC_STK_SIZE 256
 //任务句柄
-TaskHandle_t CANTask_Handler;
+TaskHandle_t ADCTask_Handler;
 //任务函数
-void CAN_task(void* pvParameters);
+void ADC_task(void* pvParameters);
 
 //任务优先级
 #define Motor_TASK_PRIO 4
@@ -66,8 +67,8 @@ u8 MoveInteval = 5;
 
 const u8 RefreshRate = 50;
 
-// CAN
-extern u8 canbuf[8];
+// ADC
+extern u8 ADCbuf[8];
 
 /*----------------------------Start Implemention-------------------------*/
 
@@ -104,10 +105,10 @@ int main(void) {
 //开始任务任务函数
 static void start_task(void* pvParameters) {
   taskENTER_CRITICAL();  //进入临界区
-  //创建CAN任务
-  /*  xTaskCreate((TaskFunction_t)CAN_task, (const char*)"CAN_task",
-                (uint16_t)CAN_STK_SIZE, (void*)NULL, (UBaseType_t)CAN_TASK_PRIO,
-                (TaskHandle_t*)&CANTask_Handler);*/
+                         //创建ADC任务
+  xTaskCreate((TaskFunction_t)ADC_task, (const char*)"ADC_task",
+              (uint16_t)ADC_STK_SIZE, (void*)NULL, (UBaseType_t)ADC_TASK_PRIO,
+              (TaskHandle_t*)&ADCTask_Handler);
   //创建Modbus任务
   xTaskCreate((TaskFunction_t)Modbus_task, (const char*)"Modbus_task",
               (uint16_t)Modbus_STK_SIZE, (void*)NULL,
@@ -122,24 +123,17 @@ static void start_task(void* pvParameters) {
   taskEXIT_CRITICAL();             //退出临界区
 }
 
-// CAN任务函数
-static void CAN_task(void* pvParameters) {
-  static u8 i = 0;
-  static u8 canbuf[8];
-  CAN1_Mode_Init(CAN_SJW_1tq, CAN_BS2_6tq, CAN_BS1_7tq, 6,
-                 CAN_Mode_Normal);  // CAN初始化正常模式,波特率500Kbps
+// ADC任务函数
+static void ADC_task(void* pvParameters) {
+  u16 adcx;
+  float temp;
+  Adc_Init();
   while (1) {
-    for (i = 0; i < 8; i++) {
-      //填充发送缓冲区
-      canbuf[i] = usRegHoldingBuf[i];
-    }
-
-    //发送8个字节
-    if (!CAN1_Send_Msg(canbuf, 8)) LED0 = !LED0;
-
-    //接收
-    if (CAN1_Receive_Msg(canbuf)) LED1 = !LED1;
-
+    adcx = Get_Adc_Average(ADC_Channel_5, 20);
+    // mv
+    temp = (float)adcx * (3.3 / 4096)*12000;
+    adcx = temp;
+    usRegHoldingBuf[11] = adcx;
     vTaskDelay(RefreshRate);  // 20ms刷新一次
   }
 }
@@ -211,7 +205,7 @@ static void Motor_task(void* pvParameters) {
     usRegHoldingBuf[8] = Motor6.MotorSpeed_mmps;
 
     /*Debug*/
-    usRegHoldingBuf[11]=Motor3.PWM;
+    // usRegHoldingBuf[11] = Motor3.PWM;
 
     vTaskDelay(100);  // Delay期间任务被BLOCK，可以执行其他任务
   }
