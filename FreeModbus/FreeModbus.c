@@ -12,7 +12,7 @@ uint16_t usRegInputStart = REG_INPUT_START;
 
 // HoldingBuf, Robot State
 int32_t usRegHoldingBuf[REG_HOLDING_NREGS] = {
-    2, 0, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0,
+    0, 4, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0,
     0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000};
 
 uint16_t usRegHoldingStart = REG_HOLDING_START;

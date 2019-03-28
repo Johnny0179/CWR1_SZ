@@ -19,7 +19,7 @@
 #define ModeManual 0
 
 #define P 300
-#define I 2
+#define I 10
 #define D 0
 
 typedef struct MOTOR_DATA {
@@ -49,6 +49,10 @@ void MotorFGInit(void);
 void MotorInit(void);
 void MotorInitConfig(u8 num, struct MOTOR_DATA *motor);
 void MotorCtrl(struct MOTOR_DATA *motor, struct PID_DATA *pid);
+
+void MotorDisable(void);
+void MotorEnable(void);
+
 
 u32 DeltaTurnCalc(u32 *motor_turn,u8 motor_num);
 u32 MotorVelCalc(u32 delta_turn);

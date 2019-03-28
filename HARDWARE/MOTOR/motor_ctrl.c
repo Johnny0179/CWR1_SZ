@@ -3,11 +3,11 @@
 #include "motor.h"
 #include "timer.h"
 
-u32 MotorSpeed[MotorNum];
 extern int32_t usRegHoldingBuf[REG_HOLDING_NREGS];
 u32 delta_turn[MotorNum];
+u32 MotorSpeed[MotorNum];
 /*ms*/
-const u8 kTimeInteval = 100;
+const u8 kTimeInteval = 50;
 const float kPI = 3.14;
 // diameter
 const u8 kDiameter = 45;
@@ -16,6 +16,8 @@ const u8 kReductionRatio = 43;
 
 static volatile u32 motor_turn_this_time[MotorNum] = {0};
 static volatile u32 motor_turn_last_time[MotorNum] = {0};
+// odometer
+static volatile u32 odometer[MotorNum] = {0};
 
 void MotorInit(void) {
   // Freq=20k,DutyRatio=50
@@ -51,10 +53,10 @@ void MotorCtrl(struct MOTOR_DATA *motor, struct PID_DATA *pid) {
   // Direction
   switch (motor->direction) {
     case moveup:
-      MoveUp();
+      // MoveUp();
       break;
     case movedown:
-      MoveDown();
+      // MoveDown();
       break;
     case stop:;
     default:;
@@ -110,6 +112,7 @@ u32 DeltaTurnCalc(u32 *motor_turn, u8 motor_num) {
       // update
       motor_turn_last_time[i] = motor_turn_this_time[i];
     } else {
+      odometer[i] = odometer[i] + (motor_turn[i] /* * kPI * kDiameter*/) / 6;
       motor_turn_this_time[i] = motor_turn[i];
       delta_turn[i] = motor_turn_this_time[i] - motor_turn_last_time[i];
       // update, reset the counter
@@ -118,6 +121,6 @@ u32 DeltaTurnCalc(u32 *motor_turn, u8 motor_num) {
       motor_turn[i] = 0;
     }
   }
-  usRegHoldingBuf[9] = motor_turn[0];
-  usRegHoldingBuf[10] = delta_turn[0];
+  usRegHoldingBuf[9] = odometer[0];
+  usRegHoldingBuf[10] = motor_turn[0] / 6;
 }

@@ -1,5 +1,8 @@
 ..\obj\robot.o: ..\ROBOT\robot.c
-..\obj\robot.o: ..\HARDWARE\LED\led.h
+..\obj\robot.o: ..\ROBOT\robot.h
+..\obj\robot.o: ..\HARDWARE\MOTOR\motor.h
+..\obj\robot.o: ..\PID\PID.h
+..\obj\robot.o: ..\HARDWARE\TIMER\timer.h
 ..\obj\robot.o: ..\SYSTEM\sys\sys.h
 ..\obj\robot.o: ..\USER\stm32f4xx.h
 ..\obj\robot.o: ..\CORE\core_cm4.h
@@ -36,4 +39,5 @@
 ..\obj\robot.o: ..\FWLIB\inc\stm32f4xx_dac.h
 ..\obj\robot.o: ..\FWLIB\inc\stm32f4xx_dcmi.h
 ..\obj\robot.o: ..\FWLIB\inc\stm32f4xx_fsmc.h
-..\obj\robot.o: ..\ROBOT\robot.h
+..\obj\robot.o: ..\SYSTEM\delay\delay.h
+..\obj\robot.o: ..\HARDWARE\LED\led.h

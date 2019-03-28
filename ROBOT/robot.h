@@ -6,23 +6,36 @@
 //
 #ifndef _ROBOT_H_
 #define _ROBOT_H_
-
-// typedef struct {
-//   void (*RobotInit)(void);
-// } RobotInit;
+#include "motor.h"
 
 void RobotInit(void);
 // function pointer
 typedef void (*robot_init)(void);
 
+void RobotEnable(void);
+// function pointer
+typedef void (*robot_enable)(void);
+
+void RobotDisable(void);
+// function pointer
+typedef void (*robot_disable)(void);
+
+void RobotControl(u16 motion_cycle);
+// function pointer
+typedef void (*robot_control)(u16);
+
 // robot class definition
 typedef struct {
+  /*data members*/
   u8 no_;
   /*functions*/
-  robot_init init;
+  robot_init Init;
+  robot_enable Enable;
+  robot_disable Disable;
+  robot_control Control;
 } robot;
 
 // constructor
-void robot_new(robot *r);
+void RobotNew(robot *r);
 
 #endif

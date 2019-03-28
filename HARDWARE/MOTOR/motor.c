@@ -375,3 +375,22 @@ void EXTI9_5_IRQHandler(void) {
   }
   EXTI_ClearITPendingBit(EXTI_Line6);
 }
+
+void MotorEnable(void) {
+  /* Main Output Enable */
+  TIM_CtrlPWMOutputs(TIM1, ENABLE);
+
+  // Initialize the motor with speed = 0.
+  // TIM1_PWM_SET(freq, 100);
+
+  /* Main Output Enable */
+  TIM_CtrlPWMOutputs(TIM8, ENABLE);
+
+  // Initialize the motor with speed = 0.
+  // TIM8_PWM_SET(freq, 100);
+}
+
+void MotorDisable(void) {
+  TIM_CtrlPWMOutputs(TIM1, DISABLE);
+  TIM_CtrlPWMOutputs(TIM8, DISABLE);
+}

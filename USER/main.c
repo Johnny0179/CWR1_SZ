@@ -1,3 +1,9 @@
+// main.c
+// CWR_SZ project
+
+// Created by Song Junlin on 3/21/2019
+// Copyright 2019 IRIM, Inc. All right reserved.
+//
 /*-------------------------------Includes-------------------------------*/
 /*STM32*/
 #include "Motor.h"
@@ -41,16 +47,7 @@ TaskHandle_t ModbusTask_Handler;
 void Modbus_task(void* pvParameters);
 
 //任务优先级
-#define ADC_TASK_PRIO 3
-//任务堆栈大小
-#define ADC_STK_SIZE 256
-//任务句柄
-TaskHandle_t ADCTask_Handler;
-//任务函数
-void ADC_task(void* pvParameters);
-
-//任务优先级
-#define Motor_TASK_PRIO 4
+#define Motor_TASK_PRIO 3
 //任务堆栈大小
 #define Motor_STK_SIZE 256
 //任务句柄
@@ -58,24 +55,33 @@ TaskHandle_t MotorTask_Handler;
 //任务函数
 void Motor_task(void* pvParameters);
 
+//任务优先级
+#define ADC_TASK_PRIO 4
+//任务堆栈大小
+#define ADC_STK_SIZE 256
+//任务句柄
+TaskHandle_t ADCTask_Handler;
+//任务函数
+void ADC_task(void* pvParameters);
+
+#define Robot_TASK_PRIO 5
+//任务堆栈大小
+#define Robot_STK_SIZE 256
+//任务句柄
+TaskHandle_t RobotTask_Handler;
+//任务函数
+void Robot_task(void* pvParameters);
+
 /*----------------------------Configuration----------------------------------*/
 
 // Robot registors
 extern int32_t usRegHoldingBuf[REG_HOLDING_NREGS];
-extern int32_t MotorSpeed[MotorNum];
-u8 MoveInteval = 5;
 
-const u8 RefreshRate = 50;
-
-// ADC
-extern u8 ADCbuf[8];
+const u8 kRefereshRate = 50;
 
 /*----------------------------Start Implemention-------------------------*/
 
 int main(void) {
-  // robot class
-  robot cwr;
-
   //设置系统中断优先级分组4
   NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
   //初始化延时函数
@@ -83,11 +89,6 @@ int main(void) {
 
   //初始化LED端口
   LED_Init();
-  robot_new(&cwr);
-  cwr.init();
-
-  // Motor Init
-  MotorInit();
 
   //创建开始任务
   xTaskCreate((TaskFunction_t)start_task,    //任务函数
@@ -104,11 +105,15 @@ int main(void) {
 
 //开始任务任务函数
 static void start_task(void* pvParameters) {
-  taskENTER_CRITICAL();  //进入临界区
-                         //创建ADC任务
+  //进入临界区
+  taskENTER_CRITICAL();
+  //创建ADC任务
   xTaskCreate((TaskFunction_t)ADC_task, (const char*)"ADC_task",
               (uint16_t)ADC_STK_SIZE, (void*)NULL, (UBaseType_t)ADC_TASK_PRIO,
               (TaskHandle_t*)&ADCTask_Handler);
+  xTaskCreate((TaskFunction_t)Robot_task, (const char*)"Robot_task",
+              (uint16_t)Robot_STK_SIZE, (void*)NULL,
+              (UBaseType_t)Robot_TASK_PRIO, (TaskHandle_t*)&RobotTask_Handler);
   //创建Modbus任务
   xTaskCreate((TaskFunction_t)Modbus_task, (const char*)"Modbus_task",
               (uint16_t)Modbus_STK_SIZE, (void*)NULL,
@@ -131,10 +136,30 @@ static void ADC_task(void* pvParameters) {
   while (1) {
     adcx = Get_Adc_Average(ADC_Channel_5, 20);
     // mv
-    temp = (float)adcx * (3.3 / 4096)*12000;
+    temp = (float)adcx * (3.3 / 4096) * 12000;
     adcx = temp;
     usRegHoldingBuf[11] = adcx;
-    vTaskDelay(RefreshRate);  // 20ms刷新一次
+    vTaskDelay(kRefereshRate);  // 20ms刷新一次
+  }
+}
+
+// Robot task
+static void Robot_task(void* pvParameters) {
+  u16 cycle;
+  // robot class
+  robot cwr;
+  RobotNew(&cwr);
+  cwr.Init();
+  while (1) {
+    cycle = usRegHoldingBuf[1];
+    // robot enable
+    if (usRegHoldingBuf[0] == 1) {
+      cwr.Enable();
+      cwr.Control(cycle);
+    } else if (usRegHoldingBuf[0] == 0) {
+      cwr.Disable();
+    }
+    vTaskDelay(kRefereshRate);  // 20ms刷新一次
   }
 }
 
@@ -146,13 +171,12 @@ static void Modbus_task(void* pvParameters) {
   while (1) {
     eMBPoll();
     // 20ms刷新一次，Delay期间任务被BLOCK，可以执行其他任务
-    vTaskDelay(RefreshRate);
+    vTaskDelay(kRefereshRate);
   }
 }
 
-// Motor任务
+// Motor task
 static void Motor_task(void* pvParameters) {
-  /*Motor*/
   // Motor Define
   MOTOR Motor1;
   MOTOR Motor2;
@@ -169,6 +193,9 @@ static void Motor_task(void* pvParameters) {
   pidData_t PIDMotor5;
   pidData_t PIDMotor6;
 
+  // Motor Init
+  MotorInit();
+
   MotorInitConfig(1, &Motor1);
   MotorInitConfig(2, &Motor2);
   MotorInitConfig(3, &Motor3);
@@ -177,12 +204,12 @@ static void Motor_task(void* pvParameters) {
   MotorInitConfig(6, &Motor6);
 
   // PID Init
-  pid_Init(1 * P, 1 * I, 0 * D, &PIDMotor1);
-  pid_Init(1 * P, 1 * I, 0 * D, &PIDMotor2);
-  pid_Init(1 * P, 1 * I, 0 * D, &PIDMotor3);
-  pid_Init(1 * P, 1 * I, 0 * D, &PIDMotor4);
-  pid_Init(1 * P, 1 * I, 0 * D, &PIDMotor5);
-  pid_Init(1 * P, 1 * I, 0 * D, &PIDMotor6);
+  pid_Init(1 * P, 0.5 * I, 0 * D, &PIDMotor1);
+  pid_Init(1 * P, 0.5 * I, 0 * D, &PIDMotor2);
+  pid_Init(1 * P, 0.5 * I, 0 * D, &PIDMotor3);
+  pid_Init(1 * P, 0.5 * I, 0 * D, &PIDMotor4);
+  pid_Init(1 * P, 0.5 * I, 0 * D, &PIDMotor5);
+  pid_Init(1 * P, 0.5 * I, 0 * D, &PIDMotor6);
 
   while (1) {
     // usRegHoldingBuf[0]=Motor1.direction;
@@ -205,7 +232,7 @@ static void Motor_task(void* pvParameters) {
     usRegHoldingBuf[8] = Motor6.MotorSpeed_mmps;
 
     /*Debug*/
-    // usRegHoldingBuf[11] = Motor3.PWM;
+    usRegHoldingBuf[12] = Motor1.PWM;
 
     vTaskDelay(100);  // Delay期间任务被BLOCK，可以执行其他任务
   }
