@@ -174,14 +174,14 @@ static void Robot_task(void* pvParameters) {
         // set initial mode
         // cwr.mode_=usRegHoldingBuf[21];
         // if(cwr.odometer_<)
-        cwr.Auto();
+        cwr.Auto(cwr.cmd_speed_,cwr.dir_,cwr.cycle_);
       }
 
     } else if (usRegHoldingBuf[0] == 0) {
       cwr.Disable();
     }
-    // 20ms刷新一次
-    vTaskDelay(50);
+    // 100ms刷新一次
+    vTaskDelay(100);
   }
 }
 

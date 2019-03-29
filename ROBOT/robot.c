@@ -27,12 +27,12 @@ static void RobotInit(void) {
   }
 
   // PID Init
-  pid_Init(1 * P, 0.5 * I, 0 * D, &PIDMotor[0]);
-  pid_Init(1 * P, 0.5 * I, 0 * D, &PIDMotor[1]);
-  pid_Init(1 * P, 0.5 * I, 0 * D, &PIDMotor[2]);
-  pid_Init(1 * P, 0.5 * I, 0 * D, &PIDMotor[3]);
-  pid_Init(1 * P, 0.5 * I, 0 * D, &PIDMotor[4]);
-  pid_Init(1 * P, 0.5 * I, 0 * D, &PIDMotor[5]);
+  pid_Init(1 * P, 1 * I, 0 * D, &PIDMotor[0]);
+  pid_Init(1 * P, 1 * I, 0 * D, &PIDMotor[1]);
+  pid_Init(1 * P, 1 * I, 0 * D, &PIDMotor[2]);
+  pid_Init(1 * P, 1 * I, 0 * D, &PIDMotor[3]);
+  pid_Init(1 * P, 1 * I, 0 * D, &PIDMotor[4]);
+  pid_Init(1 * P, 1 * I, 0 * D, &PIDMotor[5]);
 }
 
 static void RobotEnable(void) { MotorEnable(); }
@@ -57,17 +57,11 @@ static void RobotManual(u32 cmd_speed, int8_t dir) {
   usRegHoldingBuf[12] = Motor[0].PWM;
 }
 
-static void RobotAuto(void) {
-  u8 i, odometer;
-
-  /*set direction*/
-  // for (i = 0; i < MotorNum; ++i) {
-  //   Motor[i].direction = usRegHoldingBuf[21];
-  // }
-
+static void RobotAuto(u32 cmd_speed,_Bool init_dir,u8 cycle) {
+u8 i;
   /*motor control*/
   for (i = 0; i < MotorNum; ++i) {
-    MotorCtrlAuto(&Motor[i], &PIDMotor[i]);
+    MotorCtrlAuto(&Motor[i], &PIDMotor[i],cmd_speed,init_dir,cycle);
   }
 
   /*monitor speed*/
@@ -81,6 +75,7 @@ static void RobotAuto(void) {
 
 void RobotNew(robot *r) {
   r->no_ = 0;
+  r->cycle_ = 0;
   r->mode_ = kManualMode;
   r->dir_ = kDirUp;
   r->odometer_ = 0;

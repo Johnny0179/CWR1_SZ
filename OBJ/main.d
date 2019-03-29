@@ -1,5 +1,6 @@
 ..\obj\main.o: main.c
 ..\obj\main.o: ..\HARDWARE\MOTOR\Motor.h
+..\obj\main.o: D:\Keil_v5\ARM\ARMCC\bin\..\include\math.h
 ..\obj\main.o: ..\PID\PID.h
 ..\obj\main.o: ..\HARDWARE\TIMER\timer.h
 ..\obj\main.o: ..\SYSTEM\sys\sys.h
@@ -38,9 +39,8 @@
 ..\obj\main.o: ..\FWLIB\inc\stm32f4xx_dac.h
 ..\obj\main.o: ..\FWLIB\inc\stm32f4xx_dcmi.h
 ..\obj\main.o: ..\FWLIB\inc\stm32f4xx_fsmc.h
-..\obj\main.o: ..\SYSTEM\delay\delay.h
 ..\obj\main.o: ..\CORE\core_cm4.h
-..\obj\main.o: D:\Keil_v5\ARM\ARMCC\bin\..\include\math.h
+..\obj\main.o: ..\SYSTEM\delay\delay.h
 ..\obj\main.o: ..\HARDWARE\ADC\adc.h
 ..\obj\main.o: ..\HARDWARE\LED\led.h
 ..\obj\main.o: ..\FreeRTOS\include\FreeRTOS.h

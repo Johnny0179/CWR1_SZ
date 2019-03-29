@@ -38,9 +38,9 @@
 ..\obj\timer13.o: ..\FWLIB\inc\stm32f4xx_dcmi.h
 ..\obj\timer13.o: ..\FWLIB\inc\stm32f4xx_fsmc.h
 ..\obj\timer13.o: ..\HARDWARE\MOTOR\motor.h
-..\obj\timer13.o: ..\SYSTEM\delay\delay.h
-..\obj\timer13.o: ..\CORE\core_cm4.h
 ..\obj\timer13.o: D:\Keil_v5\ARM\ARMCC\bin\..\include\math.h
+..\obj\timer13.o: ..\CORE\core_cm4.h
+..\obj\timer13.o: ..\SYSTEM\delay\delay.h
 ..\obj\timer13.o: ..\FreeModbus\FreeModbus.h
 ..\obj\timer13.o: ..\FreeModbus\modbus\include\mb.h
 ..\obj\timer13.o: ..\FreeModbus\port\port.h

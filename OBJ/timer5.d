@@ -45,8 +45,8 @@
 ..\obj\timer5.o: ..\FreeModbus\modbus\include\mbutils.h
 ..\obj\timer5.o: ..\HARDWARE\LED\led.h
 ..\obj\timer5.o: ..\HARDWARE\MOTOR\motor.h
+..\obj\timer5.o: D:\Keil_v5\ARM\ARMCC\bin\..\include\math.h
 ..\obj\timer5.o: ..\PID\PID.h
 ..\obj\timer5.o: ..\HARDWARE\TIMER\timer.h
-..\obj\timer5.o: ..\SYSTEM\delay\delay.h
 ..\obj\timer5.o: ..\CORE\core_cm4.h
-..\obj\timer5.o: D:\Keil_v5\ARM\ARMCC\bin\..\include\math.h
+..\obj\timer5.o: ..\SYSTEM\delay\delay.h

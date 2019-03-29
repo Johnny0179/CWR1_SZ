@@ -6,6 +6,10 @@
 extern int32_t usRegHoldingBuf[REG_HOLDING_NREGS];
 u32 delta_turn[MotorNum];
 u32 MotorSpeed[MotorNum];
+
+const _Bool kTrue = 1;
+const _Bool kFalse = 0;
+
 /*ms*/
 const u8 kTimeInteval = 50;
 const float kPI = 3.14;
@@ -21,11 +25,20 @@ static volatile u8 motor_dir_last_time = 0;
 static volatile u8 motor_dir_this_time = 0;
 
 // default up
-static volatile _Bool dir_last_time = 1;
+static volatile _Bool dir_last_time = 0;
 static volatile _Bool dir_this_time;
+// retain the direction when stop the motor
+static volatile _Bool dir_stop;
+static volatile _Bool auto_dir;
 
+static volatile _Bool dir_change;
+static volatile u32 stop_counter;
+const u16 kStopTime = 0;
 // odometer
 u32 odometer[MotorNum] = {0};
+u32 cycle_counter = 0;
+u32 cycle_odometer_last_time = 0;
+u32 cycle_odometer_this_time = 0;
 
 void MotorInit(void) {
   // Freq=20k,DutyRatio=50
@@ -44,65 +57,36 @@ void MotorInit(void) {
 
 void MotorCtrlManual(struct MOTOR_DATA *motor, struct PID_DATA *pid,
                      u32 cmd_speed, _Bool dir) {
-  motor->direction = dir;
-
   dir_this_time = dir;
-
+  // change direction
+  if (dir_last_time != dir_this_time) {
+    dir_change = kTrue;
+    dir_stop = dir_last_time;
+  }
   // motor speed feedback
   motor->MotorSpeed_mmps = MotorVelCalc(delta_turn[motor->num - 1]);
 
-  if (dir_last_time == dir_this_time) {
-    if (abs(cmd_speed - motor->MotorSpeed_mmps) > 100) {
-      // stop
-      if (cmd_speed == 0) {
-        motor->CmdSpeed = abs(cmd_speed - motor->MotorSpeed_mmps) * 0.8;
-      } else {
-        motor->CmdSpeed = 0.8 * cmd_speed;
-      }
-
-    } else {
-      motor->CmdSpeed = cmd_speed;
-    }
+  if (!dir_change) {
+    motor->direction = dir;
+    motor->CmdSpeed = MotorSetCmdSpeed(cmd_speed, motor->MotorSpeed_mmps);
   }
-  // change direction
-  else {
+  if (dir_change) {
+    motor->direction = dir_stop;
     // check the motors have been stopped
     if (motor->MotorSpeed_mmps != 0) {
-      motor->CmdSpeed = 0;
+      motor->CmdSpeed = MotorSetCmdSpeed(0, motor->MotorSpeed_mmps);
     } else {
-      if (abs(cmd_speed - motor->MotorSpeed_mmps) > 100) {
-        // stop
-        if (cmd_speed == 0) {
-          motor->CmdSpeed = abs(cmd_speed - motor->MotorSpeed_mmps) * 0.8;
-        } else {
-          motor->CmdSpeed = 0.8 * cmd_speed;
-        }
-
+      // motors have been stopped
+      if (stop_counter < kStopTime) {
+        stop_counter++;
       } else {
-        motor->CmdSpeed = cmd_speed;
+        dir_change = kFalse;
       }
     }
   }
 
   // update dirction
   dir_last_time = dir;
-  // if (dir == 1) {
-  //   // move up
-  //   dir_this_time = 1;
-  // }
-
-  // if (dir == 0) {
-  //   // move down
-  //   dir_this_time = -1;
-  // }
-
-  // motor->CmdSpeed = cmd_speed;
-
-  // if (motor->MotorSpeed_mmps < 0.5 * cmd_speed) {
-  //   motor->CmdSpeed = 0.5 * cmd_speed;
-  // } else {
-  //   motor->CmdSpeed = cmd_speed;
-  // }
 
   motor->PWM = motor->PWM +
                pid_Controller(motor->CmdSpeed, motor->MotorSpeed_mmps, pid) / 2;
@@ -155,7 +139,33 @@ void MotorCtrlManual(struct MOTOR_DATA *motor, struct PID_DATA *pid,
   }
 }
 
-void MotorCtrlAuto(struct MOTOR_DATA *motor, struct PID_DATA *pid) {}
+void MotorCtrlAuto(struct MOTOR_DATA *motor, struct PID_DATA *pid,
+                   u32 cmd_speed, _Bool init_dir, u8 cycle) {
+  // _Bool dir;
+
+  cycle_odometer_this_time = odometer[0];
+
+  // first time
+  if (cycle_counter == 0) {
+    auto_dir = init_dir;
+  }
+
+  if (cycle_counter < cycle) {
+    // 1m
+    if ((cycle_odometer_this_time - cycle_odometer_last_time) > 100) {
+      cycle_odometer_last_time = odometer[0];
+
+      // change direction
+      auto_dir = !auto_dir;
+      cycle_counter++;
+    }
+    MotorCtrlManual(motor, pid, cmd_speed, auto_dir);
+
+  } else {
+    // stop
+    MotorCtrlManual(motor, pid, 0, auto_dir);
+  }
+}
 
 void MotorInitConfig(u8 num, struct MOTOR_DATA *motor) {
   motor->num = num;
@@ -179,7 +189,7 @@ u32 DeltaTurnCalc(u32 *motor_turn, u8 motor_num) {
 
   for (i = 0; i <= motor_num - 1; i++) {
     // protect full
-    if (motor_turn[i] < 0x0AFF) {
+    if (motor_turn[i] < 0x01FF) {
       motor_turn_this_time[i] = motor_turn[i];
       delta_turn[i] = motor_turn_this_time[i] - motor_turn_last_time[i];
       // update
@@ -187,7 +197,7 @@ u32 DeltaTurnCalc(u32 *motor_turn, u8 motor_num) {
     } else {
       // odometer
       odometer[i] = odometer[i] + (motor_turn[i] * kPI * kDiameter) /
-                                      (6 * kReductionRatio * 100);
+                                      (6 * kReductionRatio * 10);
       motor_turn_this_time[i] = motor_turn[i];
       delta_turn[i] = motor_turn_this_time[i] - motor_turn_last_time[i];
       // update, reset the counter
@@ -198,4 +208,20 @@ u32 DeltaTurnCalc(u32 *motor_turn, u8 motor_num) {
   }
   usRegHoldingBuf[9] = odometer[0];
   usRegHoldingBuf[10] = motor_turn[0] / 6;
+}
+
+u32 MotorSetCmdSpeed(u32 cmd_speed, u32 motor_feedback_speed) {
+  u32 motor_cmd_speed;
+  if (abs(cmd_speed - motor_feedback_speed) > 100) {
+    // stop
+    if (cmd_speed == 0) {
+      motor_cmd_speed = abs(cmd_speed - motor_feedback_speed) * 0.8;
+    } else {
+      motor_cmd_speed = 0.8 * cmd_speed;
+    }
+  } else {
+    motor_cmd_speed = cmd_speed;
+  }
+
+  return motor_cmd_speed;
 }

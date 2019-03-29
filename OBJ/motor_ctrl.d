@@ -46,6 +46,6 @@
 ..\obj\motor_ctrl.o: ..\PID\PID.h
 ..\obj\motor_ctrl.o: ..\HARDWARE\TIMER\timer.h
 ..\obj\motor_ctrl.o: ..\HARDWARE\MOTOR\motor.h
-..\obj\motor_ctrl.o: ..\SYSTEM\delay\delay.h
-..\obj\motor_ctrl.o: ..\CORE\core_cm4.h
 ..\obj\motor_ctrl.o: D:\Keil_v5\ARM\ARMCC\bin\..\include\math.h
+..\obj\motor_ctrl.o: ..\CORE\core_cm4.h
+..\obj\motor_ctrl.o: ..\SYSTEM\delay\delay.h

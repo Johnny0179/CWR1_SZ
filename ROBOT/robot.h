@@ -30,14 +30,15 @@ void RobotManual(u32 cmd_speed,int8_t dir);
 // function pointer
 typedef void (*robot_manual)(u32,int8_t);
 
-void RobotAuto(void);
+void RobotAuto(u32 cmd_speed,_Bool init_dir,u8 cycle);
 // function pointer
-typedef void (*robot_auto)(void);
+typedef void (*robot_auto)(u32,_Bool,u8);
 
 // robot class definition
 typedef struct {
   /*data members*/
   u8 no_;
+  u8 cycle_;
   _Bool mode_;
   int8_t dir_;
   u32 odometer_;
