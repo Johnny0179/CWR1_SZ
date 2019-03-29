@@ -47,3 +47,6 @@
 ..\obj\timer12.o: ..\HARDWARE\TIMER\timer.h
 ..\obj\timer12.o: ..\HARDWARE\LED\led.h
 ..\obj\timer12.o: ..\HARDWARE\MOTOR\motor.h
+..\obj\timer12.o: ..\SYSTEM\delay\delay.h
+..\obj\timer12.o: ..\CORE\core_cm4.h
+..\obj\timer12.o: D:\Keil_v5\ARM\ARMCC\bin\..\include\math.h

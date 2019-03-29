@@ -38,8 +38,10 @@
 ..\obj\main.o: ..\FWLIB\inc\stm32f4xx_dac.h
 ..\obj\main.o: ..\FWLIB\inc\stm32f4xx_dcmi.h
 ..\obj\main.o: ..\FWLIB\inc\stm32f4xx_fsmc.h
-..\obj\main.o: ..\HARDWARE\ADC\adc.h
 ..\obj\main.o: ..\SYSTEM\delay\delay.h
+..\obj\main.o: ..\CORE\core_cm4.h
+..\obj\main.o: D:\Keil_v5\ARM\ARMCC\bin\..\include\math.h
+..\obj\main.o: ..\HARDWARE\ADC\adc.h
 ..\obj\main.o: ..\HARDWARE\LED\led.h
 ..\obj\main.o: ..\FreeRTOS\include\FreeRTOS.h
 ..\obj\main.o: D:\Keil_v5\ARM\ARMCC\bin\..\include\stddef.h
@@ -60,3 +62,4 @@
 ..\obj\main.o: ..\FreeModbus\modbus\include\mbproto.h
 ..\obj\main.o: ..\FreeModbus\modbus\include\mbutils.h
 ..\obj\main.o: ..\ROBOT\robot.h
+..\obj\main.o: ..\FreeModbus\FreeModbus.h

@@ -6,7 +6,13 @@
 //
 #ifndef _ROBOT_H_
 #define _ROBOT_H_
+
+#include "FreeModbus.h"
+#include "PID.h"
+#include "delay.h"
+#include "led.h"
 #include "motor.h"
+#include "timer.h"
 
 void RobotInit(void);
 // function pointer
@@ -20,19 +26,28 @@ void RobotDisable(void);
 // function pointer
 typedef void (*robot_disable)(void);
 
-void RobotControl(u16 motion_cycle);
+void RobotManual(u32 cmd_speed,int8_t dir);
 // function pointer
-typedef void (*robot_control)(u16);
+typedef void (*robot_manual)(u32,int8_t);
+
+void RobotAuto(void);
+// function pointer
+typedef void (*robot_auto)(void);
 
 // robot class definition
 typedef struct {
   /*data members*/
   u8 no_;
+  _Bool mode_;
+  int8_t dir_;
+  u32 odometer_;
+  u32 cmd_speed_;
   /*functions*/
   robot_init Init;
   robot_enable Enable;
   robot_disable Disable;
-  robot_control Control;
+  robot_manual Manual;
+  robot_auto Auto;
 } robot;
 
 // constructor

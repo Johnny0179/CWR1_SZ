@@ -78,6 +78,8 @@ void Robot_task(void* pvParameters);
 extern int32_t usRegHoldingBuf[REG_HOLDING_NREGS];
 
 const u8 kRefereshRate = 50;
+static const _Bool kManualMode = 0;
+static const _Bool kManualAuto = 1;
 
 /*----------------------------Start Implemention-------------------------*/
 
@@ -120,9 +122,10 @@ static void start_task(void* pvParameters) {
               (UBaseType_t)Modbus_TASK_PRIO,
               (TaskHandle_t*)&ModbusTask_Handler);
   // Motor任务
-  xTaskCreate((TaskFunction_t)Motor_task, (const char*)"Motor_task",
-              (uint16_t)Motor_STK_SIZE, (void*)NULL,
-              (UBaseType_t)Motor_TASK_PRIO, (TaskHandle_t*)&MotorTask_Handler);
+  // xTaskCreate((TaskFunction_t)Motor_task, (const char*)"Motor_task",
+  //             (uint16_t)Motor_STK_SIZE, (void*)NULL,
+  //             (UBaseType_t)Motor_TASK_PRIO,
+  //             (TaskHandle_t*)&MotorTask_Handler);
 
   vTaskDelete(StartTask_Handler);  //删除开始任务
   taskEXIT_CRITICAL();             //退出临界区
@@ -146,20 +149,39 @@ static void ADC_task(void* pvParameters) {
 // Robot task
 static void Robot_task(void* pvParameters) {
   u16 cycle;
+  u8 dir = 1;
+  _Bool mode = 0;
   // robot class
   robot cwr;
   RobotNew(&cwr);
   cwr.Init();
   while (1) {
-    cycle = usRegHoldingBuf[1];
+    // cycle = usRegHoldingBuf[1];
+    cwr.mode_ = usRegHoldingBuf[20];
+    cwr.dir_ = usRegHoldingBuf[21];
+    cwr.cmd_speed_ = usRegHoldingBuf[2];
     // robot enable
     if (usRegHoldingBuf[0] == 1) {
       cwr.Enable();
-      cwr.Control(cycle);
+
+      if (cwr.mode_ == kManualMode) {
+        // manual mode
+        cwr.Manual(cwr.cmd_speed_, cwr.dir_);
+      }
+
+      if (cwr.mode_ == kManualAuto) {
+        /*auto mode*/
+        // set initial mode
+        // cwr.mode_=usRegHoldingBuf[21];
+        // if(cwr.odometer_<)
+        cwr.Auto();
+      }
+
     } else if (usRegHoldingBuf[0] == 0) {
       cwr.Disable();
     }
-    vTaskDelay(kRefereshRate);  // 20ms刷新一次
+    // 20ms刷新一次
+    vTaskDelay(50);
   }
 }
 
@@ -177,62 +199,10 @@ static void Modbus_task(void* pvParameters) {
 
 // Motor task
 static void Motor_task(void* pvParameters) {
-  // Motor Define
-  MOTOR Motor1;
-  MOTOR Motor2;
-  MOTOR Motor3;
-  MOTOR Motor4;
-  MOTOR Motor5;
-  MOTOR Motor6;
 
-  // PID Define
-  pidData_t PIDMotor1;
-  pidData_t PIDMotor2;
-  pidData_t PIDMotor3;
-  pidData_t PIDMotor4;
-  pidData_t PIDMotor5;
-  pidData_t PIDMotor6;
-
-  // Motor Init
-  MotorInit();
-
-  MotorInitConfig(1, &Motor1);
-  MotorInitConfig(2, &Motor2);
-  MotorInitConfig(3, &Motor3);
-  MotorInitConfig(4, &Motor4);
-  MotorInitConfig(5, &Motor5);
-  MotorInitConfig(6, &Motor6);
-
-  // PID Init
-  pid_Init(1 * P, 0.5 * I, 0 * D, &PIDMotor1);
-  pid_Init(1 * P, 0.5 * I, 0 * D, &PIDMotor2);
-  pid_Init(1 * P, 0.5 * I, 0 * D, &PIDMotor3);
-  pid_Init(1 * P, 0.5 * I, 0 * D, &PIDMotor4);
-  pid_Init(1 * P, 0.5 * I, 0 * D, &PIDMotor5);
-  pid_Init(1 * P, 0.5 * I, 0 * D, &PIDMotor6);
 
   while (1) {
-    // usRegHoldingBuf[0]=Motor1.direction;
-    MotorCtrl(&Motor1, &PIDMotor1);
-    usRegHoldingBuf[3] = Motor1.MotorSpeed_mmps;
 
-    MotorCtrl(&Motor2, &PIDMotor2);
-    usRegHoldingBuf[4] = Motor2.MotorSpeed_mmps;
-
-    MotorCtrl(&Motor3, &PIDMotor3);
-    usRegHoldingBuf[5] = Motor3.MotorSpeed_mmps;
-
-    MotorCtrl(&Motor4, &PIDMotor4);
-    usRegHoldingBuf[6] = Motor4.MotorSpeed_mmps;
-
-    MotorCtrl(&Motor5, &PIDMotor5);
-    usRegHoldingBuf[7] = Motor5.MotorSpeed_mmps;
-
-    MotorCtrl(&Motor6, &PIDMotor6);
-    usRegHoldingBuf[8] = Motor6.MotorSpeed_mmps;
-
-    /*Debug*/
-    usRegHoldingBuf[12] = Motor1.PWM;
 
     vTaskDelay(100);  // Delay期间任务被BLOCK，可以执行其他任务
   }

@@ -38,6 +38,9 @@
 ..\obj\motor.o: ..\FWLIB\inc\stm32f4xx_dac.h
 ..\obj\motor.o: ..\FWLIB\inc\stm32f4xx_dcmi.h
 ..\obj\motor.o: ..\FWLIB\inc\stm32f4xx_fsmc.h
+..\obj\motor.o: ..\SYSTEM\delay\delay.h
+..\obj\motor.o: ..\CORE\core_cm4.h
+..\obj\motor.o: D:\Keil_v5\ARM\ARMCC\bin\..\include\math.h
 ..\obj\motor.o: ..\FreeModbus\FreeModbus.h
 ..\obj\motor.o: ..\FreeModbus\modbus\include\mb.h
 ..\obj\motor.o: ..\FreeModbus\port\port.h

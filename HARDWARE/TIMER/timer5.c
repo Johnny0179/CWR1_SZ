@@ -28,6 +28,7 @@ void Tim5IntInit(u16 arr, u16 psc) {
 }
 
 void Tim5Enable(void) { TIM_Cmd(TIM5, ENABLE); }
+void Tim5Disable(void) { TIM_Cmd(TIM5, DISABLE); }
 
 /*interrupt handler*/
 void TIM5_IRQHandler(void) {

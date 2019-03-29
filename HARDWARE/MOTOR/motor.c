@@ -4,6 +4,7 @@
 #include "timer.h"
 
 extern int32_t usRegHoldingBuf[REG_HOLDING_NREGS];
+extern u32 delta_turn[MotorNum];
 u32 motor_turn[MotorNum];
 u8 timer5_enabled = 0;
 static u8 exit_int_time_motor2 = 0;
@@ -225,6 +226,28 @@ void TIM8_PWM_SET(u32 freq, u32 Duty) {
   TIM8->CCR2 = (((168000000 / 1) / freq) - 1) * Duty / 100;
 }
 
+
+
+void MoveDir(int8_t dir) {
+  switch (dir) {
+    // move down
+    case 1:
+      GPIO_ResetBits(GPIOD, GPIO_Pin_0 | GPIO_Pin_3 | GPIO_Pin_1 | GPIO_Pin_2 |
+                                GPIO_Pin_4 | GPIO_Pin_5);
+      break;
+      // move up
+    case 0:
+      GPIO_SetBits(GPIOD, GPIO_Pin_0 | GPIO_Pin_3 | GPIO_Pin_1 | GPIO_Pin_2 |
+                              GPIO_Pin_4 | GPIO_Pin_5);
+      break;
+      // defualt move up
+    default:
+      GPIO_SetBits(GPIOD, GPIO_Pin_0 | GPIO_Pin_3 | GPIO_Pin_1 | GPIO_Pin_2 |
+                              GPIO_Pin_4 | GPIO_Pin_5);
+      break;
+  }
+}
+
 void MoveUp(void) {
   GPIO_SetBits(GPIOD, GPIO_Pin_0 | GPIO_Pin_3 | GPIO_Pin_1 | GPIO_Pin_2 |
                           GPIO_Pin_4 | GPIO_Pin_5);
@@ -377,20 +400,41 @@ void EXTI9_5_IRQHandler(void) {
 }
 
 void MotorEnable(void) {
-  /* Main Output Enable */
+  // disable PWM output
+  TIM_CtrlPWMOutputs(TIM1, DISABLE);
+  TIM_CtrlPWMOutputs(TIM8, DISABLE);
+
+  // enable PWM output
   TIM_CtrlPWMOutputs(TIM1, ENABLE);
-
-  // Initialize the motor with speed = 0.
-  // TIM1_PWM_SET(freq, 100);
-
-  /* Main Output Enable */
   TIM_CtrlPWMOutputs(TIM8, ENABLE);
 
-  // Initialize the motor with speed = 0.
-  // TIM8_PWM_SET(freq, 100);
+  // enable speed counter
+  Tim5Enable();
 }
 
 void MotorDisable(void) {
-  TIM_CtrlPWMOutputs(TIM1, DISABLE);
-  TIM_CtrlPWMOutputs(TIM8, DISABLE);
+  // u8 i;
+  // // disable PWM output
+  // TIM_CtrlPWMOutputs(TIM1, DISABLE);
+  // TIM_CtrlPWMOutputs(TIM8, DISABLE);
+  // // delay 10ms
+  // delay_ms(10);
+  // // disable speed counter
+  // Tim5Disable();
+
+  // // reset the mode
+  // usRegHoldingBuf[20] = 0;
+
+  // // reset the cmd speed
+  // usRegHoldingBuf[2] = 0;
+
+  // // reset the feedback speed
+  // for (i = 0; i < MotorNum; ++i) {
+  //   /* code */
+  //   delta_turn[i + 3] = 0;
+  // }
+
+  // rst the core
+  __set_FAULTMASK(1);
+  NVIC_SystemReset();
 }

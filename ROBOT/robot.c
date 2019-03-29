@@ -5,36 +5,89 @@
 // Copyright 2019 IRIM, Inc. All right reserved.
 //
 #include "robot.h"
-#include "delay.h"
-#include "led.h"
-#include "motor.h"
 
-// motion cycle 8s
-// static const u16 kMotionCycle = 8000;
+extern int32_t usRegHoldingBuf[REG_HOLDING_NREGS];
 
-static void RobotInit(void) { LED1 = 0; }
+// const parameters
+static const _Bool kManualMode = 0;
+static const _Bool kAutoMode = 1;
+const int8_t kDirUp = 0;
+const int8_t kDirDown = 1;
+
+// Motor Define
+static MOTOR Motor[MotorNum];
+static pidData_t PIDMotor[MotorNum];
+
+static void RobotInit(void) {
+  u8 i;
+  // Motor Init
+  MotorInit();
+  for (i = 0; i < MotorNum; i++) {
+    MotorInitConfig(i + 1, &Motor[i]);
+  }
+
+  // PID Init
+  pid_Init(1 * P, 0.5 * I, 0 * D, &PIDMotor[0]);
+  pid_Init(1 * P, 0.5 * I, 0 * D, &PIDMotor[1]);
+  pid_Init(1 * P, 0.5 * I, 0 * D, &PIDMotor[2]);
+  pid_Init(1 * P, 0.5 * I, 0 * D, &PIDMotor[3]);
+  pid_Init(1 * P, 0.5 * I, 0 * D, &PIDMotor[4]);
+  pid_Init(1 * P, 0.5 * I, 0 * D, &PIDMotor[5]);
+}
 
 static void RobotEnable(void) { MotorEnable(); }
 
 static void RobotDisable(void) { MotorDisable(); }
 
-static void RobotControl(u16 motion_cycle) {
-	
-  MoveUp();
-  delay_ms(motion_cycle * 1000);
-  MotorDisable();
-  MotorEnable();
+static void RobotManual(u32 cmd_speed, int8_t dir) {
+  u8 i;
+  /*motor control*/
+  for (i = 0; i < MotorNum; ++i) {
+    /* code */
+    MotorCtrlManual(&Motor[i], &PIDMotor[i], cmd_speed, dir);
+  }
 
-  MoveDown();
-  delay_ms(motion_cycle * 1000);
-  MotorDisable();
-  MotorEnable();
+  /*monitor speed*/
+  for (i = 0; i < MotorNum; ++i) {
+    /* code */
+    usRegHoldingBuf[i + 3] = Motor[i].MotorSpeed_mmps;
+  }
+
+  /*Debug*/
+  usRegHoldingBuf[12] = Motor[0].PWM;
+}
+
+static void RobotAuto(void) {
+  u8 i, odometer;
+
+  /*set direction*/
+  // for (i = 0; i < MotorNum; ++i) {
+  //   Motor[i].direction = usRegHoldingBuf[21];
+  // }
+
+  /*motor control*/
+  for (i = 0; i < MotorNum; ++i) {
+    MotorCtrlAuto(&Motor[i], &PIDMotor[i]);
+  }
+
+  /*monitor speed*/
+  for (i = 0; i < MotorNum; ++i) {
+    /* code */
+    usRegHoldingBuf[i + 3] = Motor[i].MotorSpeed_mmps;
+  }
+  /*Debug*/
+  usRegHoldingBuf[12] = Motor[0].PWM;
 }
 
 void RobotNew(robot *r) {
   r->no_ = 0;
+  r->mode_ = kManualMode;
+  r->dir_ = kDirUp;
+  r->odometer_ = 0;
+  r->cmd_speed_ = 0;
   r->Init = RobotInit;
   r->Enable = RobotEnable;
   r->Disable = RobotDisable;
-  r->Control = RobotControl;
+  r->Manual = RobotManual;
+  r->Auto = RobotAuto;
 }
