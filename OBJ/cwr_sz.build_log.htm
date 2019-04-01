@@ -4,327 +4,49 @@
 <h1>�Vision Build Log</h1>
 <h2>Project:</h2>
 \\Vboxsvr\irim\ShenZhong\CWR_Shenzhong\Software\CWR1_SZ\USER\CWR_SZ.uvprojx
-Project File Date:  03/27/2019
+Project File Date:  03/29/2019
 
 <h2>Output:</h2>
 Build target 'CWR_SZ'
+compiling main.c...
+..\HARDWARE\MOTOR\Motor.h(69): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\ROBOT\robot.h(57): warning:  #1-D: last line of file ends without a newline
+  #endif
+main.c(152): warning:  #177-D: variable "cycle" was declared but never referenced
+    u16 cycle;
+main.c(153): warning:  #177-D: variable "dir" was declared but never referenced
+    u8 dir = 1;
+main.c(154): warning:  #177-D: variable "mode" was declared but never referenced
+    _Bool mode = 0;
+main.c(199): warning:  #177-D: function "Motor_task" was declared but never referenced
+  static void Motor_task(void* pvParameters) {
+main.c: 6 warnings, 0 errors
+compiling motor_ctrl.c...
+..\HARDWARE\MOTOR\motor.h(69): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\HARDWARE\MOTOR\motor_ctrl.c(82): warning:  #186-D: pointless comparison of unsigned integer with zero
+        if (stop_counter < kStopTime) {
+..\HARDWARE\MOTOR\motor_ctrl.c(146): warning:  #177-D: variable "state" was declared but never referenced
+    u8 state;
+..\HARDWARE\MOTOR\motor_ctrl.c(212): warning:  #940-D: missing return statement at end of non-void function "DeltaTurnCalc"
+  }
+..\HARDWARE\MOTOR\motor_ctrl.c(216): warning:  #223-D: function "abs" declared implicitly
+    if (abs(cmd_speed - motor_feedback_speed) > 100) {
+..\HARDWARE\MOTOR\motor_ctrl.c(228): warning:  #1-D: last line of file ends without a newline
+  }
+..\HARDWARE\MOTOR\motor_ctrl.c: 6 warnings, 0 errors
 compiling robot.c...
 ..\HARDWARE\MOTOR\motor.h(69): warning:  #1-D: last line of file ends without a newline
   #endif
 ..\ROBOT\robot.h(57): warning:  #1-D: last line of file ends without a newline
   #endif
-..\ROBOT\robot.c(88): warning:  #1-D: last line of file ends without a newline
+..\ROBOT\robot.c(92): warning:  #1-D: last line of file ends without a newline
   }
 ..\ROBOT\robot.c(13): warning:  #177-D: variable "kAutoMode" was declared but never referenced
   static const _Bool kAutoMode = 1;
 ..\ROBOT\robot.c: 4 warnings, 0 errors
 linking...
-Program Size: Code=36494 RO-data=1106 RW-data=1004 ZI-data=79484  
+Program Size: Code=36578 RO-data=1106 RW-data=1004 ZI-data=79484  
 FromELF: creating hex file...
-"..\OBJ\cwr_sz.axf" - 0 Error(s), 4 Warning(s).
-pvParameters) {
-main.c: 6 warnings, 0 errors
-compiling motor.c...
-..\HARDWARE\MOTOR\motor.h(69): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\HARDWARE\MOTOR\motor.c(440): warning:  #1-D: last line of file ends without a newline
-  }
-..\HARDWARE\MOTOR\motor.c: 2 warnings, 0 errors
-compiling timer4.c...
-..\HARDWARE\MOTOR\motor.h(69): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\HARDWARE\TIMER\timer4.c(42): warning:  #1-D: last line of file ends without a newline
-  }
-..\HARDWARE\TIMER\timer4.c: 2 warnings, 0 errors
-compiling timer12.c...
-..\HARDWARE\MOTOR\motor.h(69): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\HARDWARE\TIMER\timer12.c: 1 warning, 0 errors
-compiling motor_ctrl.c...
-..\HARDWARE\MOTOR\motor.h(69): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\HARDWARE\MOTOR\motor_ctrl.c(80): warning:  #186-D: pointless comparison of unsigned integer with zero
-        if (stop_counter < kStopTime) {
-..\HARDWARE\MOTOR\motor_ctrl.c(211): warning:  #940-D: missing return statement at end of non-void function "DeltaTurnCalc"
-  }
-..\HARDWARE\MOTOR\motor_ctrl.c(215): warning:  #223-D: function "abs" declared implicitly
-    if (abs(cmd_speed - motor_feedback_speed) > 100) {
-..\HARDWARE\MOTOR\motor_ctrl.c(227): warning:  #1-D: last line of file ends without a newline
-  }
-..\HARDWARE\MOTOR\motor_ctrl.c: 5 warnings, 0 errors
-compiling timer13.c...
-..\HARDWARE\MOTOR\motor.h(69): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\HARDWARE\TIMER\timer13.c: 1 warning, 0 errors
-compiling timer5.c...
-..\HARDWARE\MOTOR\motor.h(69): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\HARDWARE\TIMER\timer5.c(40): warning:  #1-D: last line of file ends without a newline
-  }
-..\HARDWARE\TIMER\timer5.c: 2 warnings, 0 errors
-compiling robot.c...
-..\HARDWARE\MOTOR\motor.h(69): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\ROBOT\robot.h(57): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\ROBOT\robot.c(63): error:  #20: identifier "i" is undefined
-    for (i = 0; i < MotorNum; ++i) {
-..\ROBOT\robot.c(88): warning:  #1-D: last line of file ends without a newline
-  }
-..\ROBOT\robot.c(13): warning:  #177-D: variable "kAutoMode" was declared but never referenced
-  static const _Bool kAutoMode = 1;
-..\ROBOT\robot.c: 4 warnings, 1 error
-"..\OBJ\cwr_sz.axf" - 1 Error(s), 23 Warning(s).
-Target not created
-e_t uxDummy1;
-..\FreeRTOS\include\FreeRTOS.h(1006): error:  #20: identifier "UBaseType_t" is undefined
-        UBaseType_t                     uxDummy5;
-..\FreeRTOS\include\FreeRTOS.h(1016): error:  #20: identifier "UBaseType_t" is undefined
-                UBaseType_t             uxDummy10[ 2 ];
-..\FreeRTOS\include\FreeRTOS.h(1019): error:  #20: identifier "UBaseType_t" is undefined
-                UBaseType_t             uxDummy12[ 2 ];
-..\FreeRTOS\include\FreeRTOS.h(1070): error:  #20: identifier "UBaseType_t" is undefined
-                UBaseType_t uxDummy2;
-..\FreeRTOS\include\FreeRTOS.h(1074): error:  #20: identifier "UBaseType_t" is undefined
-        UBaseType_t uxDummy4[ 3 ];
-..\FreeRTOS\include\FreeRTOS.h(1086): error:  #20: identifier "UBaseType_t" is undefined
-                UBaseType_t uxDummy8;
-..\FreeRTOS\include\FreeRTOS.h(1109): error:  #20: identifier "TickType_t" is undefined
-        TickType_t xDummy1;
-..\FreeRTOS\include\FreeRTOS.h(1113): error:  #20: identifier "UBaseType_t" is undefined
-                UBaseType_t uxDummy3;
-..\FreeRTOS\include\FreeRTOS.h(1140): error:  #20: identifier "TickType_t" is undefined
-        TickType_t                      xDummy3;
-..\FreeRTOS\include\FreeRTOS.h(1141): error:  #20: identifier "UBaseType_t" is undefined
-        UBaseType_t                     uxDummy4;
-..\FreeRTOS\include\FreeRTOS.h(1143): error:  #20: identifier "TaskFunction_t" is undefined
-        TaskFunction_t          pvDummy6;
-main.c: 3 warnings, 30 errors
-compiling motor.c...
-..\HARDWARE\MOTOR\motor.h(57): error:  #130: expected a "{"
-  void MotorInit(void);
-..\HARDWARE\MOTOR\motor.h(68): warning:  #1-D: last line of file ends without a newline
-  #endif
-D:\Keil_v5\ARM\ARMCC\bin\..\include\inttypes.h(224): error:  #20: identifier "wchar_t" is undefined
-  _ARMABI intmax_t wcstoimax(const wchar_t * __restrict /*nptr*/,
-D:\Keil_v5\ARM\ARMCC\bin\..\include\inttypes.h(225): error:  #20: identifier "wchar_t" is undefined
-                     wchar_t ** __restrict /*endptr*/, int /*base*/) __attribute__((__nonnull__(1)));
-D:\Keil_v5\ARM\ARMCC\bin\..\include\inttypes.h(226): error:  #20: identifier "wchar_t" is undefined
-  _ARMABI uintmax_t wcstoumax(const wchar_t * __restrict /*nptr*/,
-D:\Keil_v5\ARM\ARMCC\bin\..\include\inttypes.h(227): error:  #20: identifier "wchar_t" is undefined
-                      wchar_t ** __restrict /*endptr*/, int /*base*/) __attribute__((__nonnull__(1)));
-D:\Keil_v5\ARM\ARMCC\bin\..\include\inttypes.h(235): error:  #757: variable "imaxdiv_t" is not a type name
-  extern _ARMABI_PURE imaxdiv_t imaxdiv(intmax_t /*numer*/, intmax_t /*denom*/);
-..\HARDWARE\MOTOR\motor.c(440): warning:  #1-D: last line of file ends without a newline
-  }
-..\HARDWARE\MOTOR\motor.c: 2 warnings, 6 errors
-compiling timer4.c...
-..\HARDWARE\MOTOR\motor.h(57): error:  #130: expected a "{"
-  void MotorInit(void);
-..\HARDWARE\MOTOR\motor.h(68): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\HARDWARE\TIMER\timer4.c(8): warning:  #12-D: parsing restarts here after previous syntax error
-  void Tim4IntInit(u16 arr, u16 psc) {
-..\HARDWARE\TIMER\timer4.c(14): error:  #20: identifier "arr" is undefined
-    TIM_TimeBaseInitStructure.TIM_Period = arr;
-..\HARDWARE\TIMER\timer4.c(15): error:  #20: identifier "psc" is undefined
-    TIM_TimeBaseInitStructure.TIM_Prescaler = psc;
-..\HARDWARE\TIMER\timer4.c(27): warning:  #940-D: missing return statement at end of non-void function "MotorSetCmdSpeed"
-  }
-..\HARDWARE\TIMER\timer4.c(36): error:  #20: identifier "move_dir" is undefined
-      move_dir = !move_dir;
-..\HARDWARE\TIMER\timer4.c(37): warning:  #223-D: function "MotorDisable" declared implicitly
-      MotorDisable();
-..\HARDWARE\TIMER\timer4.c(38): warning:  #223-D: function "MotorEnable" declared implicitly
-      MotorEnable();
-..\HARDWARE\TIMER\timer4.c(42): warning:  #1-D: last line of file ends without a newline
-  }
-..\HARDWARE\TIMER\timer4.c: 6 warnings, 4 errors
-compiling timer12.c...
-..\HARDWARE\MOTOR\motor.h(57): error:  #130: expected a "{"
-  void MotorInit(void);
-..\HARDWARE\MOTOR\motor.h(68): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\HARDWARE\TIMER\timer12.c(17): warning:  #12-D: parsing restarts here after previous syntax error
-  void TIM12_CH1_Cap_Init(u32 arr, u16 psc) {
-..\HARDWARE\TIMER\timer12.c(35): error:  #20: identifier "psc" is undefined
-    TIM_TimeBaseStructure.TIM_Prescaler = psc;                   //定时器分�?                                          ^
-..\HARDWARE\TIMER\timer12.c(37): error:  #20: identifier "arr" is undefined
-    TIM_TimeBaseStructure.TIM_Period = arr;  //自动重装载�?                                       ^
-..\HARDWARE\TIMER\timer12.c(61): warning:  #940-D: missing return statement at end of non-void function "MotorSetCmdSpeed"
-  }
-..\HARDWARE\TIMER\timer12.c(90): error:  #20: identifier "exit_int_time_motor1" is undefined
-      if (exit_int_time_motor1 == 0) {
-..\HARDWARE\TIMER\timer12.c(91): error:  #20: identifier "motor_turn" is undefined
-        motor_turn[0] = 1;
-..\HARDWARE\TIMER\timer12.c(95): error:  #20: identifier "motor_turn" is undefined
-        motor_turn[0] = motor_turn[0] + 1;
-..\HARDWARE\TIMER\timer12.c: 3 warnings, 6 errors
-compiling motor_ctrl.c...
-..\HARDWARE\MOTOR\motor.h(57): error:  #130: expected a "{"
-  void MotorInit(void);
-..\HARDWARE\MOTOR\motor.h(68): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\HARDWARE\MOTOR\motor_ctrl.c(17): warning:  #12-D: parsing restarts here after previous syntax error
-  static volatile u32 motor_turn_this_time[MotorNum] = {0};
-..\HARDWARE\MOTOR\motor_ctrl.c(17): warning:  #174-D: expression has no effect
-  static volatile u32 motor_turn_this_time[MotorNum] = {0};
-..\HARDWARE\MOTOR\motor_ctrl.c(17): error:  #65: expected a ";"
-  static volatile u32 motor_turn_this_time[MotorNum] = {0};
-..\HARDWARE\MOTOR\motor_ctrl.c(17): warning:  #940-D: missing return statement at end of non-void function "MotorSetCmdSpeed"
-  static volatile u32 motor_turn_this_time[MotorNum] = {0};
-..\HARDWARE\MOTOR\motor_ctrl.c(42): error:  #20: identifier "kTimeInteval" is undefined
-    Tim5IntInit(kTimeInteval * 10 - 1, 8400 - 1);
-..\HARDWARE\MOTOR\motor_ctrl.c(52): warning:  #223-D: function "MotorVelCalc" declared implicitly
-    motor->MotorSpeed_mmps = MotorVelCalc(delta_turn[motor->num - 1]);
-..\HARDWARE\MOTOR\motor_ctrl.c(52): error:  #20: identifier "delta_turn" is undefined
-    motor->MotorSpeed_mmps = MotorVelCalc(delta_turn[motor->num - 1]);
-..\HARDWARE\MOTOR\motor_ctrl.c(151): error:  #159: declaration is incompatible with previous "MotorVelCalc" (declared at line 52)
-  u32 MotorVelCalc(u32 delta_turn) {
-..\HARDWARE\MOTOR\motor_ctrl.c(153): error:  #20: identifier "kPI" is undefined
-    return (delta_turn * kPI * kDiameter * 1000) /
-..\HARDWARE\MOTOR\motor_ctrl.c(153): error:  #20: identifier "kDiameter" is undefined
-    return (delta_turn * kPI * kDiameter * 1000) /
-..\HARDWARE\MOTOR\motor_ctrl.c(154): error:  #20: identifier "kReductionRatio" is undefined
-           (6 * kReductionRatio * kTimeInteval);
-..\HARDWARE\MOTOR\motor_ctrl.c(154): error:  #20: identifier "kTimeInteval" is undefined
-           (6 * kReductionRatio * kTimeInteval);
-..\HARDWARE\MOTOR\motor_ctrl.c(163): error:  #20: identifier "motor_turn_this_time" is undefined
-        motor_turn_this_time[i] = motor_turn[i];
-..\HARDWARE\MOTOR\motor_ctrl.c(164): error:  #20: identifier "delta_turn" is undefined
-        delta_turn[i] = motor_turn_this_time[i] - motor_turn_last_time[i];
-..\HARDWARE\MOTOR\motor_ctrl.c(169): error:  #20: identifier "kPI" is undefined
-        odometer[i] = odometer[i] + (motor_turn[i] * kPI * kDiameter) /
-..\HARDWARE\MOTOR\motor_ctrl.c(169): error:  #20: identifier "kDiameter" is undefined
-        odometer[i] = odometer[i] + (motor_turn[i] * kPI * kDiameter) /
-..\HARDWARE\MOTOR\motor_ctrl.c(170): error:  #20: identifier "kReductionRatio" is undefined
-                                        (6 * kReductionRatio * 100);
-..\HARDWARE\MOTOR\motor_ctrl.c(171): error:  #20: identifier "motor_turn_this_time" is undefined
-        motor_turn_this_time[i] = motor_turn[i];
-..\HARDWARE\MOTOR\motor_ctrl.c(172): error:  #20: identifier "delta_turn" is undefined
-        delta_turn[i] = motor_turn_this_time[i] - motor_turn_last_time[i];
-..\HARDWARE\MOTOR\motor_ctrl.c(179): error:  #20: identifier "usRegHoldingBuf" is undefined
-    usRegHoldingBuf[9] = odometer[0];
-..\HARDWARE\MOTOR\motor_ctrl.c(181): warning:  #940-D: missing return statement at end of non-void function "DeltaTurnCalc"
-  }
-..\HARDWARE\MOTOR\motor_ctrl.c(183): error:  #247: function "MotorSetCmdSpeed" has already been defined
-  u32 MotorSetCmdSpeed(u32 cmd_speed, u32 motor_feedback_speed) {
-..\HARDWARE\MOTOR\motor_ctrl.c(185): warning:  #223-D: function "abs" declared implicitly
-    if (abs(cmd_speed - motor_feedback_speed) > 100) {
-..\HARDWARE\MOTOR\motor_ctrl.c(198): warning:  #1-D: last line of file ends without a newline
-  }
-..\HARDWARE\MOTOR\motor_ctrl.c: 8 warnings, 18 errors
-compiling timer13.c...
-..\HARDWARE\MOTOR\motor.h(57): error:  #130: expected a "{"
-  void MotorInit(void);
-..\HARDWARE\MOTOR\motor.h(68): warning:  #1-D: last line of file ends without a newline
-  #endif
-D:\Keil_v5\ARM\ARMCC\bin\..\include\inttypes.h(224): error:  #20: identifier "wchar_t" is undefined
-  _ARMABI intmax_t wcstoimax(const wchar_t * __restrict /*nptr*/,
-D:\Keil_v5\ARM\ARMCC\bin\..\include\inttypes.h(225): error:  #20: identifier "wchar_t" is undefined
-                     wchar_t ** __restrict /*endptr*/, int /*base*/) __attribute__((__nonnull__(1)));
-D:\Keil_v5\ARM\ARMCC\bin\..\include\inttypes.h(226): error:  #20: identifier "wchar_t" is undefined
-  _ARMABI uintmax_t wcstoumax(const wchar_t * __restrict /*nptr*/,
-D:\Keil_v5\ARM\ARMCC\bin\..\include\inttypes.h(227): error:  #20: identifier "wchar_t" is undefined
-                      wchar_t ** __restrict /*endptr*/, int /*base*/) __attribute__((__nonnull__(1)));
-D:\Keil_v5\ARM\ARMCC\bin\..\include\inttypes.h(235): error:  #757: variable "imaxdiv_t" is not a type name
-  extern _ARMABI_PURE imaxdiv_t imaxdiv(intmax_t /*numer*/, intmax_t /*denom*/);
-..\HARDWARE\TIMER\timer13.c: 1 warning, 6 errors
-compiling timer5.c...
-..\HARDWARE\MOTOR\motor.h(57): error:  #130: expected a "{"
-  void MotorInit(void);
-..\HARDWARE\MOTOR\motor.h(68): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\HARDWARE\TIMER\timer5.c(9): warning:  #12-D: parsing restarts here after previous syntax error
-  void Tim5IntInit(u16 arr, u16 psc) {
-..\HARDWARE\TIMER\timer5.c(15): error:  #20: identifier "arr" is undefined
-    TIM_TimeBaseInitStructure.TIM_Period = arr;
-..\HARDWARE\TIMER\timer5.c(16): error:  #20: identifier "psc" is undefined
-    TIM_TimeBaseInitStructure.TIM_Prescaler = psc;
-..\HARDWARE\TIMER\timer5.c(28): warning:  #940-D: missing return statement at end of non-void function "MotorSetCmdSpeed"
-  }
-..\HARDWARE\TIMER\timer5.c(37): warning:  #223-D: function "DeltaTurnCalc" declared implicitly
-      DeltaTurnCalc(motor_turn, MotorNum);
-..\HARDWARE\TIMER\timer5.c(37): error:  #20: identifier "motor_turn" is undefined
-      DeltaTurnCalc(motor_turn, MotorNum);
-..\HARDWARE\TIMER\timer5.c(40): warning:  #1-D: last line of file ends without a newline
-  }
-..\HARDWARE\TIMER\timer5.c: 5 warnings, 4 errors
-compiling robot.c...
-..\HARDWARE\MOTOR\motor.h(57): error:  #130: expected a "{"
-  void MotorInit(void);
-..\HARDWARE\MOTOR\motor.h(68): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\ROBOT\robot.h(38): warning:  #12-D: parsing restarts here after previous syntax error
-  typedef struct {
-..\ROBOT\robot.h(46): error:  #20: identifier "robot_init" is undefined
-    robot_init Init;
-..\ROBOT\robot.h(47): error:  #20: identifier "robot_enable" is undefined
-    robot_enable Enable;
-..\ROBOT\robot.h(48): error:  #20: identifier "robot_disable" is undefined
-    robot_disable Disable;
-..\ROBOT\robot.h(49): error:  #20: identifier "robot_manual" is undefined
-    robot_manual Manual;
-..\ROBOT\robot.h(50): error:  #20: identifier "robot_auto" is undefined
-    robot_auto Auto;
-..\ROBOT\robot.h(51): warning:  #940-D: missing return statement at end of non-void function "MotorSetCmdSpeed"
-  } robot;
-..\ROBOT\robot.h(40): warning:  #177-D: variable "no_" was declared but never referenced
-    u8 no_;
-..\ROBOT\robot.h(41): warning:  #177-D: variable "mode_" was declared but never referenced
-    _Bool mode_;
-..\ROBOT\robot.h(42): warning:  #177-D: variable "dir_" was declared but never referenced
-    int8_t dir_;
-..\ROBOT\robot.h(43): warning:  #177-D: variable "odometer_" was declared but never referenced
-    u32 odometer_;
-..\ROBOT\robot.h(44): warning:  #177-D: variable "cmd_speed_" was declared but never referenced
-    u32 cmd_speed_;
-..\ROBOT\robot.h(51): error:  #77-D: this declaration has no storage class or type specifier
-  } robot;
-..\ROBOT\robot.h(54): error:  #757: variable "robot" is not a type name
-  void RobotNew(robot *r);
-..\ROBOT\robot.h(56): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\ROBOT\robot.c(24): warning:  #223-D: function "MotorInit" declared implicitly
-    MotorInit();
-..\ROBOT\robot.c(26): warning:  #223-D: function "MotorInitConfig" declared implicitly
-      MotorInitConfig(i + 1, &Motor[i]);
-..\ROBOT\robot.c(38): warning:  #223-D: function "MotorEnable" declared implicitly
-  static void RobotEnable(void) { MotorEnable(); }
-..\ROBOT\robot.c(40): warning:  #223-D: function "MotorDisable" declared implicitly
-  static void RobotDisable(void) { MotorDisable(); }
-..\ROBOT\robot.c(47): warning:  #223-D: function "MotorCtrlManual" declared implicitly
-      MotorCtrlManual(&Motor[i], &PIDMotor[i], cmd_speed, dir);
-..\ROBOT\robot.c(70): warning:  #223-D: function "MotorCtrlAuto" declared implicitly
-      MotorCtrlAuto(&Motor[i], &PIDMotor[i]);
-..\ROBOT\robot.c(61): warning:  #177-D: variable "odometer" was declared but never referenced
-    u8 i, odometer;
-..\ROBOT\robot.c(82): error:  #757: variable "robot" is not a type name
-  void RobotNew(robot *r) {
-..\ROBOT\robot.c(83): error:  #132: expression must have pointer-to-struct-or-union type
-    r->no_ = 0;
-..\ROBOT\robot.c(84): error:  #132: expression must have pointer-to-struct-or-union type
-    r->mode_ = kManualMode;
-..\ROBOT\robot.c(85): error:  #132: expression must have pointer-to-struct-or-union type
-    r->dir_ = kDirUp;
-..\ROBOT\robot.c(86): error:  #132: expression must have pointer-to-struct-or-union type
-    r->odometer_ = 0;
-..\ROBOT\robot.c(87): error:  #132: expression must have pointer-to-struct-or-union type
-    r->cmd_speed_ = 0;
-..\ROBOT\robot.c(88): error:  #132: expression must have pointer-to-struct-or-union type
-    r->Init = RobotInit;
-..\ROBOT\robot.c(89): error:  #132: expression must have pointer-to-struct-or-union type
-    r->Enable = RobotEnable;
-..\ROBOT\robot.c(90): error:  #132: expression must have pointer-to-struct-or-union type
-    r->Disable = RobotDisable;
-..\ROBOT\robot.c(91): error:  #132: expression must have pointer-to-struct-or-union type
-    r->Manual = RobotManual;
-..\ROBOT\robot.c(92): error:  #132: expression must have pointer-to-struct-or-union type
-    r->Auto = RobotAuto;
-..\ROBOT\robot.c(93): warning:  #1-D: last line of file ends without a newline
-  }
-..\ROBOT\robot.c(13): warning:  #177-D: variable "kAutoMode" was declared but never referenced
-  static const _Bool kAutoMode = 1;
-..\ROBOT\robot.c: 18 warnings, 19 errors
-"..\OBJ\cwr_sz.axf" - 93 Error(s), 46 Warning(s).
-Target not created
+"..\OBJ\cwr_sz.axf" - 0 Error(s), 16 Warning(s).

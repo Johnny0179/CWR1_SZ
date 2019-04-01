@@ -3,7 +3,7 @@
 <title>Static Call Graph - [..\OBJ\cwr_sz.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ..\OBJ\cwr_sz.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Fri Mar 29 18:09:52 2019
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Mon Apr 01 15:43:13 2019
 <BR><P>
 <H3>Maximum Stack Usage =        240 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -341,7 +341,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[12c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortValidateInterruptPriority
 </UL>
 
-<P><STRONG><a name="[8f]"></a>main</STRONG> (Thumb, 48 bytes, Stack size 16 bytes, main.o(.text))
+<P><STRONG><a name="[8f]"></a>main</STRONG> (Thumb, 54 bytes, Stack size 16 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 184 + Unknown Stack Size
 <LI>Call Chain = main &rArr; vTaskStartScheduler &rArr; xTimerCreateTimerTask &rArr; xTaskCreate &rArr; pvPortMalloc &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
@@ -1403,7 +1403,7 @@ Global Symbols
 <BR><BR>[Calls]<UL><LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_us
 </UL>
 
-<P><STRONG><a name="[a6]"></a>LED_Init</STRONG> (Thumb, 56 bytes, Stack size 16 bytes, led.o(.text))
+<P><STRONG><a name="[a6]"></a>LED_Init</STRONG> (Thumb, 112 bytes, Stack size 16 bytes, led.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 36<LI>Call Chain = LED_Init &rArr; GPIO_Init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_AHB1PeriphClockCmd
@@ -1647,7 +1647,7 @@ Global Symbols
 <LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RobotManual
 </UL>
 
-<P><STRONG><a name="[fe]"></a>MotorCtrlAuto</STRONG> (Thumb, 120 bytes, Stack size 24 bytes, motor_ctrl.o(.text))
+<P><STRONG><a name="[fe]"></a>MotorCtrlAuto</STRONG> (Thumb, 124 bytes, Stack size 24 bytes, motor_ctrl.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 120<LI>Call Chain = MotorCtrlAuto &rArr; MotorCtrlManual &rArr; MotorSetCmdSpeed &rArr; __aeabi_dmul
 </UL>
 <BR>[Calls]<UL><LI><a href="#[fb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorCtrlManual
@@ -3363,7 +3363,7 @@ Local Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(.text)
 </UL>
-<P><STRONG><a name="[69]"></a>Robot_task</STRONG> (Thumb, 132 bytes, Stack size 32 bytes, main.o(.text))
+<P><STRONG><a name="[69]"></a>Robot_task</STRONG> (Thumb, 142 bytes, Stack size 32 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = Robot_task &rArr; vTaskDelay &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay

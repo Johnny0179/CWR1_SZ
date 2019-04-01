@@ -57,11 +57,11 @@ static void RobotManual(u32 cmd_speed, int8_t dir) {
   usRegHoldingBuf[12] = Motor[0].PWM;
 }
 
-static void RobotAuto(u32 cmd_speed,_Bool init_dir,u8 cycle) {
-u8 i;
+static void RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle) {
+  u8 i;
   /*motor control*/
   for (i = 0; i < MotorNum; ++i) {
-    MotorCtrlAuto(&Motor[i], &PIDMotor[i],cmd_speed,init_dir,cycle);
+    MotorCtrlAuto(&Motor[i], &PIDMotor[i], cmd_speed, init_dir, cycle);
   }
 
   /*monitor speed*/
@@ -74,13 +74,17 @@ u8 i;
 }
 
 void RobotNew(robot *r) {
+  // robot parameters
   r->no_ = 0;
   r->cycle_ = 0;
   r->mode_ = kManualMode;
   r->dir_ = kDirUp;
   r->odometer_ = 0;
   r->cmd_speed_ = 0;
+
+  // functions
   r->Init = RobotInit;
+
   r->Enable = RobotEnable;
   r->Disable = RobotDisable;
   r->Manual = RobotManual;

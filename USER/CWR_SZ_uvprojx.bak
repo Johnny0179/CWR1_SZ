@@ -472,6 +472,11 @@
               <FileType>1</FileType>
               <FilePath>..\FWLIB\src\stm32f4xx_can.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f4xx_exti.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\FWLIB\src\stm32f4xx_exti.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -526,6 +531,11 @@
               <FileName>timer13.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\TIMER\timer13.c</FilePath>
+            </File>
+            <File>
+              <FileName>timer5.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\TIMER\timer5.c</FilePath>
             </File>
           </Files>
         </Group>

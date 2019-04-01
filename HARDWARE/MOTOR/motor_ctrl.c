@@ -7,6 +7,8 @@ extern int32_t usRegHoldingBuf[REG_HOLDING_NREGS];
 u32 delta_turn[MotorNum];
 u32 MotorSpeed[MotorNum];
 
+/*constant prarameters*/
+
 const _Bool kTrue = 1;
 const _Bool kFalse = 0;
 
@@ -141,8 +143,7 @@ void MotorCtrlManual(struct MOTOR_DATA *motor, struct PID_DATA *pid,
 
 void MotorCtrlAuto(struct MOTOR_DATA *motor, struct PID_DATA *pid,
                    u32 cmd_speed, _Bool init_dir, u8 cycle) {
-  // _Bool dir;
-
+  u8 state;
   cycle_odometer_this_time = odometer[0];
 
   // first time
@@ -150,7 +151,7 @@ void MotorCtrlAuto(struct MOTOR_DATA *motor, struct PID_DATA *pid,
     auto_dir = init_dir;
   }
 
-  if (cycle_counter < cycle) {
+  if (cycle_counter < cycle-1) {
     // 1m
     if ((cycle_odometer_this_time - cycle_odometer_last_time) > 100) {
       cycle_odometer_last_time = odometer[0];

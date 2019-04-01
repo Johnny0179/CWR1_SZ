@@ -7,6 +7,7 @@
 //LED端口定义
 #define LED0 PEout(2)	 
 #define LED1 PEout(3)	 
+#define LED2 PFout(9)	 
  
 
 //函数声明

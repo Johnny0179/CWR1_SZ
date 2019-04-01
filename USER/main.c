@@ -91,7 +91,8 @@ int main(void) {
 
   //初始化LED端口
   LED_Init();
-
+  // light the indicator by default
+  LED2 = 1;
   //创建开始任务
   xTaskCreate((TaskFunction_t)start_task,    //任务函数
               (const char*)"start_task",     //任务名称
@@ -159,6 +160,7 @@ static void Robot_task(void* pvParameters) {
     // cycle = usRegHoldingBuf[1];
     cwr.mode_ = usRegHoldingBuf[20];
     cwr.dir_ = usRegHoldingBuf[21];
+    cwr.cycle_ = usRegHoldingBuf[22];
     cwr.cmd_speed_ = usRegHoldingBuf[2];
     // robot enable
     if (usRegHoldingBuf[0] == 1) {
@@ -170,11 +172,7 @@ static void Robot_task(void* pvParameters) {
       }
 
       if (cwr.mode_ == kManualAuto) {
-        /*auto mode*/
-        // set initial mode
-        // cwr.mode_=usRegHoldingBuf[21];
-        // if(cwr.odometer_<)
-        cwr.Auto(cwr.cmd_speed_,cwr.dir_,cwr.cycle_);
+        cwr.Auto(cwr.cmd_speed_, cwr.dir_, cwr.cycle_);
       }
 
     } else if (usRegHoldingBuf[0] == 0) {
