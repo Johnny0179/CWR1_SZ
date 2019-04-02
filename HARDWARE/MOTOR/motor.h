@@ -59,7 +59,7 @@ void MotorInitConfig(u8 num, struct MOTOR_DATA *motor);
 void MotorCtrlManual(struct MOTOR_DATA *motor, struct PID_DATA *pid,
                      u32 cmd_speed, _Bool dir);
 void MotorCtrlAuto(struct MOTOR_DATA *motor, struct PID_DATA *pid,
-                   u32 cmd_speed, _Bool init_dir, u8 cycle);
+                   u32 cmd_speed, _Bool init_dir, u8 cycle, u8 cycle_distance);
 
 void MotorDisable(void);
 void MotorEnable(void);

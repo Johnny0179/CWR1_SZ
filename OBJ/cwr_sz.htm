@@ -3,7 +3,7 @@
 <title>Static Call Graph - [..\OBJ\cwr_sz.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ..\OBJ\cwr_sz.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Mon Apr 01 15:43:13 2019
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Tue Apr 02 09:45:30 2019
 <BR><P>
 <H3>Maximum Stack Usage =        240 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -1493,7 +1493,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_SetBits
 </UL>
-<BR>[Called By]<UL><LI><a href="#[fb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorCtrlManual
+<BR>[Called By]<UL><LI><a href="#[f7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorCtrlManual
 </UL>
 
 <P><STRONG><a name="[e2]"></a>MoveDown</STRONG> (Thumb, 12 bytes, Stack size 8 bytes, motor.o(.text))
@@ -1501,7 +1501,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_ResetBits
 </UL>
-<BR>[Called By]<UL><LI><a href="#[fb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorCtrlManual
+<BR>[Called By]<UL><LI><a href="#[f7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorCtrlManual
 </UL>
 
 <P><STRONG><a name="[e3]"></a>EXTIX_Init</STRONG> (Thumb, 74 bytes, Stack size 16 bytes, motor.o(.text))
@@ -1619,38 +1619,26 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RobotInit
 </UL>
 
-<P><STRONG><a name="[f7]"></a>MotorSetCmdSpeed</STRONG> (Thumb, 122 bytes, Stack size 40 bytes, motor_ctrl.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = MotorSetCmdSpeed &rArr; __aeabi_dmul
-</UL>
-<BR>[Calls]<UL><LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dmul
-<LI><a href="#[fa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_ui2d
-<LI><a href="#[f8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_i2d
-<LI><a href="#[f9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2uiz
-</UL>
-<BR>[Called By]<UL><LI><a href="#[fb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorCtrlManual
+<P><STRONG><a name="[f8]"></a>MotorVelCalc</STRONG> (Thumb, 52 bytes, Stack size 0 bytes, motor_ctrl.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[f7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorCtrlManual
 </UL>
 
-<P><STRONG><a name="[fc]"></a>MotorVelCalc</STRONG> (Thumb, 52 bytes, Stack size 0 bytes, motor_ctrl.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[fb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorCtrlManual
+<P><STRONG><a name="[f7]"></a>MotorCtrlManual</STRONG> (Thumb, 282 bytes, Stack size 24 bytes, motor_ctrl.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 52<LI>Call Chain = MotorCtrlManual &rArr; pid_Controller
 </UL>
-
-<P><STRONG><a name="[fb]"></a>MotorCtrlManual</STRONG> (Thumb, 372 bytes, Stack size 24 bytes, motor_ctrl.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = MotorCtrlManual &rArr; MotorSetCmdSpeed &rArr; __aeabi_dmul
-</UL>
-<BR>[Calls]<UL><LI><a href="#[fd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pid_Controller
-<LI><a href="#[fc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorVelCalc
-<LI><a href="#[f7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorSetCmdSpeed
+<BR>[Calls]<UL><LI><a href="#[f9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pid_Controller
+<LI><a href="#[f8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorVelCalc
 <LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MoveDown
 <LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MoveUp
 </UL>
-<BR>[Called By]<UL><LI><a href="#[fe]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorCtrlAuto
+<BR>[Called By]<UL><LI><a href="#[fa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorCtrlAuto
 <LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RobotManual
 </UL>
 
-<P><STRONG><a name="[fe]"></a>MotorCtrlAuto</STRONG> (Thumb, 124 bytes, Stack size 24 bytes, motor_ctrl.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 120<LI>Call Chain = MotorCtrlAuto &rArr; MotorCtrlManual &rArr; MotorSetCmdSpeed &rArr; __aeabi_dmul
+<P><STRONG><a name="[fa]"></a>MotorCtrlAuto</STRONG> (Thumb, 124 bytes, Stack size 32 bytes, motor_ctrl.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 84<LI>Call Chain = MotorCtrlAuto &rArr; MotorCtrlManual &rArr; pid_Controller
 </UL>
-<BR>[Calls]<UL><LI><a href="#[fb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorCtrlManual
+<BR>[Calls]<UL><LI><a href="#[f7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorCtrlManual
 </UL>
 <BR>[Called By]<UL><LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RobotAuto
 </UL>
@@ -1663,6 +1651,13 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = DeltaTurnCalc
 </UL>
 <BR>[Called By]<UL><LI><a href="#[48]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM5_IRQHandler
+</UL>
+
+<P><STRONG><a name="[fb]"></a>MotorSetCmdSpeed</STRONG> (Thumb, 126 bytes, Stack size 40 bytes, motor_ctrl.o(.text), UNUSED)
+<BR><BR>[Calls]<UL><LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dmul
+<LI><a href="#[fe]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_ui2d
+<LI><a href="#[fc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_i2d
+<LI><a href="#[fd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2uiz
 </UL>
 
 <P><STRONG><a name="[ff]"></a>TIM13_CH1_Cap_Init</STRONG> (Thumb, 178 bytes, Stack size 48 bytes, timer13.o(.text), UNUSED)
@@ -1684,7 +1679,7 @@ Global Symbols
 <LI><a href="#[f2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_GetITStatus
 <LI><a href="#[100]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_GetCapture1
 <LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dmul
-<LI><a href="#[fa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_ui2d
+<LI><a href="#[fe]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_ui2d
 <LI><a href="#[102]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2iz
 <LI><a href="#[101]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_ddiv
 </UL>
@@ -3057,18 +3052,19 @@ Global Symbols
 <P><STRONG><a name="[1a1]"></a>pid_Init</STRONG> (Thumb, 42 bytes, Stack size 12 bytes, pid.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = pid_Init
 </UL>
-<BR>[Called By]<UL><LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RobotInit
+<BR>[Called By]<UL><LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RobotManual
+<LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RobotInit
 </UL>
 
-<P><STRONG><a name="[fd]"></a>pid_Controller</STRONG> (Thumb, 146 bytes, Stack size 28 bytes, pid.o(.text))
+<P><STRONG><a name="[f9]"></a>pid_Controller</STRONG> (Thumb, 146 bytes, Stack size 28 bytes, pid.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 28<LI>Call Chain = pid_Controller
 </UL>
-<BR>[Called By]<UL><LI><a href="#[fb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorCtrlManual
+<BR>[Called By]<UL><LI><a href="#[f7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorCtrlManual
 </UL>
 
 <P><STRONG><a name="[2a9]"></a>pid_Reset_Integrator</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, pid.o(.text), UNUSED)
 
-<P><STRONG><a name="[9a]"></a>RobotNew</STRONG> (Thumb, 36 bytes, Stack size 0 bytes, robot.o(.text))
+<P><STRONG><a name="[9a]"></a>RobotNew</STRONG> (Thumb, 38 bytes, Stack size 0 bytes, robot.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[69]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Robot_task
 </UL>
 
@@ -3273,25 +3269,23 @@ Global Symbols
 <BR><BR>[Calls]<UL><LI><a href="#[1b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__fpl_dnaninf
 </UL>
 
-<P><STRONG><a name="[f9]"></a>__aeabi_d2uiz</STRONG> (Thumb, 0 bytes, Stack size 32 bytes, dfixu.o(x$fpl$dfixu))
-<BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = __aeabi_d2uiz
-</UL>
-<BR>[Called By]<UL><LI><a href="#[f7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorSetCmdSpeed
+<P><STRONG><a name="[fd]"></a>__aeabi_d2uiz</STRONG> (Thumb, 0 bytes, Stack size 32 bytes, dfixu.o(x$fpl$dfixu), UNUSED)
+<BR><BR>[Called By]<UL><LI><a href="#[fb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorSetCmdSpeed
 </UL>
 
 <P><STRONG><a name="[1b7]"></a>_dfixu</STRONG> (Thumb, 90 bytes, Stack size 32 bytes, dfixu.o(x$fpl$dfixu), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[1b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__fpl_dnaninf
 </UL>
 
-<P><STRONG><a name="[f8]"></a>__aeabi_i2d</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, dflt_clz.o(x$fpl$dflt))
-<BR><BR>[Called By]<UL><LI><a href="#[f7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorSetCmdSpeed
+<P><STRONG><a name="[fc]"></a>__aeabi_i2d</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, dflt_clz.o(x$fpl$dflt), UNUSED)
+<BR><BR>[Called By]<UL><LI><a href="#[fb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorSetCmdSpeed
 </UL>
 
 <P><STRONG><a name="[2bb]"></a>_dflt</STRONG> (Thumb, 46 bytes, Stack size 0 bytes, dflt_clz.o(x$fpl$dflt), UNUSED)
 
-<P><STRONG><a name="[fa]"></a>__aeabi_ui2d</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, dflt_clz.o(x$fpl$dfltu))
+<P><STRONG><a name="[fe]"></a>__aeabi_ui2d</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, dflt_clz.o(x$fpl$dfltu))
 <BR><BR>[Called By]<UL><LI><a href="#[42]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM8_UP_TIM13_IRQHandler
-<LI><a href="#[f7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorSetCmdSpeed
+<LI><a href="#[fb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorSetCmdSpeed
 </UL>
 
 <P><STRONG><a name="[2bc]"></a>_dfltu</STRONG> (Thumb, 38 bytes, Stack size 0 bytes, dflt_clz.o(x$fpl$dfltu), UNUSED)
@@ -3301,7 +3295,7 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[68]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADC_task
 <LI><a href="#[42]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM8_UP_TIM13_IRQHandler
-<LI><a href="#[f7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorSetCmdSpeed
+<LI><a href="#[fb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorSetCmdSpeed
 </UL>
 
 <P><STRONG><a name="[1b8]"></a>_dmul</STRONG> (Thumb, 332 bytes, Stack size 32 bytes, dmul.o(x$fpl$dmul), UNUSED)
@@ -3363,8 +3357,8 @@ Local Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(.text)
 </UL>
-<P><STRONG><a name="[69]"></a>Robot_task</STRONG> (Thumb, 142 bytes, Stack size 32 bytes, main.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = Robot_task &rArr; vTaskDelay &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
+<P><STRONG><a name="[69]"></a>Robot_task</STRONG> (Thumb, 148 bytes, Stack size 40 bytes, main.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = Robot_task &rArr; vTaskDelay &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
 <LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RobotNew
@@ -3775,17 +3769,18 @@ Local Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> robot.o(.text)
 </UL>
-<P><STRONG><a name="[82]"></a>RobotManual</STRONG> (Thumb, 100 bytes, Stack size 24 bytes, robot.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 120<LI>Call Chain = RobotManual &rArr; MotorCtrlManual &rArr; MotorSetCmdSpeed &rArr; __aeabi_dmul
+<P><STRONG><a name="[82]"></a>RobotManual</STRONG> (Thumb, 232 bytes, Stack size 24 bytes, robot.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 76<LI>Call Chain = RobotManual &rArr; MotorCtrlManual &rArr; pid_Controller
 </UL>
-<BR>[Calls]<UL><LI><a href="#[fb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorCtrlManual
+<BR>[Calls]<UL><LI><a href="#[f7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorCtrlManual
+<LI><a href="#[1a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pid_Init
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> robot.o(.text)
 </UL>
-<P><STRONG><a name="[83]"></a>RobotAuto</STRONG> (Thumb, 92 bytes, Stack size 24 bytes, robot.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 144<LI>Call Chain = RobotAuto &rArr; MotorCtrlAuto &rArr; MotorCtrlManual &rArr; MotorSetCmdSpeed &rArr; __aeabi_dmul
+<P><STRONG><a name="[83]"></a>RobotAuto</STRONG> (Thumb, 100 bytes, Stack size 32 bytes, robot.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 116<LI>Call Chain = RobotAuto &rArr; MotorCtrlAuto &rArr; MotorCtrlManual &rArr; pid_Controller
 </UL>
-<BR>[Calls]<UL><LI><a href="#[fe]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorCtrlAuto
+<BR>[Calls]<UL><LI><a href="#[fa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorCtrlAuto
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> robot.o(.text)
 </UL><P>

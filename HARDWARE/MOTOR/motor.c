@@ -226,8 +226,6 @@ void TIM8_PWM_SET(u32 freq, u32 Duty) {
   TIM8->CCR2 = (((168000000 / 1) / freq) - 1) * Duty / 100;
 }
 
-
-
 void MoveDir(int8_t dir) {
   switch (dir) {
     // move down
@@ -400,6 +398,7 @@ void EXTI9_5_IRQHandler(void) {
 }
 
 void MotorEnable(void) {
+  
   // disable PWM output
   TIM_CtrlPWMOutputs(TIM1, DISABLE);
   TIM_CtrlPWMOutputs(TIM8, DISABLE);
@@ -413,27 +412,6 @@ void MotorEnable(void) {
 }
 
 void MotorDisable(void) {
-  // u8 i;
-  // // disable PWM output
-  // TIM_CtrlPWMOutputs(TIM1, DISABLE);
-  // TIM_CtrlPWMOutputs(TIM8, DISABLE);
-  // // delay 10ms
-  // delay_ms(10);
-  // // disable speed counter
-  // Tim5Disable();
-
-  // // reset the mode
-  // usRegHoldingBuf[20] = 0;
-
-  // // reset the cmd speed
-  // usRegHoldingBuf[2] = 0;
-
-  // // reset the feedback speed
-  // for (i = 0; i < MotorNum; ++i) {
-  //   /* code */
-  //   delta_turn[i + 3] = 0;
-  // }
-
   // rst the core
   __set_FAULTMASK(1);
   NVIC_SystemReset();

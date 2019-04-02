@@ -46,14 +46,13 @@ TaskHandle_t ModbusTask_Handler;
 //任务函数
 void Modbus_task(void* pvParameters);
 
-//任务优先级
-#define Motor_TASK_PRIO 3
+#define Robot_TASK_PRIO 3
 //任务堆栈大小
-#define Motor_STK_SIZE 256
+#define Robot_STK_SIZE 256
 //任务句柄
-TaskHandle_t MotorTask_Handler;
+TaskHandle_t RobotTask_Handler;
 //任务函数
-void Motor_task(void* pvParameters);
+void Robot_task(void* pvParameters);
 
 //任务优先级
 #define ADC_TASK_PRIO 4
@@ -64,13 +63,14 @@ TaskHandle_t ADCTask_Handler;
 //任务函数
 void ADC_task(void* pvParameters);
 
-#define Robot_TASK_PRIO 5
+//任务优先级
+#define Motor_TASK_PRIO 5
 //任务堆栈大小
-#define Robot_STK_SIZE 256
+#define Motor_STK_SIZE 256
 //任务句柄
-TaskHandle_t RobotTask_Handler;
+TaskHandle_t MotorTask_Handler;
 //任务函数
-void Robot_task(void* pvParameters);
+void Motor_task(void* pvParameters);
 
 /*----------------------------Configuration----------------------------------*/
 
@@ -132,37 +132,24 @@ static void start_task(void* pvParameters) {
   taskEXIT_CRITICAL();             //退出临界区
 }
 
-// ADC任务函数
-static void ADC_task(void* pvParameters) {
-  u16 adcx;
-  float temp;
-  Adc_Init();
-  while (1) {
-    adcx = Get_Adc_Average(ADC_Channel_5, 20);
-    // mv
-    temp = (float)adcx * (3.3 / 4096) * 12000;
-    adcx = temp;
-    usRegHoldingBuf[11] = adcx;
-    vTaskDelay(kRefereshRate);  // 20ms刷新一次
-  }
-}
-
 // Robot task
 static void Robot_task(void* pvParameters) {
-  u16 cycle;
-  u8 dir = 1;
-  _Bool mode = 0;
+  // u16 cycle;
+  //  u8 dir = 1;
+  //  _Bool mode = 0;
   // robot class
   robot cwr;
   RobotNew(&cwr);
   cwr.Init();
   while (1) {
-    // cycle = usRegHoldingBuf[1];
+    // configure the robot
+    cwr.cmd_speed_ = usRegHoldingBuf[2];
     cwr.mode_ = usRegHoldingBuf[20];
     cwr.dir_ = usRegHoldingBuf[21];
     cwr.cycle_ = usRegHoldingBuf[22];
-    cwr.cmd_speed_ = usRegHoldingBuf[2];
-    // robot enable
+    cwr.cycle_distance_ = usRegHoldingBuf[23];
+
+    // enable robot
     if (usRegHoldingBuf[0] == 1) {
       cwr.Enable();
 
@@ -172,9 +159,8 @@ static void Robot_task(void* pvParameters) {
       }
 
       if (cwr.mode_ == kManualAuto) {
-        cwr.Auto(cwr.cmd_speed_, cwr.dir_, cwr.cycle_);
+        cwr.Auto(cwr.cmd_speed_, cwr.dir_, cwr.cycle_, cwr.cycle_distance_);
       }
-
     } else if (usRegHoldingBuf[0] == 0) {
       cwr.Disable();
     }
@@ -183,7 +169,7 @@ static void Robot_task(void* pvParameters) {
   }
 }
 
-// Modbus任务函数
+// Modbus task
 static void Modbus_task(void* pvParameters) {
   // Modbus Init
   eMBInit(MB_RTU, 0x0A, 0x01, 19200, MB_PAR_NONE);
@@ -200,8 +186,22 @@ static void Motor_task(void* pvParameters) {
 
 
   while (1) {
+    vTaskDelay(1000);  // Delay期间任务被BLOCK，可以执行其他任务
+  }
+}
 
-
-    vTaskDelay(100);  // Delay期间任务被BLOCK，可以执行其他任务
+// adc task
+static void ADC_task(void* pvParameters) {
+  u16 adcx;
+  float temp;
+  Adc_Init();
+  while (1) {
+    adcx = Get_Adc_Average(ADC_Channel_5, 20);
+    // mv
+    temp = (float)adcx * (3.3 / 4096) * 12000;
+    adcx = temp;
+    usRegHoldingBuf[11] = adcx;
+    // 1s 
+    vTaskDelay(1000);  
   }
 }

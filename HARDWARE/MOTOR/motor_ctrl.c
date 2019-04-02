@@ -8,7 +8,6 @@ u32 delta_turn[MotorNum];
 u32 MotorSpeed[MotorNum];
 
 /*constant prarameters*/
-
 const _Bool kTrue = 1;
 const _Bool kFalse = 0;
 
@@ -22,13 +21,11 @@ const u8 kReductionRatio = 43;
 /*motor turns*/
 static volatile u32 motor_turn_this_time[MotorNum] = {0};
 static volatile u32 motor_turn_last_time[MotorNum] = {0};
+
 /*motor dir*/
 static volatile u8 motor_dir_last_time = 0;
 static volatile u8 motor_dir_this_time = 0;
 
-// default up
-static volatile _Bool dir_last_time = 0;
-static volatile _Bool dir_this_time;
 // retain the direction when stop the motor
 static volatile _Bool dir_stop;
 static volatile _Bool auto_dir;
@@ -50,7 +47,6 @@ void MotorInit(void) {
   Motor_Init();
 
   // Capture Init
-
   MotorFGInit();
 
   /*timer counter init*/
@@ -59,16 +55,18 @@ void MotorInit(void) {
 
 void MotorCtrlManual(struct MOTOR_DATA *motor, struct PID_DATA *pid,
                      u32 cmd_speed, _Bool dir) {
-  dir_this_time = dir;
-  // change direction
-  if (dir_last_time != dir_this_time) {
-    dir_change = kTrue;
-    dir_stop = dir_last_time;
-  }
+  /*
+    // change direction
+    if (dir_last_time != dir_this_time) {
+      dir_change = kTrue;
+      dir_stop = dir_last_time;
+    }*/
+
+  motor->CmdSpeed = cmd_speed;
   // motor speed feedback
   motor->MotorSpeed_mmps = MotorVelCalc(delta_turn[motor->num - 1]);
 
-  if (!dir_change) {
+  /*if (!dir_change) {
     motor->direction = dir;
     motor->CmdSpeed = MotorSetCmdSpeed(cmd_speed, motor->MotorSpeed_mmps);
   }
@@ -85,10 +83,7 @@ void MotorCtrlManual(struct MOTOR_DATA *motor, struct PID_DATA *pid,
         dir_change = kFalse;
       }
     }
-  }
-
-  // update dirction
-  dir_last_time = dir;
+  }*/
 
   motor->PWM = motor->PWM +
                pid_Controller(motor->CmdSpeed, motor->MotorSpeed_mmps, pid) / 2;
@@ -142,7 +137,7 @@ void MotorCtrlManual(struct MOTOR_DATA *motor, struct PID_DATA *pid,
 }
 
 void MotorCtrlAuto(struct MOTOR_DATA *motor, struct PID_DATA *pid,
-                   u32 cmd_speed, _Bool init_dir, u8 cycle) {
+                   u32 cmd_speed, _Bool init_dir, u8 cycle, u8 cycle_distance) {
   u8 state;
   cycle_odometer_this_time = odometer[0];
 
@@ -151,9 +146,10 @@ void MotorCtrlAuto(struct MOTOR_DATA *motor, struct PID_DATA *pid,
     auto_dir = init_dir;
   }
 
-  if (cycle_counter < cycle-1) {
+  if (cycle_counter < cycle - 1) {
     // 1m
-    if ((cycle_odometer_this_time - cycle_odometer_last_time) > 100) {
+    if ((cycle_odometer_this_time - cycle_odometer_last_time) >
+        cycle_distance) {
       cycle_odometer_last_time = odometer[0];
 
       // change direction
@@ -213,7 +209,8 @@ u32 DeltaTurnCalc(u32 *motor_turn, u8 motor_num) {
 
 u32 MotorSetCmdSpeed(u32 cmd_speed, u32 motor_feedback_speed) {
   u32 motor_cmd_speed;
-  if (abs(cmd_speed - motor_feedback_speed) > 100) {
+  // cycle distance
+  if (abs(cmd_speed - motor_feedback_speed) > usRegHoldingBuf[23]) {
     // stop
     if (cmd_speed == 0) {
       motor_cmd_speed = abs(cmd_speed - motor_feedback_speed) * 0.8;
