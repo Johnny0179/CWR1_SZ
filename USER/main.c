@@ -46,13 +46,14 @@ TaskHandle_t ModbusTask_Handler;
 //任务函数
 void Modbus_task(void* pvParameters);
 
-#define Robot_TASK_PRIO 3
+//任务优先级
+#define RobotState_TASK_PRIO 3
 //任务堆栈大小
-#define Robot_STK_SIZE 256
+#define RobotState_STK_SIZE 256
 //任务句柄
-TaskHandle_t RobotTask_Handler;
+TaskHandle_t RobotStateTask_Handler;
 //任务函数
-void Robot_task(void* pvParameters);
+void RobotState_task(void* pvParameters);
 
 //任务优先级
 #define ADC_TASK_PRIO 4
@@ -63,29 +64,46 @@ TaskHandle_t ADCTask_Handler;
 //任务函数
 void ADC_task(void* pvParameters);
 
-//任务优先级
-#define Motor_TASK_PRIO 5
+#define Robot_TASK_PRIO 5
 //任务堆栈大小
-#define Motor_STK_SIZE 256
+#define Robot_STK_SIZE 256
 //任务句柄
-TaskHandle_t MotorTask_Handler;
+TaskHandle_t RobotTask_Handler;
 //任务函数
-void Motor_task(void* pvParameters);
+void Robot_task(void* pvParameters);
 
 /*----------------------------Configuration----------------------------------*/
-
+// extern variables
+extern const u8 kInMotion;
+extern const u8 kStepDone;
+extern const u8 kCycleDone;
 // Robot registors
 extern int32_t usRegHoldingBuf[REG_HOLDING_NREGS];
+extern u32 cycle_counter;
 
+const UCHAR kRobotAddr=0x0A;
 const u8 kRefereshRate = 50;
 static const _Bool kManualMode = 0;
 static const _Bool kManualAuto = 1;
 
+/*----------------------------Robot state definition------------------------*/
+const u8 kPowerOn=0;
+const u8 kInit=2;
+const u8 kEnabled=3;
+const u8 kError=4;
+
+/*----------------------------variables----------------------------------*/
+static u8 robot_state;
+
 /*----------------------------Start Implemention-------------------------*/
 
 int main(void) {
+  // power on
+  robot_state=kPowerOn;
+
   //设置系统中断优先级分组4
   NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
+
   //初始化延时函数
   delay_init(168);
 
@@ -122,75 +140,17 @@ static void start_task(void* pvParameters) {
               (uint16_t)Modbus_STK_SIZE, (void*)NULL,
               (UBaseType_t)Modbus_TASK_PRIO,
               (TaskHandle_t*)&ModbusTask_Handler);
-  // Motor任务
-  // xTaskCreate((TaskFunction_t)Motor_task, (const char*)"Motor_task",
-  //             (uint16_t)Motor_STK_SIZE, (void*)NULL,
-  //             (UBaseType_t)Motor_TASK_PRIO,
-  //             (TaskHandle_t*)&MotorTask_Handler);
+  // RobotState任务
+  // xTaskCreate((TaskFunction_t)RobotState_task, (const char*)"RobotState_task",
+  //             (uint16_t)RobotState_STK_SIZE, (void*)NULL,
+  //             (UBaseType_t)RobotState_TASK_PRIO,
+  //             (TaskHandle_t*)&RobotStateTask_Handler);
 
   vTaskDelete(StartTask_Handler);  //删除开始任务
   taskEXIT_CRITICAL();             //退出临界区
 }
 
-// Robot task
-static void Robot_task(void* pvParameters) {
-  // u16 cycle;
-  //  u8 dir = 1;
-  //  _Bool mode = 0;
-  // robot class
-  robot cwr;
-  RobotNew(&cwr);
-  cwr.Init();
-  while (1) {
-    // configure the robot
-    cwr.cmd_speed_ = usRegHoldingBuf[2];
-    cwr.mode_ = usRegHoldingBuf[20];
-    cwr.dir_ = usRegHoldingBuf[21];
-    cwr.cycle_ = usRegHoldingBuf[22];
-    cwr.cycle_distance_ = usRegHoldingBuf[23];
-
-    // enable robot
-    if (usRegHoldingBuf[0] == 1) {
-      cwr.Enable();
-
-      if (cwr.mode_ == kManualMode) {
-        // manual mode
-        cwr.Manual(cwr.cmd_speed_, cwr.dir_);
-      }
-
-      if (cwr.mode_ == kManualAuto) {
-        cwr.Auto(cwr.cmd_speed_, cwr.dir_, cwr.cycle_, cwr.cycle_distance_);
-      }
-    } else if (usRegHoldingBuf[0] == 0) {
-      cwr.Disable();
-    }
-    // 100ms刷新一次
-    vTaskDelay(100);
-  }
-}
-
-// Modbus task
-static void Modbus_task(void* pvParameters) {
-  // Modbus Init
-  eMBInit(MB_RTU, 0x0A, 0x01, 19200, MB_PAR_NONE);
-  eMBEnable();
-  while (1) {
-    eMBPoll();
-    // 20ms刷新一次，Delay期间任务被BLOCK，可以执行其他任务
-    vTaskDelay(kRefereshRate);
-  }
-}
-
-// Motor task
-static void Motor_task(void* pvParameters) {
-
-
-  while (1) {
-    vTaskDelay(1000);  // Delay期间任务被BLOCK，可以执行其他任务
-  }
-}
-
-// adc task
+// ADC任务函数
 static void ADC_task(void* pvParameters) {
   u16 adcx;
   float temp;
@@ -200,8 +160,96 @@ static void ADC_task(void* pvParameters) {
     // mv
     temp = (float)adcx * (3.3 / 4096) * 12000;
     adcx = temp;
-    usRegHoldingBuf[11] = adcx;
-    // 1s 
-    vTaskDelay(1000);  
+    usRegHoldingBuf[20] = adcx;
+    vTaskDelay(kRefereshRate);  // 20ms刷新一次
+  }
+}
+
+// Robot task
+static void Robot_task(void* pvParameters) {
+  u16 cycle;
+  u8 dir = 1;
+  u8 state;
+  _Bool mode = 0;
+  // robot class
+  robot cwr;
+  RobotNew(&cwr);
+  cwr.Init();
+  usRegHoldingBuf[0]=kRobotAddr;
+  while (1) {
+
+    // cycle = usRegHoldingBuf[1];
+
+    cwr.dir_ = usRegHoldingBuf[2];
+    cwr.mode_ = usRegHoldingBuf[21];
+    cwr.cycle_ = usRegHoldingBuf[22];
+    cwr.cmd_speed_ = usRegHoldingBuf[23];
+
+    // reset
+    if (usRegHoldingBuf[9]==1)
+    {
+      cwr.Reset();
+    }
+
+
+    // robot enable
+    if (usRegHoldingBuf[3] == 1) {
+      cwr.Enable();
+
+      if (cwr.mode_ == kManualMode) {
+        // manual mode
+        cwr.Manual(cwr.cmd_speed_, cwr.dir_);
+      }
+
+      if (cwr.mode_ == kManualAuto) {
+        state=cwr.Auto(cwr.cmd_speed_, cwr.dir_, cwr.cycle_);
+        if(state==kCycleDone)
+        {
+          // reset the cycle counter
+          cycle_counter=0;
+          // disable
+          usRegHoldingBuf[3]=0;
+        }
+      }
+
+    } else if (usRegHoldingBuf[3] == 0) {
+      // cwr.Disable();
+      // stop
+      cwr.Manual(0, cwr.dir_);
+
+      /*
+        if(error)
+        else if (stop)
+        ....
+      */
+    }
+
+    // cycle done, refresh the enable
+    if (state==kCycleDone)
+    {
+      // usRegHoldingBuf[3]=0;
+    }
+    
+    // 100ms刷新一次
+    vTaskDelay(100);
+  }
+}
+
+// Modbus任务函数
+static void Modbus_task(void* pvParameters) {
+  // Modbus Init
+  eMBInit(MB_RTU, kRobotAddr, 0x01, 19200, MB_PAR_NONE);
+  eMBEnable();
+  while (1) {
+    eMBPoll();
+    // 20ms刷新一次，Delay期间任务被BLOCK，可以执行其他任务
+    vTaskDelay(kRefereshRate);
+  }
+}
+
+// RobotState task
+static void RobotState_task(void* pvParameters) {
+  while (1) {
+    vTaskDelay(100);  // Delay期间任务被BLOCK，可以执行其他任务
   }
 }

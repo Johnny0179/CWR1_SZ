@@ -26,7 +26,7 @@
 
 #define P 300
 #define I 10
-#define D 0
+#define D 10
 
 typedef struct MOTOR_DATA {
   u8 num;
@@ -57,13 +57,20 @@ u32 MotorSetCmdSpeed(u32 cmd_speed, u32 motor_feedback_speed);
 void MotorInit(void);
 void MotorInitConfig(u8 num, struct MOTOR_DATA *motor);
 void MotorCtrlManual(struct MOTOR_DATA *motor, struct PID_DATA *pid,
-                     u32 cmd_speed, _Bool dir);
-void MotorCtrlAuto(struct MOTOR_DATA *motor, struct PID_DATA *pid,
-                   u32 cmd_speed, _Bool init_dir, u8 cycle, u8 cycle_distance);
+                     const u32 *cmd_speed, _Bool dir);
+u8 MotorCtrlAuto(struct MOTOR_DATA *motor, struct PID_DATA *pid,
+                   const u32 *cmd_speed, _Bool init_dir, u8 cycle);
 
 void MotorDisable(void);
 void MotorEnable(void);
+void MotorReset(void);
+
 
 u32 DeltaTurnCalc(u32 *motor_turn, u8 motor_num);
 u32 MotorVelCalc(u32 delta_turn);
+
+u32 Acceleration(u8 N,u32 cmd_speed);
+u32 Deceleration(u8 N,u32 cmd_speed);
+u8 StateCheck(u8 state,u32 this_time,u32 last_time);
+u32 SetSpeed(u8 state,u32 cmd_speed);
 #endif

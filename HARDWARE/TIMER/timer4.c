@@ -4,7 +4,7 @@
 #include "motor.h"
 #include "timer.h"
 
-static u8 move_dir = 1;
+extern u8 stage_num;
 void Tim4IntInit(u16 arr, u16 psc) {
   TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure;
   NVIC_InitTypeDef NVIC_InitStructure;
@@ -32,11 +32,8 @@ void Tim4Disable(void) { TIM_Cmd(TIM4, DISABLE); }
 /*interrupt handler*/
 void TIM4_IRQHandler(void) {
   if (TIM_GetITStatus(TIM4, TIM_IT_Update) == SET) {
-    LED1 = !LED1;
-    move_dir = !move_dir;
-    MotorDisable();
-    MotorEnable();
-    // MoveDir(move_dir);
+    LED2 = !LED2;
+    stage_num=stage_num+1;
   }
   TIM_ClearITPendingBit(TIM4, TIM_IT_Update);
 }

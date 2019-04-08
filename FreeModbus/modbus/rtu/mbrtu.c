@@ -383,7 +383,7 @@ xMBRTUTimerT35Expired( void )
                 ( eRcvState == STATE_RX_RCV ) || ( eRcvState == STATE_RX_ERROR ) );
     }
     
-    //��ֹ��ʱ��			
+    //��ֹ��ʱ��
     vMBPortTimersDisable(  );
     //���ڽ���״̬ ��Ϊ����״̬��
     eRcvState = STATE_RX_IDLE;

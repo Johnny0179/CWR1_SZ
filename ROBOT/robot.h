@@ -26,13 +26,17 @@ void RobotDisable(void);
 // function pointer
 typedef void (*robot_disable)(void);
 
+void RobotReset(void);
+// function pointer
+typedef void (*robot_reset)(void);
+
 void RobotManual(u32 cmd_speed,int8_t dir);
 // function pointer
 typedef void (*robot_manual)(u32,int8_t);
 
-void RobotAuto(u32 cmd_speed,_Bool init_dir,u8 cycle,u8 cycle_distance);
+u8 RobotAuto(u32 cmd_speed,_Bool init_dir,u8 cycle);
 // function pointer
-typedef void (*robot_auto)(u32,_Bool,u8);
+typedef u8 (*robot_auto)(u32,_Bool,u8);
 
 // robot class definition
 typedef struct {
@@ -43,11 +47,11 @@ typedef struct {
   int8_t dir_;
   u32 odometer_;
   u32 cmd_speed_;
-  u8 cycle_distance_;
   /*functions*/
   robot_init Init;
   robot_enable Enable;
   robot_disable Disable;
+  robot_reset Reset;
   robot_manual Manual;
   robot_auto Auto;
 } robot;

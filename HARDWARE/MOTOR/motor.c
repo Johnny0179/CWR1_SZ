@@ -5,6 +5,7 @@
 
 extern int32_t usRegHoldingBuf[REG_HOLDING_NREGS];
 extern u32 delta_turn[MotorNum];
+extern u32 cycle_counter;
 u32 motor_turn[MotorNum];
 u8 timer5_enabled = 0;
 static u8 exit_int_time_motor2 = 0;
@@ -226,6 +227,8 @@ void TIM8_PWM_SET(u32 freq, u32 Duty) {
   TIM8->CCR2 = (((168000000 / 1) / freq) - 1) * Duty / 100;
 }
 
+
+
 void MoveDir(int8_t dir) {
   switch (dir) {
     // move down
@@ -246,12 +249,12 @@ void MoveDir(int8_t dir) {
   }
 }
 
-void MoveUp(void) {
+void MoveDown(void) {
   GPIO_SetBits(GPIOD, GPIO_Pin_0 | GPIO_Pin_3 | GPIO_Pin_1 | GPIO_Pin_2 |
                           GPIO_Pin_4 | GPIO_Pin_5);
 }
 
-void MoveDown(void) {
+void MoveUp(void) {
   GPIO_ResetBits(GPIOD, GPIO_Pin_0 | GPIO_Pin_3 | GPIO_Pin_1 | GPIO_Pin_2 |
                             GPIO_Pin_4 | GPIO_Pin_5);
 }
@@ -398,10 +401,20 @@ void EXTI9_5_IRQHandler(void) {
 }
 
 void MotorEnable(void) {
-  
+
+    /*------------------------reset the registors----------------------*/
+/*    // defualt auto mode
+    usRegHoldingBuf[21]=1;
+    // defualt 6 cycles
+    usRegHoldingBuf[22]=6;
+    // defualt speed 200
+    usRegHoldingBuf[23]=200;
+    // reset the cycle counter
+    cycle_counter=0;*/
+
   // disable PWM output
-  TIM_CtrlPWMOutputs(TIM1, DISABLE);
-  TIM_CtrlPWMOutputs(TIM8, DISABLE);
+  // TIM_CtrlPWMOutputs(TIM1, DISABLE);
+  // TIM_CtrlPWMOutputs(TIM8, DISABLE);
 
   // enable PWM output
   TIM_CtrlPWMOutputs(TIM1, ENABLE);
@@ -411,8 +424,18 @@ void MotorEnable(void) {
   Tim5Enable();
 }
 
-void MotorDisable(void) {
+void MotorReset(void) {
   // rst the core
   __set_FAULTMASK(1);
   NVIC_SystemReset();
+}
+
+void MotorDisable(void){
+  TIM_CtrlPWMOutputs(TIM1, DISABLE);
+  TIM_CtrlPWMOutputs(TIM8, DISABLE);
+  Tim5Disable();
+
+   //   for (i = 0; i < MotorNum; ++i) {
+    
+   //  delta_turn[i + 3] = 0;}
 }
