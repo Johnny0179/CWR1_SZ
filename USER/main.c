@@ -81,16 +81,16 @@ extern const u8 kCycleDone;
 extern int32_t usRegHoldingBuf[REG_HOLDING_NREGS];
 extern u32 cycle_counter;
 
-const UCHAR kRobotAddr=0x0A;
+const UCHAR kRobotAddr = 0x0A;
 const u8 kRefereshRate = 50;
 static const _Bool kManualMode = 0;
 static const _Bool kManualAuto = 1;
 
 /*----------------------------Robot state definition------------------------*/
-const u8 kPowerOn=0;
-const u8 kInit=2;
-const u8 kEnabled=3;
-const u8 kError=4;
+const u8 kPowerOn = 0;
+const u8 kInit = 2;
+const u8 kEnabled = 3;
+const u8 kError = 4;
 
 /*----------------------------variables----------------------------------*/
 static u8 robot_state;
@@ -99,7 +99,7 @@ static u8 robot_state;
 
 int main(void) {
   // power on
-  robot_state=kPowerOn;
+  robot_state = kPowerOn;
 
   //设置系统中断优先级分组4
   NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
@@ -141,7 +141,8 @@ static void start_task(void* pvParameters) {
               (UBaseType_t)Modbus_TASK_PRIO,
               (TaskHandle_t*)&ModbusTask_Handler);
   // RobotState任务
-  // xTaskCreate((TaskFunction_t)RobotState_task, (const char*)"RobotState_task",
+  // xTaskCreate((TaskFunction_t)RobotState_task, (const
+  // char*)"RobotState_task",
   //             (uint16_t)RobotState_STK_SIZE, (void*)NULL,
   //             (UBaseType_t)RobotState_TASK_PRIO,
   //             (TaskHandle_t*)&RobotStateTask_Handler);
@@ -175,9 +176,8 @@ static void Robot_task(void* pvParameters) {
   robot cwr;
   RobotNew(&cwr);
   cwr.Init();
-  usRegHoldingBuf[0]=kRobotAddr;
+  usRegHoldingBuf[0] = kRobotAddr;
   while (1) {
-
     // cycle = usRegHoldingBuf[1];
 
     cwr.dir_ = usRegHoldingBuf[2];
@@ -186,11 +186,9 @@ static void Robot_task(void* pvParameters) {
     cwr.cmd_speed_ = usRegHoldingBuf[23];
 
     // reset
-    if (usRegHoldingBuf[9]==1)
-    {
+    if (usRegHoldingBuf[9] == 1) {
       cwr.Reset();
     }
-
 
     // robot enable
     if (usRegHoldingBuf[3] == 1) {
@@ -202,14 +200,13 @@ static void Robot_task(void* pvParameters) {
       }
 
       if (cwr.mode_ == kManualAuto) {
-        state=cwr.Auto(cwr.cmd_speed_, cwr.dir_, cwr.cycle_);
-        if(state==kCycleDone)
-        {
-          // reset the cycle counter
-          cycle_counter=0;
-          // disable
-          usRegHoldingBuf[3]=0;
-        }
+        state = cwr.Auto(cwr.cmd_speed_, cwr.dir_, cwr.cycle_, &state);
+        // if (state == kCycleDone) {
+        //   // reset the cycle counter
+        //   cycle_counter = 0;
+        //   // disable
+        //   usRegHoldingBuf[3] = 0;
+        // }
       }
 
     } else if (usRegHoldingBuf[3] == 0) {
@@ -225,11 +222,11 @@ static void Robot_task(void* pvParameters) {
     }
 
     // cycle done, refresh the enable
-    if (state==kCycleDone)
-    {
-      // usRegHoldingBuf[3]=0;
-    }
-    
+    // if (state == kCycleDone) {
+    //   // usRegHoldingBuf[3]=0;
+    // }
+
+    usRegHoldingBuf[16] = state;
     // 100ms刷新一次
     vTaskDelay(100);
   }

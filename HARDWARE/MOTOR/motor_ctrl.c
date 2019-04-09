@@ -31,7 +31,7 @@ static volatile _Bool dir_last_time = 0;
 static volatile _Bool dir_this_time;
 // retain the direction when stop the motor
 static volatile _Bool dir_stop;
-static volatile _Bool auto_dir;
+
 
 static volatile _Bool dir_change;
 static volatile u32 stop_counter;
@@ -45,31 +45,28 @@ const u32 kDecelerationPhaseTime = 1000;
 const u32 kDecelerationStageNum = 10;
 
 // motor state
-const u8 kStopState=0;
-const u8 kAccelerationState=1;
-const u8 kConstantState=2;
-const u8 kDecelerationState=3;
-
+const u8 kStopState = 0;
+const u8 kAccelerationState = 1;
+const u8 kConstantState = 2;
+const u8 kDecelerationState = 3;
 
 volatile u32 cmd_speed_last_time;
 volatile u32 cmd_speed_this_time;
 volatile u32 constant_speed;
 volatile u8 constant_speed_setflag;
-volatile u8 motor_state=0;
-volatile u8 stage_num=0;
+volatile u8 motor_state = 0;
+volatile u8 stage_num = 0;
 
-const u32 stop_speed=0;
+
 
 // motor control state
-const u8 kInMotion=0;
-const u8 kStepDone=1;
-const u8 kCycleDone=2;
+const u8 kInMotion = 0;
+const u8 kStepDone = 1;
+const u8 kCycleDone = 2;
 
 // odometer
 u32 odometer[MotorNum] = {0};
-u32 cycle_counter = 0;
-u32 cycle_odometer_last_time = 0;
-u32 cycle_odometer_this_time = 0;
+
 
 void MotorInit(void) {
   // Freq=20k,DutyRatio=50
@@ -83,13 +80,14 @@ void MotorInit(void) {
   MotorFGInit();
 
   /*timer counter init*/
-  Tim4IntInit(2*(kAccelerationPhaseTime/kAccelerationStageNum)*10-1,8400-1);
+  Tim4IntInit(2 * (kAccelerationPhaseTime / kAccelerationStageNum) * 10 - 1,
+              8400 - 1);
   Tim5IntInit(kTimeInteval * 10 - 1, 8400 - 1);
 }
 
 void MotorCtrlManual(struct MOTOR_DATA *motor, struct PID_DATA *pid,
                      const u32 *cmd_speed, _Bool dir) {
-  cmd_speed_this_time=*cmd_speed;
+  cmd_speed_this_time = *cmd_speed;
   dir_this_time = dir;
   // change direction
   if (dir_last_time != dir_this_time) {
@@ -97,51 +95,34 @@ void MotorCtrlManual(struct MOTOR_DATA *motor, struct PID_DATA *pid,
     dir_stop = dir_last_time;
   }
 
-motor->direction=dir;
+  motor->direction = dir;
 
-// motor speed feedback
-motor->MotorSpeed_mmps = MotorVelCalc(delta_turn[motor->num - 1]);
-
-
-/*  if (!dir_change) {
-    MotorEnable();
-    // motor->direction = dir;
-    // motor->CmdSpeed = MotorSetCmdSpeed(cmd_speed, motor->MotorSpeed_mmps);
-  }
-
-  if (dir_change) {
-    // motor->direction = dir_stop;
-    MotorReset();
-    // check the motors have been stopped
-    if (motor->MotorSpeed_mmps != 0) {
-    }
-  }*/
+  // motor speed feedback
+  motor->MotorSpeed_mmps = MotorVelCalc(delta_turn[motor->num - 1]);
 
   // check the state
-  motor_state=StateCheck(motor_state,cmd_speed_this_time,cmd_speed_last_time);
+  motor_state =
+      StateCheck(motor_state, cmd_speed_this_time, cmd_speed_last_time);
 
-  if (motor_state==kConstantState)
-  {
+  if (motor_state == kConstantState) {
     // save the initial decelerate speed
-    constant_speed=*cmd_speed;
+    constant_speed = *cmd_speed;
   }
 
-  if (motor_state==kDecelerationState)
-  {
-    motor->CmdSpeed=SetSpeed(motor_state,constant_speed);
-  }else{
-      // set the motor speed
-    motor->CmdSpeed=SetSpeed(motor_state,*cmd_speed);
+  if (motor_state == kDecelerationState) {
+    motor->CmdSpeed = SetSpeed(motor_state, constant_speed);
+  } else {
+    // set the motor speed
+    motor->CmdSpeed = SetSpeed(motor_state, *cmd_speed);
   }
-
 
   // motor->CmdSpeed=SetSpeed(motor_state,*cmd_speed);
-  usRegHoldingBuf[33]=motor_state;
-  usRegHoldingBuf[34]=motor->CmdSpeed;
-  usRegHoldingBuf[35]=*cmd_speed;
+  usRegHoldingBuf[33] = motor_state;
+  usRegHoldingBuf[34] = motor->CmdSpeed;
+  usRegHoldingBuf[35] = *cmd_speed;
 
   // update cmd speed
-  cmd_speed_last_time=*cmd_speed;
+  cmd_speed_last_time = *cmd_speed;
 
   // update dirction
   dir_last_time = dir;
@@ -155,9 +136,8 @@ motor->MotorSpeed_mmps = MotorVelCalc(delta_turn[motor->num - 1]);
   } else if (motor->PWM > 100) {
     // Max motor->PWM Ratio
     motor->PWM = 100;
-  }else if (motor->CmdSpeed==0)
-  {
-    motor->PWM=0;
+  } else if (motor->CmdSpeed == 0) {
+    motor->PWM = 0;
   }
 
   /*mannual mode*/
@@ -200,61 +180,149 @@ motor->MotorSpeed_mmps = MotorVelCalc(delta_turn[motor->num - 1]);
   }
 }
 
+
+
 u8 MotorCtrlAuto(struct MOTOR_DATA *motor, struct PID_DATA *pid,
-                   const u32 *cmd_speed, _Bool init_dir, u8 cycle) {
-u32 motor_speed;
-u8 state=0;
-  motor_speed=MotorVelCalc(delta_turn[motor->num - 1]);
-  cycle_odometer_this_time = odometer[0];
-  usRegHoldingBuf[30]=motor->MotorSpeed_mmps;
-  usRegHoldingBuf[1]=cycle_counter;
-  usRegHoldingBuf[38]=cycle_odometer_this_time;
-  usRegHoldingBuf[39]=cycle_odometer_last_time;
-  // first time
-  if (cycle_counter == 0) {
-    auto_dir = init_dir;
-  }
+                 const u32 *cmd_speed, _Bool init_dir, u8 cycle, u8 *state) {
+  // u32 motor_speed;
+  // motor_speed = MotorVelCalc(delta_turn[motor->num - 1]);
+  // cycle_odometer_this_time = odometer[0];
 
-/*direction*/
-  // up
-if(auto_dir==0){
-  // usRegHoldingBuf[8]=2;
-  usRegHoldingBuf[8]=2;
-}else if (auto_dir==1)
-{
-  // down
-  // usRegHoldingBuf[8]=1;
-  usRegHoldingBuf[8]=1;
-}
+  // // debug
+  // usRegHoldingBuf[30] = motor->MotorSpeed_mmps;
+  // usRegHoldingBuf[1] = cycle_counter;
+  // usRegHoldingBuf[38] = cycle_odometer_this_time;
+  // usRegHoldingBuf[39] = cycle_odometer_last_time;
 
-  if (cycle_counter < cycle)
-  {
-    // 1m, one cycle complete
-    if (((cycle_odometer_this_time - cycle_odometer_last_time) > 100) &&( motor_speed!=0) ) {
-      // stop first
+  // /*indicate the dir*/
+  // // up
+  // if (auto_dir == 0) {
+  //   usRegHoldingBuf[8] = 2;
+  // } else if (auto_dir == 1) {
+  //   // down
+  //   usRegHoldingBuf[8] = 1;
+  // }
+
+  // switch (*state) {
+  //   case kIdle:
+  //     if (usRegHoldingBuf[3] == 0 || cycle_counter == cycle) {
+  //       // clear the counter
+  //       cycle_counter = 0;
+
+  //       //
+  //       usRegHoldingBuf[3] = 0;
+
+  //       *state = kIdle;
+  //     } else if (usRegHoldingBuf[3] == 1) {
+  //       *state = kCounterCheck;
+  //     }
+  //     break;
+
+  //   case kCounterCheck:
+  //     if (cycle_counter < cycle) {
+  //       *state = kFirstCheck;
+  //     } else if (cycle_counter == cycle) {
+  //       *state = kIdle;
+  //     }
+  //     break;
+
+  //   case kFirstCheck:
+  //     if (cycle_counter == 0) {
+  //       auto_dir = init_dir;
+  //       *state = kMotion;
+  //     } else {
+  //       *state = kChangeDir;
+  //     }
+  //     break;
+
+  //   case kChangeDir:
+  //     // change direction
+  //     auto_dir = !auto_dir;
+
+  //     // update the odometer
+  //     cycle_odometer_last_time = odometer[0];
+  //     *state = kMotion;
+  //     break;
+
+  //   case kMotion:
+  //     if ((cycle_odometer_this_time - cycle_odometer_last_time) <= 100) {
+  //       MotorCtrlManual(motor, pid, cmd_speed, auto_dir);
+  //       *state = kMotion;
+  //     } else {
+  //       *state = kStop;
+  //     }
+  //     break;
+
+  //   case kStop:
+  //     //
+  //     if (motor_speed != 0 ) {
+  //       MotorCtrlManual(motor, pid, &stop_speed, auto_dir);
+  //       *state = kStop;
+  //     } else {
+  //       // update cycle counter
+  //       cycle_counter++;
+
+  //       // //
+  //       // MotorDisable();
+  //       // MotorEnable();
+
+  //       *state = kCounterCheck;
+  //     }
+  //     break;
+
+  //   case kDone:;
+
+  //   default:
+  //     *state = kIdle;
+  //     break;
+  // }
+
+  // return *state;
+
+  /*  // first time
+    if (cycle_counter == 0) {
+      auto_dir = init_dir;
+    }
+
+    // up
+    if (auto_dir == 0) {
+      usRegHoldingBuf[8] = 2;
+    } else if (auto_dir == 1) {
+      // down
+      usRegHoldingBuf[8] = 1;
+    }
+
+    if (cycle_counter < cycle) {
+      // 1m, one cycle complete
+      if (((cycle_odometer_this_time - cycle_odometer_last_time) > 100) &&
+          (motor_speed != 0)) {
+
+        // stop first
         MotorCtrlManual(motor, pid, &stop_speed, auto_dir);
         // state=kInMotion;
-      // already stopped
-    }else if((cycle_odometer_this_time - cycle_odometer_last_time) > 100 && motor_speed ==0 ){
- 
-          // change direction
+        // already stopped
+      } else if ((cycle_odometer_this_time - cycle_odometer_last_time) > 100 &&
+                 motor_speed == 0) {
+        // change direction
         auto_dir = !auto_dir;
+
+        // update cycle counter
         cycle_counter++;
+
         // update the odometer
         cycle_odometer_last_time = odometer[0];
+
         MotorCtrlManual(motor, pid, cmd_speed, auto_dir);
         // state=kStepDone;
-    }else{
-          MotorCtrlManual(motor, pid, cmd_speed, auto_dir);
-          // state=kInMotion;
-          }
-  } else {
-    // stop
-    MotorCtrlManual(motor, pid, &stop_speed, auto_dir);
-    state =kCycleDone;
-  }
-
-  return state;
+      } else {
+        MotorCtrlManual(motor, pid, cmd_speed, auto_dir);
+        // state=kInMotion;
+      }
+    } else {
+      // stop
+      MotorCtrlManual(motor, pid, &stop_speed, auto_dir);
+      state = kCycleDone;
+    }*/
 }
 
 void MotorInitConfig(u8 num, struct MOTOR_DATA *motor) {
@@ -302,7 +370,7 @@ u32 DeltaTurnCalc(u32 *motor_turn, u8 motor_num) {
 
 u32 MotorSetCmdSpeed(u32 cmd_speed, u32 motor_feedback_speed) {
   u32 motor_cmd_speed;
-	
+
   if (abs(cmd_speed - motor_feedback_speed) > 100) {
     // stop
     if (cmd_speed == 0) {
@@ -313,109 +381,100 @@ u32 MotorSetCmdSpeed(u32 cmd_speed, u32 motor_feedback_speed) {
   } else {
     motor_cmd_speed = cmd_speed;
   }
-	
-//motor_cmd_speed=cmd_speed;
+
+  // motor_cmd_speed=cmd_speed;
   return motor_cmd_speed;
 }
 
-u32 Acceleration(u8 N,u32 cmd_speed)
-{
-  return (N*cmd_speed/kAccelerationStageNum);
+u32 Acceleration(u8 N, u32 cmd_speed) {
+  return (N * cmd_speed / kAccelerationStageNum);
 }
 
-
-u32 Deceleration(u8 N,u32 cmd_speed)
-{
-
-  return cmd_speed-(N*cmd_speed/kDecelerationStageNum);
+u32 Deceleration(u8 N, u32 cmd_speed) {
+  return cmd_speed - (N * cmd_speed / kDecelerationStageNum);
 }
 
-u8 StateCheck(u8 state,u32 this_time,u32 last_time){
-  u8 state_new=0;
-/*define the motor state*/
-// stop state
-if (state==kStopState && (this_time==last_time))
-{
-  // stay in the stop state
-  state_new=kStopState;
-  stage_num=0;
-}else if (state==kStopState && (this_time>last_time))
-{
-  // change to accelaration state
-  state_new=kAccelerationState;
-  Tim4Enable();
-}
-
-/*acceleration state*/
-if (stage_num<kAccelerationStageNum)
-{
-  if (state == kAccelerationState &&(this_time==last_time)&& (stage_num !=kAccelerationStageNum-1))
-{
-  // stay in the acceleration state
-  state_new=kAccelerationState;
-}else if (state==kAccelerationState && (stage_num ==kAccelerationStageNum-1))
-  {
-  // change to the constant state, accelaration complete
-  state_new=kConstantState;
-  Tim4Disable();
-  stage_num=0;
+u8 StateCheck(u8 state, u32 this_time, u32 last_time) {
+  u8 state_new = 0;
+  /*define the motor state*/
+  // stop state
+  if (state == kStopState && (this_time == last_time)) {
+    // stay in the stop state
+    state_new = kStopState;
+    stage_num = 0;
+  } else if (state == kStopState && (this_time > last_time)) {
+    // change to accelaration state
+    state_new = kAccelerationState;
+    Tim4Enable();
   }
-}
 
-/*constant state*/
-if (state == kConstantState &&(this_time==last_time))
-{
-// stay in the Constant state
-  state_new=kConstantState;
-}/* else if (state == kConstantState &&(this_time>last_time))
-{
-  // change to acceleration state
-  state=kAccelerationState;
-}*/else if (state == kConstantState &&(this_time==0))
-{
-  // change to deceleration state
-  state_new=kDecelerationState;
-  Tim4Enable();
-}
-
-// if (stage_num<kDecelerationStageNum){
-  /*deceleration state*/
-if (state == kDecelerationState &&(this_time==last_time)&& (stage_num <kDecelerationStageNum-1))
-{
-  // stay in deceleration state
-state_new=kDecelerationState;
-}else if (state == kDecelerationState && (stage_num==kDecelerationStageNum-1))
-  {
-  // decelaration complete
-  state_new=kStopState;
-  Tim4Disable();
-  stage_num=0;
-  }
-// }
-
-return state_new;
-}
-
-u32 SetSpeed(u8 state,u32 cmd_speed)
-{
-  u32 set_motor_speed;
-  usRegHoldingBuf[36]=stage_num;
-  switch(state){
-    case 0: 
-          set_motor_speed =0;
-          break;
-    case 1: 
-          set_motor_speed=Acceleration(stage_num,cmd_speed);
-          break;
-    case 2:
-          set_motor_speed=cmd_speed;
-          break ;
-    case 3: 
-          set_motor_speed=Deceleration(stage_num+1,cmd_speed);
-          break;
-    default: 
-          set_motor_speed=0;
-          break;
+  /*acceleration state*/
+  if (stage_num < kAccelerationStageNum) {
+    if (state == kAccelerationState && (this_time == last_time) &&
+        (stage_num != kAccelerationStageNum - 1)) {
+      // stay in the acceleration state
+      state_new = kAccelerationState;
+    } else if (state == kAccelerationState &&
+               (stage_num == kAccelerationStageNum - 1)) {
+      // change to the constant state, accelaration complete
+      state_new = kConstantState;
+      Tim4Disable();
+      stage_num = 0;
     }
-return set_motor_speed;
+  }
+
+  /*constant state*/
+  if (state == kConstantState && (this_time == last_time)) {
+    // stay in the Constant state
+    state_new = kConstantState;
+  } /* else if (state == kConstantState &&(this_time>last_time))
+   {
+     // change to acceleration state
+     state=kAccelerationState;
+   }*/
+  else if (state == kConstantState && (this_time == 0)) {
+    // change to deceleration state
+    state_new = kDecelerationState;
+    Tim4Enable();
+  }
+
+  // if (stage_num<kDecelerationStageNum){
+  /*deceleration state*/
+  if (state == kDecelerationState && (this_time == last_time) &&
+      (stage_num < kDecelerationStageNum - 1)) {
+    // stay in deceleration state
+    state_new = kDecelerationState;
+  } else if (state == kDecelerationState &&
+             (stage_num == kDecelerationStageNum - 1)) {
+    // decelaration complete
+    state_new = kStopState;
+    Tim4Disable();
+    stage_num = 0;
+  }
+  // }
+
+  return state_new;
+}
+
+u32 SetSpeed(u8 state, u32 cmd_speed) {
+  u32 set_motor_speed;
+  usRegHoldingBuf[36] = stage_num;
+  switch (state) {
+    case 0:
+      set_motor_speed = 0;
+      break;
+    case 1:
+      set_motor_speed = Acceleration(stage_num, cmd_speed);
+      break;
+    case 2:
+      set_motor_speed = cmd_speed;
+      break;
+    case 3:
+      set_motor_speed = Deceleration(stage_num + 1, cmd_speed);
+      break;
+    default:
+      set_motor_speed = 0;
+      break;
+  }
+  return set_motor_speed;
 }
