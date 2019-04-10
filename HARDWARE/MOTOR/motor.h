@@ -70,6 +70,6 @@ u32 MotorVelCalc(u32 delta_turn);
 
 u32 Acceleration(u8 N, u32 cmd_speed);
 u32 Deceleration(u8 N, u32 cmd_speed);
-u8 StateCheck(u8 state, u32 this_time, u32 last_time);
+u8 StateCheck(u8 state, u32 this_time, u32 last_time,u32 motor_speed);
 u32 SetSpeed(u8 state, u32 cmd_speed);
 #endif

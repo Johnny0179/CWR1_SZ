@@ -17,39 +17,42 @@ compiling motor_ctrl.c...
   }
 ..\HARDWARE\MOTOR\motor_ctrl.c(241): warning:  #223-D: function "abs" declared implicitly
     if (abs(cmd_speed - motor_feedback_speed) > 100) {
-..\HARDWARE\MOTOR\motor_ctrl.c(352): warning:  #1-D: last line of file ends without a newline
+..\HARDWARE\MOTOR\motor_ctrl.c(412): warning:  #1-D: last line of file ends without a newline
   }
 ..\HARDWARE\MOTOR\motor_ctrl.c(85): warning:  #177-D: variable "kMotorNormal" was declared but never referenced
   static const u8 kMotorNormal = 0;
 ..\HARDWARE\MOTOR\motor_ctrl.c: 6 warnings, 0 errors
 linking...
-Program Size: Code=37438 RO-data=1122 RW-data=512 ZI-data=79992  
+Program Size: Code=37406 RO-data=1122 RW-data=512 ZI-data=79992  
 FromELF: creating hex file...
 "..\OBJ\cwr_sz.axf" - 0 Error(s), 6 Warning(s).
-ng:  #177-D: variable "kAutoMode" was declared but never referenced
-  static const _Bool kAutoMode = 1;
-..\ROBOT\robot.c(89): warning:  #177-D: variable "kMotorStall" was declared but never referenced
-  static const u8 kMotorStall = 7;
-..\ROBOT\robot.c: 4 warnings, 0 errors
-linking...
-Program Size: Code=37426 RO-data=1122 RW-data=512 ZI-data=79992  
-FromELF: creating hex file...
-"..\OBJ\cwr_sz.axf" - 0 Error(s), 10 Warning(s).
--D: last line of file ends without a newline
+g:  #1-D: last line of file ends without a newline
+  }
+..\HARDWARE\MOTOR\motor.c: 3 warnings, 0 errors
+compiling timer4.c...
+..\HARDWARE\MOTOR\motor.h(75): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\HARDWARE\TIMER\timer4.c(39): warning:  #1-D: last line of file ends without a newline
+  }
+..\HARDWARE\TIMER\timer4.c: 2 warnings, 0 errors
+compiling timer12.c...
+..\HARDWARE\MOTOR\motor.h(75): warning:  #1-D: last line of file ends without a newline
   #endif
 ..\HARDWARE\TIMER\timer12.c: 1 warning, 0 errors
 compiling motor_ctrl.c...
 ..\HARDWARE\MOTOR\motor.h(75): warning:  #1-D: last line of file ends without a newline
   #endif
-..\HARDWARE\MOTOR\motor_ctrl.c(202): warning:  #940-D: missing return statement at end of non-void function "MotorCtrlAuto"
+..\HARDWARE\MOTOR\motor_ctrl.c(193): warning:  #940-D: missing return statement at end of non-void function "MotorCtrlAuto"
+                   const u32 *cmd_speed, _Bool init_dir, u8 cycle, u8 *state) {}
+..\HARDWARE\MOTOR\motor_ctrl.c(236): warning:  #940-D: missing return statement at end of non-void function "DeltaTurnCalc"
   }
-..\HARDWARE\MOTOR\motor_ctrl.c(245): warning:  #940-D: missing return statement at end of non-void function "DeltaTurnCalc"
-  }
-..\HARDWARE\MOTOR\motor_ctrl.c(250): warning:  #223-D: function "abs" declared implicitly
+..\HARDWARE\MOTOR\motor_ctrl.c(241): warning:  #223-D: function "abs" declared implicitly
     if (abs(cmd_speed - motor_feedback_speed) > 100) {
-..\HARDWARE\MOTOR\motor_ctrl.c(356): warning:  #1-D: last line of file ends without a newline
+..\HARDWARE\MOTOR\motor_ctrl.c(410): warning:  #1-D: last line of file ends without a newline
   }
-..\HARDWARE\MOTOR\motor_ctrl.c: 5 warnings, 0 errors
+..\HARDWARE\MOTOR\motor_ctrl.c(85): warning:  #177-D: variable "kMotorNormal" was declared but never referenced
+  static const u8 kMotorNormal = 0;
+..\HARDWARE\MOTOR\motor_ctrl.c: 6 warnings, 0 errors
 compiling timer13.c...
 ..\HARDWARE\MOTOR\motor.h(75): warning:  #1-D: last line of file ends without a newline
   #endif
@@ -67,18 +70,14 @@ compiling robot.c...
   #endif
 ..\ROBOT\robot.c(13): warning:  #177-D: variable "kAutoMode" was declared but never referenced
   static const _Bool kAutoMode = 1;
-..\ROBOT\robot.c: 3 warnings, 0 errors
+..\ROBOT\robot.c(89): warning:  #177-D: variable "kMotorStall" was declared but never referenced
+  static const u8 kMotorStall = 7;
+..\ROBOT\robot.c: 4 warnings, 0 errors
 linking...
-..\OBJ\cwr_sz.axf: Error: L6200E: Symbol kMotorStall multiply defined (by robot.o and motor_ctrl.o).
-Not enough information to list image symbols.
-Not enough information to list the image map.
-Finished: 2 information, 0 warning and 1 error messages.
-"..\OBJ\cwr_sz.axf" - 1 Error(s), 24 Warning(s).
-Target not created
-3): warning:  #177-D: variable "kAutoMode" was declared but never referenced
-  static const _Bool kAutoMode = 1;
-..\ROBOT\robot.c: 4 warnings, 2 errors
-"..\OBJ\cwr_sz.axf" - 3 Error(s), 24 Warning(s).
+Program Size: Code=37398 RO-data=1122 RW-data=512 ZI-data=79992  
+FromELF: creating hex file...
+"..\OBJ\cwr_sz.axf" - 0 Error(s), 26 Warning(s).
+s), 24 Warning(s).
 Target not created
 iling mbutils.c...
 compiling FreeModbus.c...

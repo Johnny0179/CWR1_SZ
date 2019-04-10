@@ -43,12 +43,6 @@ const u32 kAccelerationStageNum = 10;
 const u32 kDecelerationPhaseTime = 1000;
 const u32 kDecelerationStageNum = 10;
 
-// motor state
-const u8 kStopState = 0;
-const u8 kAccelerationState = 1;
-const u8 kConstantState = 2;
-const u8 kDecelerationState = 3;
-
 volatile u32 cmd_speed_last_time;
 volatile u32 cmd_speed_this_time;
 volatile u32 constant_speed;
@@ -60,6 +54,12 @@ volatile u8 stage_num = 0;
 const u8 kInMotion = 0;
 const u8 kStepDone = 1;
 const u8 kCycleDone = 2;
+
+// motor state
+static const u8 kStopState = 0;
+static const u8 kAccelerationState = 1;
+static const u8 kConstantState = 2;
+static const u8 kDecelerationState = 3;
 
 // odometer
 u32 odometer[MotorNum] = {0};
@@ -103,8 +103,8 @@ u8 MotorCtrlManual(struct MOTOR_DATA *motor, struct PID_DATA *pid,
   motor->MotorSpeed_mmps = MotorVelCalc(delta_turn[motor->num - 1]);
 
   // check the state
-  motor_state =
-      StateCheck(motor_state, cmd_speed_this_time, cmd_speed_last_time);
+  motor_state = StateCheck(motor_state, cmd_speed_this_time,
+                           cmd_speed_last_time, motor->MotorSpeed_mmps);
 
   if (motor_state == kConstantState) {
     // save the initial decelerate speed
@@ -261,71 +261,64 @@ u32 Deceleration(u8 N, u32 cmd_speed) {
   return cmd_speed - (N * cmd_speed / kDecelerationStageNum);
 }
 
-u8 StateCheck(u8 state, u32 this_time, u32 last_time) {
-  u8 state_new = 0;
-  /*define the motor state*/
-  // stop state
-  if (state == kStopState && (this_time == 0)) {
-    // stay in the stop state
-    state_new = kStopState;
-    stage_num = 0;
-  } else if (state == kStopState && (this_time != 0)) {
-    // change to accelaration state
-    state_new = kAccelerationState;
-    Tim4Enable();
+u8 StateCheck(u8 state, u32 this_time, u32 last_time, u32 motor_speed) {
+  switch (state) {
+    case kStopState:
+      if (this_time == 0) {
+        state = kStopState;
+        stage_num = 0;
+      } else {
+        // change to acceleration
+        state = kAccelerationState;
+        Tim4Enable();
+      }
+      break;
+
+    case kAccelerationState:
+      if (stage_num < kAccelerationStageNum) {
+        state = kAccelerationState;
+      }
+      // have not been speed up, return to stop state.
+      else if (motor_speed == 0 /*abs(this_time - motor_speed) > 100*/) {
+        state = kStopState;
+      }
+      // change to the constantState
+      else {
+        state = kConstantState;
+        Tim4Disable();
+        stage_num = 0;
+      }
+      break;
+
+    case kConstantState:
+      if (this_time == last_time) {
+        // stay in constant state
+        state = kConstantState;
+      } else if (this_time < last_time || this_time == 0) {
+        // change to deceleration state
+        state = kDecelerationState;
+        Tim4Enable();
+      }
+      break;
+
+    case kDecelerationState:
+      if (stage_num < kDecelerationStageNum) {
+        // stay in the deceleration state
+        state = kDecelerationState;
+      } else {
+        // change to stop state
+        state = kStopState;
+        Tim4Disable();
+        stage_num = 0;
+      }
+      break;
+
+    default:
+      state = kStopState;
+      break;
   }
 
-  /*acceleration state*/
-  if (stage_num < kAccelerationStageNum) {
-    if (state == kAccelerationState && (this_time == last_time) &&
-        (stage_num != kAccelerationStageNum - 1)) {
-      // stay in the acceleration state
-      state_new = kAccelerationState;
-    } else if (state == kAccelerationState &&
-               (stage_num == kAccelerationStageNum - 1)) {
-      // change to the constant state, accelaration complete
-      state_new = kConstantState;
-      Tim4Disable();
-      stage_num = 0;
-    }
-  } else {
-    // change to the constant state, accelaration complete
-    state_new = kConstantState;
-    Tim4Disable();
-    stage_num = 0;
-  }
-
-  /*constant state*/
-  if (state == kConstantState && (this_time == last_time)) {
-    // stay in the Constant state
-    state_new = kConstantState;
-  } /* else if (state == kConstantState &&(this_time>last_time))
-   {
-     // change to acceleration state
-     state=kAccelerationState;
-   }*/
-  else if (state == kConstantState && (this_time == 0)) {
-    // change to deceleration state
-    state_new = kDecelerationState;
-    Tim4Enable();
-  }
-
-  // if (stage_num<kDecelerationStageNum){
-  /*deceleration state*/
-  if (state == kDecelerationState && (this_time == last_time) &&
-      (stage_num < kDecelerationStageNum - 1)) {
-    // stay in deceleration state
-    state_new = kDecelerationState;
-  } else if (state == kDecelerationState &&
-             (stage_num == kDecelerationStageNum - 1)) {
-    // decelaration complete
-    state_new = kStopState;
-    Tim4Disable();
-    stage_num = 0;
-  }
-  // }
-
-  return state_new;
+  return state;
 }
 
 u32 SetSpeed(u8 state, u32 cmd_speed) {

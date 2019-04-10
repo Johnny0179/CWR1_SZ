@@ -3,7 +3,7 @@
 <title>Static Call Graph - [..\OBJ\cwr_sz.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ..\OBJ\cwr_sz.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Wed Apr 10 08:51:30 2019
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Wed Apr 10 11:31:05 2019
 <BR><P>
 <H3>Maximum Stack Usage =        240 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -230,8 +230,8 @@ Global Symbols
 <P><STRONG><a name="[1d7]"></a>__rt_lib_init_user_alloc_1</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, libinit2.o(.ARM.Collect$$libinit$$0000000A))
 
 <P><STRONG><a name="[93]"></a>__rt_lib_shutdown</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, libshutdown.o(.ARM.Collect$$libshutdown$$00000000))
-<BR><BR>[Called By]<UL><LI><a href="#[1a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;abort
-<LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_exit_ls
+<BR><BR>[Called By]<UL><LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_exit_ls
+<LI><a href="#[1a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;abort
 </UL>
 
 <P><STRONG><a name="[1d8]"></a>__rt_lib_shutdown_fp_trap_1</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, libshutdown2.o(.ARM.Collect$$libshutdown$$00000006))
@@ -1656,7 +1656,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[fd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorCtrlManual
 </UL>
 
-<P><STRONG><a name="[fc]"></a>StateCheck</STRONG> (Thumb, 176 bytes, Stack size 24 bytes, motor_ctrl.o(.text))
+<P><STRONG><a name="[fc]"></a>StateCheck</STRONG> (Thumb, 140 bytes, Stack size 24 bytes, motor_ctrl.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = StateCheck &rArr; Tim4Disable
 </UL>
 <BR>[Calls]<UL><LI><a href="#[f4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Tim4Disable
@@ -1670,7 +1670,7 @@ Global Symbols
 <LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RobotAuto
 </UL>
 
-<P><STRONG><a name="[fd]"></a>MotorCtrlManual</STRONG> (Thumb, 420 bytes, Stack size 32 bytes, motor_ctrl.o(.text))
+<P><STRONG><a name="[fd]"></a>MotorCtrlManual</STRONG> (Thumb, 422 bytes, Stack size 32 bytes, motor_ctrl.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = MotorCtrlManual &rArr; StateCheck &rArr; Tim4Disable
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ff]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pid_Controller
@@ -1696,7 +1696,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[48]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM5_IRQHandler
 </UL>
 
-<P><STRONG><a name="[100]"></a>MotorSetCmdSpeed</STRONG> (Thumb, 196 bytes, Stack size 40 bytes, motor_ctrl.o(.text), UNUSED)
+<P><STRONG><a name="[100]"></a>MotorSetCmdSpeed</STRONG> (Thumb, 204 bytes, Stack size 40 bytes, motor_ctrl.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dmul
 <LI><a href="#[103]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_ui2d
 <LI><a href="#[101]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_i2d
@@ -3207,9 +3207,9 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[95]"></a>_sys_exit</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, sys_exit.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[1b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__sig_exit
+<BR><BR>[Called By]<UL><LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_exit_exit
+<LI><a href="#[1b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__sig_exit
 <LI><a href="#[1a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;abort
-<LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_exit_exit
 </UL>
 
 <P><STRONG><a name="[1ac]"></a>__rt_SIGABRT</STRONG> (Thumb, 14 bytes, Stack size 8 bytes, defsig_abrt_outer.o(.text))
