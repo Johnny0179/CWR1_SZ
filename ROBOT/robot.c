@@ -43,6 +43,11 @@ static void RobotInit(void) {
   usRegHoldingBuf[23] = 200;
   // disable reset
   usRegHoldingBuf[9] = 0;
+  // default direction up
+  usRegHoldingBuf[2] = 0;
+
+  // default step distance
+  usRegHoldingBuf[17] = 50;
 }
 
 static void RobotEnable(void) { MotorEnable(); }
@@ -81,6 +86,7 @@ const u8 kFirstCheck = 3;
 const u8 kMotion = 4;
 const u8 kStop = 5;
 const u8 kDone = 6;
+static const u8 kMotorStall = 7;
 
 /*----------------------variables----------------------*/
 extern u32 odometer[MotorNum];
@@ -100,7 +106,9 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state) {
     motor_speed[i] = MotorVelCalc(delta_turn[i]);
   }
 
-  cycle_odometer_this_time = odometer[0];
+  cycle_odometer_this_time = (odometer[0] + odometer[1] + odometer[2] +
+                              odometer[3] + odometer[4] + odometer[5]) /
+                             MotorNum;
 
   // debug
   usRegHoldingBuf[1] = cycle_counter;
@@ -125,16 +133,17 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state) {
 
         //
         usRegHoldingBuf[3] = 0;
-
         *state = kIdle;
       } else if (usRegHoldingBuf[3] == 1) {
+        // defualt dir;
+        auto_dir = init_dir;
         *state = kCounterCheck;
       }
       break;
 
     case kCounterCheck:
       if (cycle_counter < cycle) {
-        *state = kFirstCheck;
+        *state = kMotion;
       } else if (cycle_counter == cycle) {
         *state = kIdle;
       }
@@ -153,13 +162,18 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state) {
       // change direction
       auto_dir = !auto_dir;
 
+      //
+      usRegHoldingBuf[2] = auto_dir;
       // update the odometer
-      cycle_odometer_last_time = odometer[0];
-      *state = kMotion;
+      cycle_odometer_last_time = (odometer[0] + odometer[1] + odometer[2] +
+                                  odometer[3] + odometer[4] + odometer[5]) /
+                                 MotorNum;
+      *state = kCounterCheck;
       break;
 
     case kMotion:
-      if ((cycle_odometer_this_time - cycle_odometer_last_time) <= 100) {
+      if ((cycle_odometer_this_time - cycle_odometer_last_time) <=
+          usRegHoldingBuf[17]) {
         /*motor control*/
         for (i = 0; i < MotorNum; ++i) {
           MotorCtrlManual(&Motor[i], &PIDMotor[i], &cmd_speed, auto_dir);
@@ -183,7 +197,7 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state) {
       } else {
         // update cycle counter
         cycle_counter++;
-        *state = kCounterCheck;
+        *state = kChangeDir;
       }
       break;
 
@@ -206,6 +220,7 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state) {
   usRegHoldingBuf[13] = Motor[3].PWM;
   usRegHoldingBuf[14] = Motor[4].PWM;
   usRegHoldingBuf[15] = Motor[5].PWM;
+  
   return *state;
 }
 

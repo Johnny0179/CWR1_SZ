@@ -87,10 +87,13 @@ static const _Bool kManualMode = 0;
 static const _Bool kManualAuto = 1;
 
 /*----------------------------Robot state definition------------------------*/
-const u8 kPowerOn = 0;
-const u8 kInit = 2;
-const u8 kEnabled = 3;
-const u8 kError = 4;
+extern const u8 kIdle;
+extern const u8 kCounterCheck;
+extern const u8 kChangeDir;
+extern const u8 kFirstCheck;
+extern const u8 kMotion;
+extern const u8 kStop;
+extern const u8 kDone;
 
 /*----------------------------variables----------------------------------*/
 static u8 robot_state;
@@ -99,7 +102,7 @@ static u8 robot_state;
 
 int main(void) {
   // power on
-  robot_state = kPowerOn;
+  // robot_state = kPowerOn;
 
   //设置系统中断优先级分组4
   NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
@@ -109,8 +112,9 @@ int main(void) {
 
   //初始化LED端口
   LED_Init();
+
   // light the indicator by default
-  LED2 = 1;
+  // LED2 = 1;
   //创建开始任务
   xTaskCreate((TaskFunction_t)start_task,    //任务函数
               (const char*)"start_task",     //任务名称
@@ -201,32 +205,21 @@ static void Robot_task(void* pvParameters) {
 
       if (cwr.mode_ == kManualAuto) {
         state = cwr.Auto(cwr.cmd_speed_, cwr.dir_, cwr.cycle_, &state);
-        // if (state == kCycleDone) {
-        //   // reset the cycle counter
-        //   cycle_counter = 0;
-        //   // disable
-        //   usRegHoldingBuf[3] = 0;
-        // }
       }
 
     } else if (usRegHoldingBuf[3] == 0) {
       // cwr.Disable();
       // stop
       cwr.Manual(0, cwr.dir_);
-
-      /*
-        if(error)
-        else if (stop)
-        ....
-      */
     }
 
-    // cycle done, refresh the enable
-    // if (state == kCycleDone) {
-    //   // usRegHoldingBuf[3]=0;
-    // }
-
     usRegHoldingBuf[16] = state;
+
+    // LED indicator
+    if (state == kIdle || state == kMotion) {
+      LED2 = 1;
+    }
+
     // 100ms刷新一次
     vTaskDelay(100);
   }

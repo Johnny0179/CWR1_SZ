@@ -56,7 +56,7 @@ void MotorFGInit(void);
 u32 MotorSetCmdSpeed(u32 cmd_speed, u32 motor_feedback_speed);
 void MotorInit(void);
 void MotorInitConfig(u8 num, struct MOTOR_DATA *motor);
-void MotorCtrlManual(struct MOTOR_DATA *motor, struct PID_DATA *pid,
+u8 MotorCtrlManual(struct MOTOR_DATA *motor, struct PID_DATA *pid,
                      const u32 *cmd_speed, _Bool dir);
 u8 MotorCtrlAuto(struct MOTOR_DATA *motor, struct PID_DATA *pid,
                  const u32 *cmd_speed, _Bool init_dir, u8 cycle, u8 *state);

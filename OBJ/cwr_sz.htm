@@ -3,7 +3,7 @@
 <title>Static Call Graph - [..\OBJ\cwr_sz.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ..\OBJ\cwr_sz.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Mon Apr 08 18:50:44 2019
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Wed Apr 10 08:51:30 2019
 <BR><P>
 <H3>Maximum Stack Usage =        240 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -342,7 +342,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[130]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortValidateInterruptPriority
 </UL>
 
-<P><STRONG><a name="[90]"></a>main</STRONG> (Thumb, 60 bytes, Stack size 16 bytes, main.o(.text))
+<P><STRONG><a name="[90]"></a>main</STRONG> (Thumb, 48 bytes, Stack size 16 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 184 + Unknown Stack Size
 <LI>Call Chain = main &rArr; vTaskStartScheduler &rArr; xTimerCreateTimerTask &rArr; xTaskCreate &rArr; pvPortMalloc &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
@@ -1656,7 +1656,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[fd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorCtrlManual
 </UL>
 
-<P><STRONG><a name="[fc]"></a>StateCheck</STRONG> (Thumb, 166 bytes, Stack size 24 bytes, motor_ctrl.o(.text))
+<P><STRONG><a name="[fc]"></a>StateCheck</STRONG> (Thumb, 176 bytes, Stack size 24 bytes, motor_ctrl.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = StateCheck &rArr; Tim4Disable
 </UL>
 <BR>[Calls]<UL><LI><a href="#[f4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Tim4Disable
@@ -1670,8 +1670,8 @@ Global Symbols
 <LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RobotAuto
 </UL>
 
-<P><STRONG><a name="[fd]"></a>MotorCtrlManual</STRONG> (Thumb, 432 bytes, Stack size 24 bytes, motor_ctrl.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = MotorCtrlManual &rArr; StateCheck &rArr; Tim4Disable
+<P><STRONG><a name="[fd]"></a>MotorCtrlManual</STRONG> (Thumb, 420 bytes, Stack size 32 bytes, motor_ctrl.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = MotorCtrlManual &rArr; StateCheck &rArr; Tim4Disable
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ff]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pid_Controller
 <LI><a href="#[fe]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorVelCalc
@@ -1696,7 +1696,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[48]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM5_IRQHandler
 </UL>
 
-<P><STRONG><a name="[100]"></a>MotorSetCmdSpeed</STRONG> (Thumb, 208 bytes, Stack size 40 bytes, motor_ctrl.o(.text), UNUSED)
+<P><STRONG><a name="[100]"></a>MotorSetCmdSpeed</STRONG> (Thumb, 196 bytes, Stack size 40 bytes, motor_ctrl.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dmul
 <LI><a href="#[103]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_ui2d
 <LI><a href="#[101]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_i2d
@@ -3403,7 +3403,7 @@ Local Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(.text)
 </UL>
-<P><STRONG><a name="[69]"></a>Robot_task</STRONG> (Thumb, 176 bytes, Stack size 40 bytes, main.o(.text))
+<P><STRONG><a name="[69]"></a>Robot_task</STRONG> (Thumb, 206 bytes, Stack size 40 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = Robot_task &rArr; vTaskDelay &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
@@ -3792,7 +3792,7 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xMBASCIITransmitFSM
 </UL>
 
-<P><STRONG><a name="[7f]"></a>RobotInit</STRONG> (Thumb, 150 bytes, Stack size 8 bytes, robot.o(.text))
+<P><STRONG><a name="[7f]"></a>RobotInit</STRONG> (Thumb, 156 bytes, Stack size 8 bytes, robot.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 116<LI>Call Chain = RobotInit &rArr; MotorInit &rArr; MotorFGInit &rArr; TIM12_CH1_Cap_Init &rArr; TIM_ICInit &rArr; TI1_Config
 </UL>
 <BR>[Calls]<UL><LI><a href="#[1a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorInitConfig
@@ -3823,14 +3823,14 @@ Local Symbols
 <BR>[Address Reference Count : 1]<UL><LI> robot.o(.text)
 </UL>
 <P><STRONG><a name="[82]"></a>RobotManual</STRONG> (Thumb, 128 bytes, Stack size 24 bytes, robot.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = RobotManual &rArr; MotorCtrlManual &rArr; StateCheck &rArr; Tim4Disable
+<BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = RobotManual &rArr; MotorCtrlManual &rArr; StateCheck &rArr; Tim4Disable
 </UL>
 <BR>[Calls]<UL><LI><a href="#[fd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorCtrlManual
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> robot.o(.text)
 </UL>
-<P><STRONG><a name="[83]"></a>RobotAuto</STRONG> (Thumb, 476 bytes, Stack size 64 bytes, robot.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 120<LI>Call Chain = RobotAuto &rArr; MotorCtrlManual &rArr; StateCheck &rArr; Tim4Disable
+<P><STRONG><a name="[83]"></a>RobotAuto</STRONG> (Thumb, 566 bytes, Stack size 64 bytes, robot.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 128<LI>Call Chain = RobotAuto &rArr; MotorCtrlManual &rArr; StateCheck &rArr; Tim4Disable
 </UL>
 <BR>[Calls]<UL><LI><a href="#[fd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorCtrlManual
 <LI><a href="#[fe]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorVelCalc

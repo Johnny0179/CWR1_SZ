@@ -32,7 +32,6 @@ static volatile _Bool dir_this_time;
 // retain the direction when stop the motor
 static volatile _Bool dir_stop;
 
-
 static volatile _Bool dir_change;
 static volatile u32 stop_counter;
 const u16 kStopTime = 500;
@@ -54,10 +53,8 @@ volatile u32 cmd_speed_last_time;
 volatile u32 cmd_speed_this_time;
 volatile u32 constant_speed;
 volatile u8 constant_speed_setflag;
-volatile u8 motor_state = 0;
+static volatile u8 motor_state = 0;
 volatile u8 stage_num = 0;
-
-
 
 // motor control state
 const u8 kInMotion = 0;
@@ -66,7 +63,6 @@ const u8 kCycleDone = 2;
 
 // odometer
 u32 odometer[MotorNum] = {0};
-
 
 void MotorInit(void) {
   // Freq=20k,DutyRatio=50
@@ -85,15 +81,21 @@ void MotorInit(void) {
   Tim5IntInit(kTimeInteval * 10 - 1, 8400 - 1);
 }
 
-void MotorCtrlManual(struct MOTOR_DATA *motor, struct PID_DATA *pid,
-                     const u32 *cmd_speed, _Bool dir) {
+// motor motion state const
+static const u8 kMotorNormal = 0;
+static const u8 kMotorStall = 1;
+
+u8 MotorCtrlManual(struct MOTOR_DATA *motor, struct PID_DATA *pid,
+                   const u32 *cmd_speed, _Bool dir) {
+  u8 state;
   cmd_speed_this_time = *cmd_speed;
-  dir_this_time = dir;
-  // change direction
-  if (dir_last_time != dir_this_time) {
-    dir_change = kTrue;
-    dir_stop = dir_last_time;
-  }
+
+  /*  dir_this_time = dir;
+    // change direction
+    if (dir_last_time != dir_this_time) {
+      dir_change = kTrue;
+      dir_stop = dir_last_time;
+    }*/
 
   motor->direction = dir;
 
@@ -155,7 +157,7 @@ void MotorCtrlManual(struct MOTOR_DATA *motor, struct PID_DATA *pid,
     }
   }
 
-  // Speed
+  // Power out put control
   switch (motor->num) {
     case 1:
       TIM1->CCR4 = (((168000000 / 1) / PWMfreq) - 1) * (100 - motor->PWM) / 100;
@@ -178,152 +180,17 @@ void MotorCtrlManual(struct MOTOR_DATA *motor, struct PID_DATA *pid,
     default:
       break;
   }
+
+  // motor stall detection
+  if (motor_state == kConstantState && motor->MotorSpeed_mmps == 0) {
+    state = kMotorStall;
+  }
+
+  return state;
 }
-
-
 
 u8 MotorCtrlAuto(struct MOTOR_DATA *motor, struct PID_DATA *pid,
-                 const u32 *cmd_speed, _Bool init_dir, u8 cycle, u8 *state) {
-  // u32 motor_speed;
-  // motor_speed = MotorVelCalc(delta_turn[motor->num - 1]);
-  // cycle_odometer_this_time = odometer[0];
-
-  // // debug
-  // usRegHoldingBuf[30] = motor->MotorSpeed_mmps;
-  // usRegHoldingBuf[1] = cycle_counter;
-  // usRegHoldingBuf[38] = cycle_odometer_this_time;
-  // usRegHoldingBuf[39] = cycle_odometer_last_time;
-
-  // /*indicate the dir*/
-  // // up
-  // if (auto_dir == 0) {
-  //   usRegHoldingBuf[8] = 2;
-  // } else if (auto_dir == 1) {
-  //   // down
-  //   usRegHoldingBuf[8] = 1;
-  // }
-
-  // switch (*state) {
-  //   case kIdle:
-  //     if (usRegHoldingBuf[3] == 0 || cycle_counter == cycle) {
-  //       // clear the counter
-  //       cycle_counter = 0;
-
-  //       //
-  //       usRegHoldingBuf[3] = 0;
-
-  //       *state = kIdle;
-  //     } else if (usRegHoldingBuf[3] == 1) {
-  //       *state = kCounterCheck;
-  //     }
-  //     break;
-
-  //   case kCounterCheck:
-  //     if (cycle_counter < cycle) {
-  //       *state = kFirstCheck;
-  //     } else if (cycle_counter == cycle) {
-  //       *state = kIdle;
-  //     }
-  //     break;
-
-  //   case kFirstCheck:
-  //     if (cycle_counter == 0) {
-  //       auto_dir = init_dir;
-  //       *state = kMotion;
-  //     } else {
-  //       *state = kChangeDir;
-  //     }
-  //     break;
-
-  //   case kChangeDir:
-  //     // change direction
-  //     auto_dir = !auto_dir;
-
-  //     // update the odometer
-  //     cycle_odometer_last_time = odometer[0];
-  //     *state = kMotion;
-  //     break;
-
-  //   case kMotion:
-  //     if ((cycle_odometer_this_time - cycle_odometer_last_time) <= 100) {
-  //       MotorCtrlManual(motor, pid, cmd_speed, auto_dir);
-  //       *state = kMotion;
-  //     } else {
-  //       *state = kStop;
-  //     }
-  //     break;
-
-  //   case kStop:
-  //     //
-  //     if (motor_speed != 0 ) {
-  //       MotorCtrlManual(motor, pid, &stop_speed, auto_dir);
-  //       *state = kStop;
-  //     } else {
-  //       // update cycle counter
-  //       cycle_counter++;
-
-  //       // //
-  //       // MotorDisable();
-  //       // MotorEnable();
-
-  //       *state = kCounterCheck;
-  //     }
-  //     break;
-
-  //   case kDone:;
-
-  //   default:
-  //     *state = kIdle;
-  //     break;
-  // }
-
-  // return *state;
-
-  /*  // first time
-    if (cycle_counter == 0) {
-      auto_dir = init_dir;
-    }
-
-    // up
-    if (auto_dir == 0) {
-      usRegHoldingBuf[8] = 2;
-    } else if (auto_dir == 1) {
-      // down
-      usRegHoldingBuf[8] = 1;
-    }
-
-    if (cycle_counter < cycle) {
-      // 1m, one cycle complete
-      if (((cycle_odometer_this_time - cycle_odometer_last_time) > 100) &&
-          (motor_speed != 0)) {
-
-        // stop first
-        MotorCtrlManual(motor, pid, &stop_speed, auto_dir);
-        // state=kInMotion;
-        // already stopped
-      } else if ((cycle_odometer_this_time - cycle_odometer_last_time) > 100 &&
-                 motor_speed == 0) {
-        // change direction
-        auto_dir = !auto_dir;
-
-        // update cycle counter
-        cycle_counter++;
-
-        // update the odometer
-        cycle_odometer_last_time = odometer[0];
-
-        MotorCtrlManual(motor, pid, cmd_speed, auto_dir);
-        // state=kStepDone;
-      } else {
-        MotorCtrlManual(motor, pid, cmd_speed, auto_dir);
-        // state=kInMotion;
-      }
-    } else {
-      // stop
-      MotorCtrlManual(motor, pid, &stop_speed, auto_dir);
-      state = kCycleDone;
-    }*/
-}
+                 const u32 *cmd_speed, _Bool init_dir, u8 cycle, u8 *state) {}
 
 void MotorInitConfig(u8 num, struct MOTOR_DATA *motor) {
   motor->num = num;
@@ -398,11 +265,11 @@ u8 StateCheck(u8 state, u32 this_time, u32 last_time) {
   u8 state_new = 0;
   /*define the motor state*/
   // stop state
-  if (state == kStopState && (this_time == last_time)) {
+  if (state == kStopState && (this_time == 0)) {
     // stay in the stop state
     state_new = kStopState;
     stage_num = 0;
-  } else if (state == kStopState && (this_time > last_time)) {
+  } else if (state == kStopState && (this_time != 0)) {
     // change to accelaration state
     state_new = kAccelerationState;
     Tim4Enable();
@@ -421,6 +288,11 @@ u8 StateCheck(u8 state, u32 this_time, u32 last_time) {
       Tim4Disable();
       stage_num = 0;
     }
+  } else {
+    // change to the constant state, accelaration complete
+    state_new = kConstantState;
+    Tim4Disable();
+    stage_num = 0;
   }
 
   /*constant state*/
