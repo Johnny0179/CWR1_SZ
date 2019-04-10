@@ -92,8 +92,20 @@ static const u8 kMotorStall = 7;
 extern u32 odometer[MotorNum];
 extern u32 delta_turn[MotorNum];
 u32 cycle_counter = 0;
+
 u32 cycle_odometer_last_time = 0;
 u32 cycle_odometer_this_time = 0;
+
+u32 decel_odom = 0;
+
+// distance variables
+u32 dis_up_start = 0;
+u32 dis_up_end = 0;
+u32 dis_up = 0;
+
+u32 dis_down_start = 0;
+u32 dis_down_end = 0;
+u32 dis_down = 0;
 
 const u32 stop_speed = 0;
 
@@ -101,7 +113,7 @@ static volatile _Bool auto_dir;
 
 static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state) {
   u8 i;
-  u32 motor_speed[MotorNum];
+  u32 motor_speed[MotorNum], odom_temp;
   for (i = 0; i < MotorNum; ++i) {
     motor_speed[i] = MotorVelCalc(delta_turn[i]);
   }
@@ -143,6 +155,16 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state) {
 
     case kCounterCheck:
       if (cycle_counter < cycle) {
+        // up
+        if (auto_dir == 0) {
+          dis_up_start = cycle_odometer_this_time;
+          usRegHoldingBuf[40] = dis_up_start;
+        } else if (auto_dir == 1) {
+          // down
+          dis_down_start = cycle_odometer_this_time;
+          usRegHoldingBuf[41] = dis_down_start;
+        }
+
         *state = kMotion;
       } else if (cycle_counter == cycle) {
         *state = kIdle;
@@ -164,25 +186,49 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state) {
 
       //
       usRegHoldingBuf[2] = auto_dir;
-      // update the odometer
-      cycle_odometer_last_time = (odometer[0] + odometer[1] + odometer[2] +
-                                  odometer[3] + odometer[4] + odometer[5]) /
-                                 MotorNum;
+
       *state = kCounterCheck;
       break;
 
     case kMotion:
-      if ((cycle_odometer_this_time - cycle_odometer_last_time) <=
-          usRegHoldingBuf[17]) {
-        /*motor control*/
-        for (i = 0; i < MotorNum; ++i) {
-          MotorCtrlManual(&Motor[i], &PIDMotor[i], &cmd_speed, auto_dir);
-        }
 
-        *state = kMotion;
-      } else {
-        *state = kStop;
+      // complete two step
+      if (cycle_counter < 2) {
+        if ((cycle_odometer_this_time - cycle_odometer_last_time) <=
+            usRegHoldingBuf[17]) {
+          /*motor control*/
+          for (i = 0; i < MotorNum; ++i) {
+            MotorCtrlManual(&Motor[i], &PIDMotor[i], &cmd_speed, auto_dir);
+          }
+          *state = kMotion;
+        } else {
+          *state = kStop;
+        }
+      }  // move down
+      else if (auto_dir == 1) {
+        if ((cycle_odometer_this_time - cycle_odometer_last_time) <=
+            (usRegHoldingBuf[17] - abs(dis_down - dis_up))) {
+          /*motor control*/
+          for (i = 0; i < MotorNum; ++i) {
+            MotorCtrlManual(&Motor[i], &PIDMotor[i], &cmd_speed, auto_dir);
+          }
+          *state = kMotion;
+        } else {
+          *state = kStop;
+        }
+      } else if (auto_dir == 0) {
+        if ((cycle_odometer_this_time - cycle_odometer_last_time) <=
+            usRegHoldingBuf[17]) {
+          /*motor control*/
+          for (i = 0; i < MotorNum; ++i) {
+            MotorCtrlManual(&Motor[i], &PIDMotor[i], &cmd_speed, auto_dir);
+          }
+          *state = kMotion;
+        } else {
+          *state = kStop;
+        }
       }
+
       break;
 
     case kStop:
@@ -195,6 +241,28 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state) {
         }
         *state = kStop;
       } else {
+        // update the odometer
+        cycle_odometer_last_time = (odometer[0] + odometer[1] + odometer[2] +
+                                    odometer[3] + odometer[4] + odometer[5]) /
+                                   MotorNum;
+
+        // up
+        if (auto_dir == 0) {
+          dis_up_end = cycle_odometer_this_time;
+          usRegHoldingBuf[42] = dis_up_end;
+        } else if (auto_dir == 1) {
+          // down
+          dis_down_end = cycle_odometer_this_time;
+          usRegHoldingBuf[43] = dis_down_end;
+        }
+
+        // claculate the distance
+        dis_up = dis_up_end - dis_up_start;
+        dis_down = dis_down_end - dis_down_start;
+
+        usRegHoldingBuf[18] = dis_up;
+        usRegHoldingBuf[19] = dis_down;
+
         // update cycle counter
         cycle_counter++;
         *state = kChangeDir;
@@ -220,7 +288,7 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state) {
   usRegHoldingBuf[13] = Motor[3].PWM;
   usRegHoldingBuf[14] = Motor[4].PWM;
   usRegHoldingBuf[15] = Motor[5].PWM;
-  
+
   return *state;
 }
 
