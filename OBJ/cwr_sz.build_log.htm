@@ -8,6 +8,26 @@ Project File Date:  04/02/2019
 
 <h2>Output:</h2>
 Build target 'CWR_SZ'
+linking...
+Program Size: Code=37690 RO-data=1122 RW-data=544 ZI-data=79992  
+FromELF: creating hex file...
+"..\OBJ\cwr_sz.axf" - 0 Error(s), 0 Warning(s).
+last line of file ends without a newline
+  #endif
+..\ROBOT\robot.c(118): warning:  #177-D: variable "odom_temp" was declared but never referenced
+    u32 motor_speed[MotorNum], odom_temp;
+..\ROBOT\robot.c(13): warning:  #177-D: variable "kAutoMode" was declared but never referenced
+  static const _Bool kAutoMode = 1;
+..\ROBOT\robot.c(89): warning:  #177-D: variable "kMotorStall" was declared but never referenced
+  static const u8 kMotorStall = 7;
+..\ROBOT\robot.c: 5 warnings, 0 errors
+linking...
+Program Size: Code=37690 RO-data=1122 RW-data=544 ZI-data=79992  
+FromELF: creating hex file...
+"..\OBJ\cwr_sz.axf" - 0 Error(s), 5 Warning(s).
+nced
+  static const u8 kMotorNormal = 0;
+..\HARDWARE\MOTOR\motor_ctrl.c: 6 warnings, 0 errors
 compiling robot.c...
 ..\HARDWARE\MOTOR\motor.h(75): warning:  #1-D: last line of file ends without a newline
   #endif
@@ -25,24 +45,8 @@ compiling robot.c...
 linking...
 Program Size: Code=37810 RO-data=1122 RW-data=540 ZI-data=79996  
 FromELF: creating hex file...
-"..\OBJ\cwr_sz.axf" - 0 Error(s), 6 Warning(s).
-.h(75): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\ROBOT\robot.h(62): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\ROBOT\robot.c(195): warning:  #223-D: function "abs" declared implicitly
-               abs(dis_down - dis_up)) <= usRegHoldingBuf[17]) {
-..\ROBOT\robot.c(116): warning:  #177-D: variable "odom_temp" was declared but never referenced
-    u32 motor_speed[MotorNum], odom_temp;
-..\ROBOT\robot.c(13): warning:  #177-D: variable "kAutoMode" was declared but never referenced
-  static const _Bool kAutoMode = 1;
-..\ROBOT\robot.c(89): warning:  #177-D: variable "kMotorStall" was declared but never referenced
-  static const u8 kMotorStall = 7;
-..\ROBOT\robot.c: 6 warnings, 0 errors
-linking...
-Program Size: Code=37642 RO-data=1122 RW-data=540 ZI-data=79996  
-FromELF: creating hex file...
 "..\OBJ\cwr_sz.axf" - 0 Error(s), 12 Warning(s).
+
               const u32 *cmd_speed, _Bool init_dir, u8 cycle, u8 *state) {}
 ..\HARDWARE\MOTOR\motor_ctrl.c(236): warning:  #940-D: missing return statement at end of non-void function "DeltaTurnCalc"
   }

@@ -38,9 +38,9 @@ static void RobotInit(void) {
   // defualt auto mode
   usRegHoldingBuf[21] = 1;
   // defualt 6 cycles
-  usRegHoldingBuf[22] = 6;
+  usRegHoldingBuf[22] = 50;
   // defualt speed 200
-  usRegHoldingBuf[23] = 200;
+  usRegHoldingBuf[23] = 150;
   // disable reset
   usRegHoldingBuf[9] = 0;
   // default direction up
@@ -106,6 +106,8 @@ u32 dis_up = 0;
 u32 dis_down_start = 0;
 u32 dis_down_end = 0;
 u32 dis_down = 0;
+
+u32 offset_correct = 0;
 
 const u32 stop_speed = 0;
 
@@ -191,42 +193,43 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state) {
       break;
 
     case kMotion:
-
-      // complete two step
+      /*offset correction*/
+      // complete 2 step?
       if (cycle_counter < 2) {
-        if ((cycle_odometer_this_time - cycle_odometer_last_time) <=
-            usRegHoldingBuf[17]) {
-          /*motor control*/
-          for (i = 0; i < MotorNum; ++i) {
-            MotorCtrlManual(&Motor[i], &PIDMotor[i], &cmd_speed, auto_dir);
+        // up?
+        if (auto_dir == 0) {
+          // dis up > dis down
+          if (dis_up > dis_down) {
+            // upward correction
+            offset_correct = dis_up - dis_down;
+          } else {
+            // no correction
+            offset_correct = 0;
           }
-          *state = kMotion;
         } else {
-          *state = kStop;
-        }
-      }  // move down
-      else if (auto_dir == 1) {
-        if ((cycle_odometer_this_time - cycle_odometer_last_time) <=
-            (usRegHoldingBuf[17] - abs(dis_down - dis_up))) {
-          /*motor control*/
-          for (i = 0; i < MotorNum; ++i) {
-            MotorCtrlManual(&Motor[i], &PIDMotor[i], &cmd_speed, auto_dir);
+          // down
+          if (dis_down > dis_up) {
+            offset_correct = dis_down - dis_up;
+          } else {
+            // no correction
+            offset_correct = 0;
           }
-          *state = kMotion;
-        } else {
-          *state = kStop;
         }
-      } else if (auto_dir == 0) {
-        if ((cycle_odometer_this_time - cycle_odometer_last_time) <=
-            usRegHoldingBuf[17]) {
-          /*motor control*/
-          for (i = 0; i < MotorNum; ++i) {
-            MotorCtrlManual(&Motor[i], &PIDMotor[i], &cmd_speed, auto_dir);
-          }
-          *state = kMotion;
-        } else {
-          *state = kStop;
+      } else {
+        // no correction
+        offset_correct = 0;
+      }
+
+      if ((cycle_odometer_this_time - cycle_odometer_last_time) <=
+          usRegHoldingBuf[17] - offset_correct) {
+        // motor control
+        for (i = 0; i < MotorNum; ++i) {
+          MotorCtrlManual(&Motor[i], &PIDMotor[i], &cmd_speed, auto_dir);
         }
+
+        *state = kMotion;
+      } else {
+        *state = kStop;
       }
 
       break;
