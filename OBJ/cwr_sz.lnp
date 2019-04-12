@@ -48,6 +48,7 @@
 "..\obj\freemodbus.o"
 "..\obj\pid.o"
 "..\obj\robot.o"
+"..\obj\state.o"
 --strict --scatter "..\OBJ\cwr_sz.sct"
 --summary_stderr --info summarysizes --map --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

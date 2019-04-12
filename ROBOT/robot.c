@@ -7,10 +7,12 @@
 #include "robot.h"
 
 extern int32_t usRegHoldingBuf[REG_HOLDING_NREGS];
+extern const UCHAR kRobotAddr;
 
 // const parameters
 static const _Bool kManualMode = 0;
 static const _Bool kAutoMode = 1;
+
 const int8_t kDirUp = 0;
 const int8_t kDirDown = 1;
 
@@ -20,6 +22,14 @@ static pidData_t PIDMotor[MotorNum];
 
 static void RobotInit(void) {
   u8 i;
+
+  //初始化延时函数
+  delay_init(168);
+
+  //初始化LED端口
+  LED_Init();
+
+  // Adc_Init();
 
   // Motor Init
   MotorInit();
@@ -36,11 +46,18 @@ static void RobotInit(void) {
   pid_Init(1 * P, 1 * I, 0 * D, &PIDMotor[4]);
   pid_Init(1 * P, 1 * I, 0 * D, &PIDMotor[5]);
 
+  // light up led
+  LED2 = 1;
+
+  // robot address
+  usRegHoldingBuf[0] = kRobotAddr;
+  // communication indicator flag
+  usRegHoldingBuf[6] = 1;
   // defualt auto mode
   usRegHoldingBuf[21] = 1;
-  // defualt 6 cycles
+  // defualt 50 cycles
   usRegHoldingBuf[22] = 50;
-  // defualt speed 200
+  // defualt speed 150
   usRegHoldingBuf[23] = 150;
   // disable reset
   usRegHoldingBuf[9] = 0;
