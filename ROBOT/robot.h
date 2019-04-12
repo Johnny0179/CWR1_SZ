@@ -38,6 +38,10 @@ u8 RobotAuto(u32 cmd_speed,_Bool init_dir,u8 cycle,u8 *state);
 // function pointer
 typedef u8 (*robot_auto)(u32,_Bool,u8,u8 *);
 
+// alarm
+void RobotAlarmEnable(void);
+void RobotAlarmDisable(void);
+
 // robot class definition
 typedef struct {
   /*data members*/

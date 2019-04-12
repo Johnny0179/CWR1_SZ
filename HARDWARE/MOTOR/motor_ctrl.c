@@ -36,12 +36,12 @@ static volatile _Bool dir_change;
 static volatile u32 stop_counter;
 const u16 kStopTime = 500;
 
-// acceleration phase parameters, default 1s
-const u32 kAccelerationPhaseTime = 1000;
-const u32 kAccelerationStageNum = 10;
+// acceleration phase parameters, default 0.5s
+const u32 kAccelerationPhaseTime = 500;
+const u32 kAccelerationStageNum = 50;
 
-const u32 kDecelerationPhaseTime = 1000;
-const u32 kDecelerationStageNum = 10;
+const u32 kDecelerationPhaseTime = 500;
+const u32 kDecelerationStageNum = 50;
 
 volatile u32 cmd_speed_last_time;
 volatile u32 cmd_speed_this_time;
@@ -79,6 +79,9 @@ void MotorInit(void) {
   Tim4IntInit(2 * (kAccelerationPhaseTime / kAccelerationStageNum) * 10 - 1,
               8400 - 1);
   Tim5IntInit(kTimeInteval * 10 - 1, 8400 - 1);
+
+  // error indicator 1s
+  Tim13IntInit(500 * 10, 8400 - 1);
 }
 
 // motor motion state const

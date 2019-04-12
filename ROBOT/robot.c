@@ -20,6 +20,7 @@ static pidData_t PIDMotor[MotorNum];
 
 static void RobotInit(void) {
   u8 i;
+
   // Motor Init
   MotorInit();
 
@@ -294,6 +295,10 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state) {
 
   return *state;
 }
+
+void RobotAlarmEnable(void) { Tim13Enable(); }
+
+void RobotAlarmDisable(void) { Tim13Disable(); }
 
 void RobotNew(robot *r) {
   // robot parameters

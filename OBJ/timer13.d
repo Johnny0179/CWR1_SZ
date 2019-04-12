@@ -1,5 +1,4 @@
 ..\obj\timer13.o: ..\HARDWARE\TIMER\timer13.c
-..\obj\timer13.o: ..\PID\PID.h
 ..\obj\timer13.o: ..\HARDWARE\TIMER\timer.h
 ..\obj\timer13.o: ..\SYSTEM\sys\sys.h
 ..\obj\timer13.o: ..\USER\stm32f4xx.h
@@ -37,15 +36,4 @@
 ..\obj\timer13.o: ..\FWLIB\inc\stm32f4xx_dac.h
 ..\obj\timer13.o: ..\FWLIB\inc\stm32f4xx_dcmi.h
 ..\obj\timer13.o: ..\FWLIB\inc\stm32f4xx_fsmc.h
-..\obj\timer13.o: ..\HARDWARE\MOTOR\motor.h
-..\obj\timer13.o: D:\Keil_v5\ARM\ARMCC\bin\..\include\math.h
-..\obj\timer13.o: ..\CORE\core_cm4.h
-..\obj\timer13.o: ..\SYSTEM\delay\delay.h
-..\obj\timer13.o: ..\FreeModbus\FreeModbus.h
-..\obj\timer13.o: ..\FreeModbus\modbus\include\mb.h
-..\obj\timer13.o: ..\FreeModbus\port\port.h
-..\obj\timer13.o: D:\Keil_v5\ARM\ARMCC\bin\..\include\assert.h
-..\obj\timer13.o: D:\Keil_v5\ARM\ARMCC\bin\..\include\inttypes.h
-..\obj\timer13.o: ..\FreeModbus\modbus\include\mbport.h
-..\obj\timer13.o: ..\FreeModbus\modbus\include\mbproto.h
-..\obj\timer13.o: ..\FreeModbus\modbus\include\mbutils.h
+..\obj\timer13.o: ..\HARDWARE\LED\led.h

@@ -81,10 +81,12 @@ extern const u8 kCycleDone;
 extern int32_t usRegHoldingBuf[REG_HOLDING_NREGS];
 extern u32 cycle_counter;
 
-const UCHAR kRobotAddr = 0x0A;
-const u8 kRefereshRate = 50;
+static const UCHAR kRobotAddr = 0x0A;
+static const u8 kRefereshRate = 50;
 static const _Bool kManualMode = 0;
 static const _Bool kManualAuto = 1;
+// battery voltage threhold 23V
+static const int32_t kBatVoltTHR = 23500;
 
 /*----------------------------Robot state definition------------------------*/
 extern const u8 kIdle;
@@ -97,13 +99,16 @@ extern const u8 kDone;
 
 /*----------------------------variables----------------------------------*/
 static u8 robot_state;
+static const u8 kPowerOn = 0;
+static const u8 kReady = 2;
+static const u8 kEnabled = 3;
+static const u8 kAlarm = 4;
+
+static u8 err_code;
 
 /*----------------------------Start Implemention-------------------------*/
 
 int main(void) {
-  // power on
-  // robot_state = kPowerOn;
-
   //设置系统中断优先级分组4
   NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
 
@@ -113,8 +118,6 @@ int main(void) {
   //初始化LED端口
   LED_Init();
 
-  // light the indicator by default
-  // LED2 = 1;
   //创建开始任务
   xTaskCreate((TaskFunction_t)start_task,    //任务函数
               (const char*)"start_task",     //任务名称
@@ -166,6 +169,17 @@ static void ADC_task(void* pvParameters) {
     temp = (float)adcx * (3.3 / 4096) * 12000;
     adcx = temp;
     usRegHoldingBuf[20] = adcx;
+
+    if (adcx < kBatVoltTHR) {
+      // low voltage error.
+      err_code |= 0x01;
+      RobotAlarmEnable();
+    } else {
+      // clear the error
+      err_code &= 0xFE;
+      RobotAlarmDisable();
+    }
+
     vTaskDelay(kRefereshRate);  // 20ms刷新一次
   }
 }
@@ -180,10 +194,9 @@ static void Robot_task(void* pvParameters) {
   robot cwr;
   RobotNew(&cwr);
   cwr.Init();
+
   usRegHoldingBuf[0] = kRobotAddr;
   while (1) {
-    // cycle = usRegHoldingBuf[1];
-
     cwr.dir_ = usRegHoldingBuf[2];
     cwr.mode_ = usRegHoldingBuf[21];
     cwr.cycle_ = usRegHoldingBuf[22];
@@ -201,16 +214,13 @@ static void Robot_task(void* pvParameters) {
       if (cwr.mode_ == kManualMode) {
         // manual mode
         cwr.Manual(cwr.cmd_speed_, cwr.dir_);
-      }
-
-      if (cwr.mode_ == kManualAuto) {
+      } else if (cwr.mode_ == kManualAuto) {
+        // auto mode
         state = cwr.Auto(cwr.cmd_speed_, cwr.dir_, cwr.cycle_, &state);
       }
-
     } else if (usRegHoldingBuf[3] == 0) {
-      // cwr.Disable();
       // stop
-      cwr.Manual(0, cwr.dir_);
+      { cwr.Manual(0, cwr.dir_); }
     }
 
     usRegHoldingBuf[16] = state;
@@ -232,14 +242,16 @@ static void Modbus_task(void* pvParameters) {
   eMBEnable();
   while (1) {
     eMBPoll();
+    // communication indicator flag
+    usRegHoldingBuf[6] = 1;
     // 20ms刷新一次，Delay期间任务被BLOCK，可以执行其他任务
     vTaskDelay(kRefereshRate);
   }
 }
 
-// RobotState task
-static void RobotState_task(void* pvParameters) {
-  while (1) {
-    vTaskDelay(100);  // Delay期间任务被BLOCK，可以执行其他任务
+  // RobotState task
+  static void RobotState_task(void* pvParameters) {
+    while (1) {
+      vTaskDelay(100);  // Delay期间任务被BLOCK，可以执行其他任务
+    }
   }
-}

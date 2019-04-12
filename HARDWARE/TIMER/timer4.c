@@ -32,7 +32,7 @@ void Tim4Disable(void) { TIM_Cmd(TIM4, DISABLE); }
 /*interrupt handler*/
 void TIM4_IRQHandler(void) {
   if (TIM_GetITStatus(TIM4, TIM_IT_Update) == SET) {
-    LED2 = !LED2;
+    // LED2 = !LED2;
     stage_num=stage_num+1;
   }
   TIM_ClearITPendingBit(TIM4, TIM_IT_Update);

@@ -14,11 +14,16 @@ void TIM13_CH1_Cap_Init(u32 arr,u16 psc);
 
 void Tim4IntInit(u16 arr,u16 psc);
 void Tim5IntInit(u16 arr,u16 psc);
+void Tim13IntInit(u16 arr,u16 psc);
+
+void Tim13Enable(void);
+void Tim13Disable(void);
 
 void Tim4Enable(void);
 void Tim4Disable(void);
 
 void Tim5Enable(void);
+void Tim5Disable(void);
 
 #endif
 

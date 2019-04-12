@@ -69,22 +69,6 @@ void TIM8_BRK_TIM12_IRQHandler(void) {
 
   else if (TIM_GetITStatus(TIM12, TIM_IT_CC1) != RESET)  //捕获发生
   {
-    // LED1=!LED1;
-    /*interrupted first time */
-    // if (exit_int_time_motor1 == 0) {
-    //   // motor_turn[0] = 6;
-    //   Tim5Enable();
-    //   timer5_enabled = 1;
-    //   exit_int_time_motor1++;
-    // } else {
-    //   exit_int_time_motor1++;
-    // }
-    // /*one turn*/
-    // if (exit_int_time_motor1 == 5 ) {
-    //   motor_turn[0] = motor_turn[0] + 1;
-    //   exit_int_time_motor1=0;
-    // }
-
     LED1 = !LED1;
     /*interrupted first time */
     if (exit_int_time_motor1 == 0) {
