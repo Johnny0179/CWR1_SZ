@@ -7,7 +7,13 @@
 
 #ifndef _STATE_H_
 #define _STATE_H_
+
 #include "robot.h"
+
 _Bool ErrCheck(const u8 *err_code);
+
+u8 RobotStateCheck(_Bool err,u8 *robot_state);
+u8 ErrCodeSet(u8 err, u8 *err_code);
+u8 ErrCodeClear(u8 err, u8 *err_code);
 
 #endif

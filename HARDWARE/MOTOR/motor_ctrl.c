@@ -46,7 +46,6 @@ const u32 kDecelerationStageNum = 50;
 volatile u32 cmd_speed_last_time;
 volatile u32 cmd_speed_this_time;
 volatile u32 constant_speed;
-volatile u8 constant_speed_setflag;
 static volatile u8 motor_state = 0;
 volatile u8 stage_num = 0;
 
@@ -93,12 +92,7 @@ u8 MotorCtrlManual(struct MOTOR_DATA *motor, struct PID_DATA *pid,
   u8 state;
   cmd_speed_this_time = *cmd_speed;
 
-  /*  dir_this_time = dir;
-    // change direction
-    if (dir_last_time != dir_this_time) {
-      dir_change = kTrue;
-      dir_stop = dir_last_time;
-    }*/
+
 
   motor->direction = dir;
 

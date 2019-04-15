@@ -8,118 +8,50 @@ Project File Date:  04/12/2019
 
 <h2>Output:</h2>
 Build target 'CWR_SZ'
-compiling state.c...
-..\HARDWARE\MOTOR\motor.h(75): warning:  #1-D: last line of file ends without a newline
+compiling main.c...
+..\HARDWARE\MOTOR\Motor.h(75): warning:  #1-D: last line of file ends without a newline
   #endif
 ..\ROBOT\robot.h(66): warning:  #1-D: last line of file ends without a newline
   #endif
-..\STATE\state.h(13): warning:  #1-D: last line of file ends without a newline
+..\STATE\state.h(19): warning:  #1-D: last line of file ends without a newline
   #endif
-..\STATE\state.c(23): warning:  #1-D: last line of file ends without a newline
+main.c(86): warning:  #69-D: integer conversion resulted in truncation
+  static const u8 kRefereshRate = 1000;
+main.c(266): warning:  #1-D: last line of file ends without a newline
   }
-..\STATE\state.c: 4 warnings, 0 errors
+main.c(87): warning:  #177-D: variable "kManualMode" was declared but never referenced
+  static const _Bool kManualMode = 0;
+main.c(88): warning:  #177-D: variable "kManualAuto" was declared but never referenced
+  static const _Bool kManualAuto = 1;
+main.c: 7 warnings, 0 errors
 linking...
-Program Size: Code=36734 RO-data=1122 RW-data=528 ZI-data=79992  
-FromELF: creating hex file...
-"..\OBJ\cwr_sz.axf" - 0 Error(s), 4 Warning(s).
-ine of file ends without a newline
-  #endif
-..\STATE\state.c(24): warning:  #1-D: last line of file ends without a newline
-  }
-..\STATE\state.c: 4 warnings, 0 errors
-linking...
-Program Size: Code=36734 RO-data=1122 RW-data=528 ZI-data=79992  
+Program Size: Code=37334 RO-data=1130 RW-data=528 ZI-data=79992  
 FromELF: creating hex file...
 "..\OBJ\cwr_sz.axf" - 0 Error(s), 7 Warning(s).
-static const u8 kMotorStall = 7;
-..\ROBOT\robot.c: 5 warnings, 0 errors
-linking...
-Program Size: Code=36730 RO-data=1122 RW-data=528 ZI-data=79992  
-FromELF: creating hex file...
-"..\OBJ\cwr_sz.axf" - 0 Error(s), 8 Warning(s).
-.c...
-compiling timer4.c...
-..\HARDWARE\MOTOR\motor.h(75): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\HARDWARE\TIMER\timer4.c(39): warning:  #1-D: last line of file ends without a newline
-  }
-..\HARDWARE\TIMER\timer4.c: 2 warnings, 0 errors
-compiling timer12.c...
-..\HARDWARE\MOTOR\motor.h(75): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\HARDWARE\TIMER\timer12.c: 1 warning, 0 errors
-compiling motor_ctrl.c...
-..\HARDWARE\MOTOR\motor.h(75): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\HARDWARE\MOTOR\motor_ctrl.c(196): warning:  #940-D: missing return statement at end of non-void function "MotorCtrlAuto"
-                   const u32 *cmd_speed, _Bool init_dir, u8 cycle, u8 *state) {}
-..\HARDWARE\MOTOR\motor_ctrl.c(239): warning:  #940-D: missing return statement at end of non-void function "DeltaTurnCalc"
-  }
-..\HARDWARE\MOTOR\motor_ctrl.c(244): warning:  #223-D: function "abs" declared implicitly
-    if (abs(cmd_speed - motor_feedback_speed) > 100) {
-..\HARDWARE\MOTOR\motor_ctrl.c(348): warning:  #1-D: last line of file ends without a newline
-  }
-..\HARDWARE\MOTOR\motor_ctrl.c(88): warning:  #177-D: variable "kMotorNormal" was declared but never referenced
-  static const u8 kMotorNormal = 0;
-..\HARDWARE\MOTOR\motor_ctrl.c: 6 warnings, 0 errors
-compiling timer13.c...
-compiling timer5.c...
-..\HARDWARE\MOTOR\motor.h(75): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\HARDWARE\TIMER\timer5.c(40): warning:  #1-D: last line of file ends without a newline
-  }
-..\HARDWARE\TIMER\timer5.c: 2 warnings, 0 errors
-compiling adc.c...
-compiling croutine.c...
-compiling event_groups.c...
-compiling list.c...
-compiling queue.c...
-compiling tasks.c...
-compiling timers.c...
-compiling port.c...
-compiling heap_4.c...
-compiling portevent.c...
-compiling portserial.c...
-compiling porttimer.c...
-compiling mb.c...
-compiling mbcrc.c...
-compiling mbrtu.c...
-..\FreeModbus\modbus\rtu\mbrtu.c(392): warning:  #1-D: last line of file ends without a newline
-  }
-..\FreeModbus\modbus\rtu\mbrtu.c: 1 warning, 0 errors
-compiling mbascii.c...
-compiling mbfunccoils.c...
-compiling mbfuncdiag.c...
-compiling mbfuncdisc.c...
-compiling mbfuncholding.c...
-compiling mbfuncinput.c...
-compiling mbfuncother.c...
-compiling mbutils.c...
-compiling FreeModbus.c...
-..\FreeModbus\FreeModbus.c(171): warning:  #1-D: last line of file ends without a newline
-  }
-..\FreeModbus\FreeModbus.c: 1 warning, 0 errors
-compiling PID.c...
-compiling robot.c...
-..\HARDWARE\MOTOR\motor.h(75): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\ROBOT\robot.h(66): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\ROBOT\robot.c(133): warning:  #177-D: variable "odom_temp" was declared but never referenced
+iply defined (by robot.o and main.o).
+..\OBJ\cwr_sz.axf: Error: L6200E: Symbol kManual multiply defined (by robot.o and main.o).
+..\OBJ\cwr_sz.axf: Error: L6200E: Symbol kAuto multiply defined (by robot.o and main.o).
+Not enough information to list image symbols.
+Not enough information to list the image map.
+Finished: 2 information, 0 warning and 4 error messages.
+"..\OBJ\cwr_sz.axf" - 4 Error(s), 7 Warning(s).
+Target not created
+_temp" was declared but never referenced
     u32 motor_speed[MotorNum], odom_temp;
 ..\ROBOT\robot.c(14): warning:  #177-D: variable "kAutoMode" was declared but never referenced
   static const _Bool kAutoMode = 1;
-..\ROBOT\robot.c(104): warning:  #177-D: variable "kMotorStall" was declared but never referenced
-  static const u8 kMotorStall = 7;
-..\ROBOT\robot.c: 5 warnings, 0 errors
-compiling state.c...
-..\STATE\state.c(7): error:  #20: identifier "u8" is undefined
-  const u8 kSkid;
-KB: Unexpected type: 0
-error type>(12): error:  #20: identifier "u8" is undefined
-  _Bool ErrCheck(const u8 *err_code) {
-..\STATE\state.c(22): warning:  #1-D: last line of file ends without a newline
-  }
-..\STATE\state.c: 1 warning, 2 errors
-"..\OBJ\cwr_sz.axf" - 2 Error(s), 25 Warning(s).
+..\ROBOT\robot.c: 6 warnings, 1 error
+"..\OBJ\cwr_sz.axf" - 1 Error(s), 12 Warning(s).
 Target not created
+piling state.c...
+..\HARDWARE\MOTOR\motor.h(75): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\ROBOT\robot.h(66): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\STATE\state.h(19): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\STATE\state.c: 3 warnings, 0 errors
+linking...
+Program Size: Code=37066 RO-data=1130 RW-data=528 ZI-data=79992  
+FromELF: creating hex file...
+"..\OBJ\cwr_sz.axf" - 0 Error(s), 16 Warning(s).
