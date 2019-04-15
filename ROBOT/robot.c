@@ -13,6 +13,9 @@ extern const UCHAR kRobotAddr;
 static const _Bool kManualMode = 0;
 static const _Bool kAutoMode = 1;
 
+static const kManualEnable = 1;
+static const kManualDisable = 0;
+
 const int8_t kDirUp = 0;
 const int8_t kDirDown = 1;
 
@@ -54,9 +57,9 @@ static void RobotInit(void) {
   // communication indicator flag
   usRegHoldingBuf[6] = 1;
   // defualt auto mode
-  usRegHoldingBuf[21] = 1;
-  // defualt 50 cycles
-  usRegHoldingBuf[22] = 50;
+  usRegHoldingBuf[21] = 0;
+  // defualt 10 cycles
+  usRegHoldingBuf[22] = 10;
   // defualt speed 150
   usRegHoldingBuf[23] = 150;
   // disable reset
@@ -130,6 +133,7 @@ u32 dis_down = 0;
 u32 offset_correct = 0;
 
 const u32 stop_speed = 0;
+const u32 fine_tuning_speed = 100;
 
 volatile _Bool auto_dir;
 
@@ -152,24 +156,25 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state) {
   /*indicate the dir*/
   // up
   if (auto_dir == 0) {
-    usRegHoldingBuf[8] = 2;
+    usRegHoldingBuf[8] = 1;
   } else if (auto_dir == 1) {
     // down
-    usRegHoldingBuf[8] = 1;
+    usRegHoldingBuf[8] = 2;
   }
 
   // state machine
   switch (*state) {
     case kIdle:
-      if (usRegHoldingBuf[21] == 1 && usRegHoldingBuf[3] == 1) {
+      if (usRegHoldingBuf[21] == kManualDisable && usRegHoldingBuf[3] == 1) {
         // auto mode, defualt dir;
         auto_dir = init_dir;
         *state = kAuto;
-      } else if (usRegHoldingBuf[21] == 0) {
+      } else if (usRegHoldingBuf[21] == kManualEnable) {
         *state = kManual;
       } else if (usRegHoldingBuf[3] == 0 || cycle_counter == cycle) {
-        // clear the counter
-        cycle_counter = 0;
+        /*        // clear the counter
+                cycle_counter = 0;*/
+
         //
         usRegHoldingBuf[3] = 0;
         *state = kIdle;
@@ -178,15 +183,17 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state) {
 
     case kAuto:
       if (usRegHoldingBuf[3] == 1) {
+        // clear the counter
+        cycle_counter = 0;
         *state = kCounterCheck;
-      } else if (usRegHoldingBuf[21] == 0) {
+      } else if (usRegHoldingBuf[21] == kManualEnable) {
         // back to manual mode
         *state = kManual;
       } else if (usRegHoldingBuf[3] == 0) {
         // stop
         for (i = 0; i < MotorNum; ++i) {
-          motor_state[i] =
-              MotorCtrlManual(&Motor[i], &PIDMotor[i], &stop_speed, &usRegHoldingBuf[2]);
+          motor_state[i] = MotorCtrlManual(&Motor[i], &PIDMotor[i], &stop_speed,
+                                           usRegHoldingBuf[2]);
         }
         // wait cmd
         *state = kAuto;
@@ -194,16 +201,15 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state) {
       break;
 
     case kManual:
-      if (usRegHoldingBuf[21] == 0) {
+      if (usRegHoldingBuf[21] == kManualEnable) {
         usRegHoldingBuf[3] = 1;
         // motor control
         for (i = 0; i < MotorNum; ++i) {
-          motor_state[i] =
-              MotorCtrlManual(&Motor[i], &PIDMotor[i], &usRegHoldingBuf[23],
-                              &usRegHoldingBuf[2]);
+          motor_state[i] = MotorCtrlManual(
+              &Motor[i], &PIDMotor[i], &fine_tuning_speed, usRegHoldingBuf[2]);
         }
         *state = kManual;
-      } else if (usRegHoldingBuf[21] == 1) {
+      } else if (usRegHoldingBuf[21] == kManualDisable) {
         usRegHoldingBuf[3] = 0;
         // clear odom
         for (i = 0; i < MotorNum; ++i) {
@@ -224,9 +230,10 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state) {
           dis_down_start = cycle_odometer_this_time;
           usRegHoldingBuf[41] = dis_down_start;
         }
-
         *state = kMotion;
       } else if (cycle_counter == cycle) {
+        // disable
+        usRegHoldingBuf[3] = 0;
         *state = kIdle;
       }
       break;

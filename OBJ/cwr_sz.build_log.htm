@@ -8,50 +8,29 @@ Project File Date:  04/12/2019
 
 <h2>Output:</h2>
 Build target 'CWR_SZ'
-compiling main.c...
-..\HARDWARE\MOTOR\Motor.h(75): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\ROBOT\robot.h(66): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\STATE\state.h(19): warning:  #1-D: last line of file ends without a newline
-  #endif
-main.c(86): warning:  #69-D: integer conversion resulted in truncation
-  static const u8 kRefereshRate = 1000;
-main.c(266): warning:  #1-D: last line of file ends without a newline
-  }
-main.c(87): warning:  #177-D: variable "kManualMode" was declared but never referenced
-  static const _Bool kManualMode = 0;
-main.c(88): warning:  #177-D: variable "kManualAuto" was declared but never referenced
-  static const _Bool kManualAuto = 1;
-main.c: 7 warnings, 0 errors
-linking...
-Program Size: Code=37334 RO-data=1130 RW-data=528 ZI-data=79992  
-FromELF: creating hex file...
-"..\OBJ\cwr_sz.axf" - 0 Error(s), 7 Warning(s).
-iply defined (by robot.o and main.o).
-..\OBJ\cwr_sz.axf: Error: L6200E: Symbol kManual multiply defined (by robot.o and main.o).
-..\OBJ\cwr_sz.axf: Error: L6200E: Symbol kAuto multiply defined (by robot.o and main.o).
-Not enough information to list image symbols.
-Not enough information to list the image map.
-Finished: 2 information, 0 warning and 4 error messages.
-"..\OBJ\cwr_sz.axf" - 4 Error(s), 7 Warning(s).
-Target not created
-_temp" was declared but never referenced
-    u32 motor_speed[MotorNum], odom_temp;
-..\ROBOT\robot.c(14): warning:  #177-D: variable "kAutoMode" was declared but never referenced
-  static const _Bool kAutoMode = 1;
-..\ROBOT\robot.c: 6 warnings, 1 error
-"..\OBJ\cwr_sz.axf" - 1 Error(s), 12 Warning(s).
-Target not created
-piling state.c...
+compiling robot.c...
 ..\HARDWARE\MOTOR\motor.h(75): warning:  #1-D: last line of file ends without a newline
   #endif
 ..\ROBOT\robot.h(66): warning:  #1-D: last line of file ends without a newline
   #endif
-..\STATE\state.h(19): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\STATE\state.c: 3 warnings, 0 errors
+..\ROBOT\robot.c(16): warning:  #260-D: explicit type is missing ("int" assumed)
+  static const kManualEnable = 1;
+..\ROBOT\robot.c(17): warning:  #260-D: explicit type is missing ("int" assumed)
+  static const kManualDisable = 0;
+..\ROBOT\robot.c(142): warning:  #177-D: variable "odom_temp" was declared but never referenced
+    u32 motor_speed[MotorNum], odom_temp;
+..\ROBOT\robot.c(14): warning:  #177-D: variable "kAutoMode" was declared but never referenced
+  static const _Bool kAutoMode = 1;
+..\ROBOT\robot.c: 6 warnings, 0 errors
 linking...
-Program Size: Code=37066 RO-data=1130 RW-data=528 ZI-data=79992  
+Program Size: Code=37350 RO-data=1134 RW-data=528 ZI-data=79992  
 FromELF: creating hex file...
-"..\OBJ\cwr_sz.axf" - 0 Error(s), 16 Warning(s).
+"..\OBJ\cwr_sz.axf" - 0 Error(s), 6 Warning(s).
+</pre>
+</body>
+</html>
+arnings, 0 errors
+linking...
+Program Size: Code=37346 RO-data=1130 RW-data=528 ZI-data=79992  
+FromELF: creating hex file...
+"..\OBJ\cwr_sz.axf" - 0 Error(s), 7 Warning(s).
