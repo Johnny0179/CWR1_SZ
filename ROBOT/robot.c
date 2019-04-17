@@ -211,10 +211,17 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state) {
         *state = kManual;
       } else if (usRegHoldingBuf[21] == kManualDisable) {
         usRegHoldingBuf[3] = 0;
+
+        // rst
+        // RobotReset();
+        
         // clear odom
         for (i = 0; i < MotorNum; ++i) {
           odometer[i] = 0;
         }
+        cycle_odometer_last_time = 0;
+        cycle_odometer_this_time = 0;
+
         *state = kAuto;
       }
       break;

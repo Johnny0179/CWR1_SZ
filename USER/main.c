@@ -231,6 +231,12 @@ static void Modbus_task(void* pvParameters) {
   eMBInit(MB_RTU, kRobotAddr, 0x01, 19200, MB_PAR_NONE);
   eMBEnable();
   while (1) {
+    if (usRegHoldingBuf[7] != 1) {
+      // communication error.
+      err_code = ErrCodeSet(kComFail, &err_code);
+    } else if (usRegHoldingBuf[7] == 1) {
+      err_code = ErrCodeClear(kComFail, &err_code);
+    }
     eMBPoll();
     vTaskDelay(kRefereshRate);
   }

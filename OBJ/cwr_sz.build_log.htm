@@ -23,14 +23,22 @@ compiling robot.c...
   static const _Bool kAutoMode = 1;
 ..\ROBOT\robot.c: 6 warnings, 0 errors
 linking...
-Program Size: Code=37350 RO-data=1134 RW-data=528 ZI-data=79992  
+Program Size: Code=37406 RO-data=1134 RW-data=528 ZI-data=79992  
 FromELF: creating hex file...
 "..\OBJ\cwr_sz.axf" - 0 Error(s), 6 Warning(s).
-</pre>
-</body>
-</html>
-arnings, 0 errors
+ Warning(s).
+last line of file ends without a newline
+  #endif
+..\ROBOT\robot.c(16): warning:  #260-D: explicit type is missing ("int" assumed)
+  static const kManualEnable = 1;
+..\ROBOT\robot.c(17): warning:  #260-D: explicit type is missing ("int" assumed)
+  static const kManualDisable = 0;
+..\ROBOT\robot.c(142): warning:  #177-D: variable "odom_temp" was declared but never referenced
+    u32 motor_speed[MotorNum], odom_temp;
+..\ROBOT\robot.c(14): warning:  #177-D: variable "kAutoMode" was declared but never referenced
+  static const _Bool kAutoMode = 1;
+..\ROBOT\robot.c: 6 warnings, 0 errors
 linking...
-Program Size: Code=37346 RO-data=1130 RW-data=528 ZI-data=79992  
+Program Size: Code=37374 RO-data=1134 RW-data=528 ZI-data=79992  
 FromELF: creating hex file...
-"..\OBJ\cwr_sz.axf" - 0 Error(s), 7 Warning(s).
+"..\OBJ\cwr_sz.axf" - 0 Error(s), 13 Warning(s).
