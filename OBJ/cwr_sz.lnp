@@ -12,6 +12,7 @@
 "..\obj\stm32f4xx_can.o"
 "..\obj\stm32f4xx_exti.o"
 "..\obj\stm32f4xx_adc.o"
+"..\obj\stm32f4xx_flash.o"
 "..\obj\delay.o"
 "..\obj\sys.o"
 "..\obj\led.o"
@@ -49,6 +50,7 @@
 "..\obj\pid.o"
 "..\obj\robot.o"
 "..\obj\state.o"
+"..\obj\stmflash.o"
 --strict --scatter "..\OBJ\cwr_sz.sct"
 --summary_stderr --info summarysizes --map --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

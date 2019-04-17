@@ -5,6 +5,7 @@
 // Copyright 2019 IRIM, Inc. All right reserved.
 //
 #include "robot.h"
+#include "stmflash.h"
 
 extern uint32_t usRegHoldingBuf[REG_HOLDING_NREGS];
 extern const UCHAR kRobotAddr;
@@ -18,6 +19,11 @@ static const kManualDisable = 0;
 
 const int8_t kDirUp = 0;
 const int8_t kDirDown = 1;
+
+// record the step
+u32 flash_step;
+
+static const u32 flashe_clear = 0;
 
 // Motor Define
 static MOTOR Motor[MotorNum];
@@ -51,6 +57,16 @@ static void RobotInit(void) {
 
   // light up led
   LED2 = 1;
+
+#if 1
+  // clear flash
+  STMFLASH_Write(0x080E0000, (u32 *)(&flashe_clear), 1);
+#endif
+
+  // read from flash
+  STMFLASH_Read(0x080E0000, (u32 *)(&flash_step), 1);
+
+  usRegHoldingBuf[1] = flash_step;
 
   // robot address
   usRegHoldingBuf[0] = kRobotAddr;
@@ -140,6 +156,7 @@ volatile _Bool auto_dir;
 static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state) {
   u8 i, motor_state[MotorNum];
   u32 motor_speed[MotorNum], odom_temp;
+
   for (i = 0; i < MotorNum; ++i) {
     motor_speed[i] = MotorVelCalc(delta_turn[i]);
   }
@@ -148,8 +165,6 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state) {
                               odometer[3] + odometer[4] + odometer[5]) /
                              MotorNum;
 
-  // debug
-  usRegHoldingBuf[1] = cycle_counter;
   usRegHoldingBuf[38] = cycle_odometer_this_time;
   usRegHoldingBuf[39] = cycle_odometer_last_time;
 
@@ -349,6 +364,20 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state) {
 
         // update cycle counter
         cycle_counter++;
+
+        // read from flash
+        STMFLASH_Read(0x080E0000, (u32 *)(&flash_step), 1);
+
+        flash_step++;
+
+        // write to flash
+        STMFLASH_Write(0x080E0000, (u32 *)(&flash_step), 1);
+
+        // read from flash
+        STMFLASH_Read(0x080E0000, (u32 *)(&flash_step), 1);
+
+        usRegHoldingBuf[1] = flash_step;
+
         *state = kChangeDir;
       }
       break;

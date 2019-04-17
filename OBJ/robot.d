@@ -51,3 +51,4 @@
 ..\obj\robot.o: ..\HARDWARE\MOTOR\motor.h
 ..\obj\robot.o: D:\Keil_v5\ARM\ARMCC\bin\..\include\math.h
 ..\obj\robot.o: ..\CORE\core_cm4.h
+..\obj\robot.o: ..\FLASH\stmflash.h
