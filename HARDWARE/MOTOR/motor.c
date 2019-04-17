@@ -3,7 +3,7 @@
 #include "PID.h"
 #include "timer.h"
 
-extern int32_t usRegHoldingBuf[REG_HOLDING_NREGS];
+extern uint32_t usRegHoldingBuf[REG_HOLDING_NREGS];
 extern u32 delta_turn[MotorNum];
 extern u32 cycle_counter;
 u32 motor_turn[MotorNum];

@@ -4,7 +4,7 @@
 #include "FreeModbus.h"
 
 extern int32_t MotorSpeed[4];
-// extern int32_t usRegHoldingBuf[REG_HOLDING_NREGS];
+// extern uint32_t usRegHoldingBuf[REG_HOLDING_NREGS];
 
 // TIM9通道1输入捕获配置
 // arr：自动重装值(TIM2,TIM5是32位的!!)

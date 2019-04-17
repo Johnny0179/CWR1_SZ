@@ -3,7 +3,7 @@
 #include "motor.h"
 #include "timer.h"
 
-extern int32_t usRegHoldingBuf[REG_HOLDING_NREGS];
+extern uint32_t usRegHoldingBuf[REG_HOLDING_NREGS];
 u32 delta_turn[MotorNum];
 u32 MotorSpeed[MotorNum];
 

@@ -6,7 +6,7 @@
 
 extern int32_t MotorSpeed[MotorNum];
 // extern u8 motor_turn[MotorNum];
-extern int32_t usRegHoldingBuf[REG_HOLDING_NREGS];
+extern uint32_t usRegHoldingBuf[REG_HOLDING_NREGS];
 static u8 exit_int_time_motor1 = 0;
 extern u8 timer5_enabled;
 extern u32 motor_turn[MotorNum];

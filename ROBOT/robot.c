@@ -6,7 +6,7 @@
 //
 #include "robot.h"
 
-extern int32_t usRegHoldingBuf[REG_HOLDING_NREGS];
+extern uint32_t usRegHoldingBuf[REG_HOLDING_NREGS];
 extern const UCHAR kRobotAddr;
 
 // const parameters
@@ -185,6 +185,13 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state) {
       if (usRegHoldingBuf[3] == 1) {
         // clear the counter
         cycle_counter = 0;
+        // clear odom
+        for (i = 0; i < MotorNum; ++i) {
+          odometer[i] = 0;
+        }
+        cycle_odometer_last_time = 0;
+        cycle_odometer_this_time = 0;
+
         *state = kCounterCheck;
       } else if (usRegHoldingBuf[21] == kManualEnable) {
         // back to manual mode
@@ -214,13 +221,13 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state) {
 
         // rst
         // RobotReset();
-        
-        // clear odom
-        for (i = 0; i < MotorNum; ++i) {
-          odometer[i] = 0;
-        }
-        cycle_odometer_last_time = 0;
-        cycle_odometer_this_time = 0;
+
+        // // clear odom
+        // for (i = 0; i < MotorNum; ++i) {
+        //   odometer[i] = 0;
+        // }
+        // cycle_odometer_last_time = 0;
+        // cycle_odometer_this_time = 0;
 
         *state = kAuto;
       }

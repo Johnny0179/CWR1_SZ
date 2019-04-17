@@ -79,11 +79,11 @@ extern const u8 kInMotion;
 extern const u8 kStepDone;
 extern const u8 kCycleDone;
 // Robot registors
-extern int32_t usRegHoldingBuf[REG_HOLDING_NREGS];
+extern uint32_t usRegHoldingBuf[REG_HOLDING_NREGS];
 extern u32 cycle_counter;
 
 const UCHAR kRobotAddr = 0x0A;
-static const u8 kRefereshRate = 1000;
+static const u8 kModbusRefreshRate = 500;
 static const _Bool kManualMode = 0;
 static const _Bool kManualAuto = 1;
 // battery voltage threhold 23V
@@ -211,16 +211,18 @@ static void Robot_task(void* pvParameters) {
       cwr.Reset();
     }
 
-    state = cwr.Auto(cwr.cmd_speed_, cwr.dir_, cwr.cycle_, &state);
+    if (state != kMotorStall) {
+      state = cwr.Auto(cwr.cmd_speed_, cwr.dir_, cwr.cycle_, &state);
+    } else {
+      // stall error
+      err_code = ErrCodeSet(kStall, &err_code);
+
+      // sotp
+      cwr.Manual(0, 0);
+    }
 
     usRegHoldingBuf[16] = state;
 
-    if (state == kMotorStall) {
-      // stall error
-      err_code = ErrCodeSet(kStall, &err_code);
-    } else {
-      err_code = ErrCodeClear(kStall, &err_code);
-    }
     vTaskDelay(100);
   }
 }
@@ -231,14 +233,14 @@ static void Modbus_task(void* pvParameters) {
   eMBInit(MB_RTU, kRobotAddr, 0x01, 19200, MB_PAR_NONE);
   eMBEnable();
   while (1) {
+    // communication error check.
     if (usRegHoldingBuf[7] != 1) {
-      // communication error.
       err_code = ErrCodeSet(kComFail, &err_code);
     } else if (usRegHoldingBuf[7] == 1) {
       err_code = ErrCodeClear(kComFail, &err_code);
     }
     eMBPoll();
-    vTaskDelay(kRefereshRate);
+    vTaskDelay(kModbusRefreshRate);
   }
 }
 
@@ -253,7 +255,7 @@ static void StateCheck_task(void* pvParameters) {
       RobotAlarmEnable();
     } else {
       RobotAlarmDisable();
-      LED2=1;
+      LED2 = 1;
     }
 
     usRegHoldingBuf[5] = err_code;
