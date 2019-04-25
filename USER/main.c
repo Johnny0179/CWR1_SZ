@@ -84,8 +84,8 @@ const UCHAR kRobotAddr = 0x0A;
 static const u8 kModbusRefreshRate = 20;
 static const _Bool kManualMode = 0;
 static const _Bool kManualAuto = 1;
-// battery voltage threhold 23V
-static const int32_t kBatVoltTHR = 23000;
+// battery voltage threhold 23.2V
+static const int32_t kBatVoltTHR = 23200;
 
 /*----------------------------Robot state definition------------------------*/
 extern const u8 kIdle;

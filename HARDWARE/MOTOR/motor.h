@@ -24,7 +24,7 @@
 #define ModeAuto 1
 #define ModeManual 0
 
-#define P 300
+#define P 400
 #define I 10
 #define D 10
 

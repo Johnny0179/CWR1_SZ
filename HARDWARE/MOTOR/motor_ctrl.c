@@ -36,12 +36,12 @@ static volatile _Bool dir_change;
 static volatile u32 stop_counter;
 const u16 kStopTime = 500;
 
-// acceleration phase parameters, default 0.5s
+// acceleration phase parameters, default 0.01s
 const u32 kAccelerationPhaseTime = 500;
-const u32 kAccelerationStageNum = 10;
+const u32 kAccelerationStageNum = 50;
 
 const u32 kDecelerationPhaseTime = 500;
-const u32 kDecelerationStageNum = 10;
+const u32 kDecelerationStageNum = 50;
 
 volatile u32 cmd_speed_last_time;
 volatile u32 cmd_speed_this_time;
