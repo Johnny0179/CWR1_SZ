@@ -222,7 +222,7 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state)
       cycle_odometer_this_time = 0;
 
       // set the direction
-      auto_dir=init_dir;
+      auto_dir = init_dir;
 
       *state = kCounterCheck;
     }
@@ -443,7 +443,14 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state)
   case kWait:
     if (usRegHoldingBuf[3] == 0)
     {
-      *state = kWait;
+      if (usRegHoldingBuf[21] == kManualEnable)
+      {
+        *state = kManual;
+      }
+      else
+      {
+        *state = kWait;
+      }
     }
     else
     {
