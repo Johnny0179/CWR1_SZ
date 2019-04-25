@@ -221,6 +221,9 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state)
       cycle_odometer_last_time = 0;
       cycle_odometer_this_time = 0;
 
+      // set the direction
+      auto_dir=init_dir;
+
       *state = kCounterCheck;
     }
     else if (usRegHoldingBuf[21] == kManualEnable)
