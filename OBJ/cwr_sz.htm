@@ -3,7 +3,7 @@
 <title>Static Call Graph - [..\OBJ\cwr_sz.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ..\OBJ\cwr_sz.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Thu Apr 25 10:20:49 2019
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Thu Apr 25 14:05:23 2019
 <BR><P>
 <H3>Maximum Stack Usage =        240 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -1784,12 +1784,14 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[111]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetSpeed
 </UL>
 
-<P><STRONG><a name="[112]"></a>Acceleration</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, motor_ctrl.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[111]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetSpeed
+<P><STRONG><a name="[112]"></a>Acceleration</STRONG> (Thumb, 26 bytes, Stack size 8 bytes, motor_ctrl.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = Acceleration
+</UL>
+<BR>[Called By]<UL><LI><a href="#[111]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetSpeed
 </UL>
 
 <P><STRONG><a name="[111]"></a>SetSpeed</STRONG> (Thumb, 82 bytes, Stack size 16 bytes, motor_ctrl.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = SetSpeed
+<BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = SetSpeed &rArr; Acceleration
 </UL>
 <BR>[Calls]<UL><LI><a href="#[112]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Acceleration
 <LI><a href="#[113]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Deceleration
@@ -4036,7 +4038,7 @@ Local Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> robot.o(.text)
 </UL>
-<P><STRONG><a name="[84]"></a>RobotAuto</STRONG> (Thumb, 1262 bytes, Stack size 72 bytes, robot.o(.text))
+<P><STRONG><a name="[84]"></a>RobotAuto</STRONG> (Thumb, 1276 bytes, Stack size 72 bytes, robot.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 128<LI>Call Chain = RobotAuto &rArr; MotorCtrlManual &rArr; StateCheck &rArr; Tim4Disable
 </UL>
 <BR>[Calls]<UL><LI><a href="#[115]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorCtrlManual

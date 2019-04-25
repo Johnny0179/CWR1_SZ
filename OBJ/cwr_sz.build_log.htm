@@ -3,76 +3,68 @@
 <pre>
 <h1>µVision Build Log</h1>
 <h2>Project:</h2>
-E:\share\CWR1_SZ\USER\CWR_SZ.uvprojx
+\\Vboxsvr\irim\ShenZhong\CWR_Shenzhong\Software\CWR1_SZ\USER\CWR_SZ.uvprojx
 Project File Date:  04/25/2019
 
 <h2>Output:</h2>
 Build target 'CWR_SZ'
-compiling robot.c...
+linking...
+Program Size: Code=39514 RO-data=1134 RW-data=532 ZI-data=79996  
+FromELF: creating hex file...
+"..\OBJ\cwr_sz.axf" - 0 Error(s), 0 Warning(s).
+ast line of file ends without a newline
+  #endif
+..\STATE\state.h(19): warning:  #1-D: last line of file ends without a newline
+  #endif
+main.c(298): warning:  #1-D: last line of file ends without a newline
+  }
+main.c(85): warning:  #177-D: variable "kManualMode" was declared but never referenced
+  static const _Bool kManualMode = 0;
+main.c(86): warning:  #177-D: variable "kManualAuto" was declared but never referenced
+  static const _Bool kManualAuto = 1;
+main.c: 6 warnings, 0 errors
+compiling stm32f4xx_it.c...
+compiling system_stm32f4xx.c...
+compiling misc.c...
+compiling stm32f4xx_gpio.c...
+compiling stm32f4xx_rcc.c...
+compiling stm32f4xx_syscfg.c...
+compiling stm32f4xx_usart.c...
+compiling stm32f4xx_tim.c...
+compiling stm32f4xx_can.c...
+compiling stm32f4xx_exti.c...
+compiling stm32f4xx_adc.c...
+compiling stm32f4xx_flash.c...
+compiling delay.c...
+compiling sys.c...
+compiling led.c...
+compiling motor.c...
 ..\HARDWARE\MOTOR\motor.h(75): warning:  #1-D: last line of file ends without a newline
   #endif
-..\ROBOT\robot.h(67): warning:  #1-D: last line of file ends without a newline
+..\HARDWARE\MOTOR\motor.c(476): warning:  #1-D: last line of file ends without a newline
+  }
+..\HARDWARE\MOTOR\motor.c: 2 warnings, 0 errors
+compiling can.c...
+compiling timer4.c...
+..\HARDWARE\MOTOR\motor.h(75): warning:  #1-D: last line of file ends without a newline
   #endif
-..\ROBOT\robot.c(17): warning:  #260-D: explicit type is missing ("int" assumed)
-  static const kManualEnable = 1;
-..\ROBOT\robot.c(18): warning:  #260-D: explicit type is missing ("int" assumed)
-  static const kManualDisable = 0;
-..\ROBOT\robot.c(160): warning:  #177-D: variable "odom_temp" was declared but never referenced
-    u32 motor_speed[MotorNum], odom_temp;
-..\ROBOT\robot.c(15): warning:  #177-D: variable "kAutoMode" was declared but never referenced
-  static const _Bool kAutoMode = 1;
-..\ROBOT\robot.c(26): warning:  #177-D: variable "flashe_clear" was declared but never referenced
-  static const u32 flashe_clear = 0;
-..\ROBOT\robot.c: 7 warnings, 0 errors
-linking...
-Program Size: Code=39482 RO-data=1134 RW-data=532 ZI-data=79996  
-FromELF: creating hex file...
-"..\OBJ\cwr_sz.axf" - 0 Error(s), 7 Warning(s).
-ors
-linking...
-Program Size: Code=39494 RO-data=1142 RW-data=532 ZI-data=79996  
-FromELF: creating hex file...
-"..\OBJ\cwr_sz.axf" - 0 Error(s), 7 Warning(s).
-Load "..\\OBJ\\cwr_sz.axf" 
-Set JLink Project File to "E:\share\CWR1_SZ\USER\JLinkSettings.ini"
-* JLink Info: Device "STM32F407ZE" selected (512 KB flash, 128 KB RAM).
- 
-JLink info:
-------------
-DLL: V4.80g, compiled Feb 13 2014 20:50:02
-Firmware: J-Link ARM-OB STM32 compiled Aug 22 2012 19:52:04
-Hardware: V7.00
-S/N : 20090928 
-Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull 
- 
-* JLink Info: Found SWD-DP with ID 0x2BA01477
-* JLink Info: Found SWD-DP with ID 0x2BA01477
-* JLink Info: Found Cortex-M4 r0p1, Little endian.
-* JLink Info: FPUnit: 6 code (BP) slots and 2 literal slots
-* JLink Info: TPIU fitted.
-* JLink Info: ETM fitted.
-ROMTableAddr = 0xE00FF003
- 
-Target info:
-------------
-Device: STM32F407ZE
-VTarget = 3.300V
-State of Pins: 
-TCK: 0, TDI: 0, TDO: 1, TMS: 0, TRES: 1, TRST: 1
-Hardware-Breakpoints: 6
-Software-Breakpoints: 8192
-Watchpoints:          4
-JTAG speed: 2000 kHz
- 
-Erase Done.
-Programming Done.
-Verify OK.
-Application running ...
-n statement at end of non-void function "DeltaTurnCalc"
+..\HARDWARE\TIMER\timer4.c(39): warning:  #1-D: last line of file ends without a newline
+  }
+..\HARDWARE\TIMER\timer4.c: 2 warnings, 0 errors
+compiling timer12.c...
+..\HARDWARE\MOTOR\motor.h(75): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\HARDWARE\TIMER\timer12.c: 1 warning, 0 errors
+compiling motor_ctrl.c...
+..\HARDWARE\MOTOR\motor.h(75): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\HARDWARE\MOTOR\motor_ctrl.c(202): warning:  #940-D: missing return statement at end of non-void function "MotorCtrlAuto"
+                   const u32 *cmd_speed, _Bool init_dir, u8 cycle, u8 *state) {}
+..\HARDWARE\MOTOR\motor_ctrl.c(252): warning:  #940-D: missing return statement at end of non-void function "DeltaTurnCalc"
   }
 ..\HARDWARE\MOTOR\motor_ctrl.c(258): warning:  #223-D: function "abs" declared implicitly
     if (abs(cmd_speed - motor_feedback_speed) > 100)
-..\HARDWARE\MOTOR\motor_ctrl.c(386): warning:  #1-D: last line of file ends without a newline
+..\HARDWARE\MOTOR\motor_ctrl.c(395): warning:  #1-D: last line of file ends without a newline
   }
 ..\HARDWARE\MOTOR\motor_ctrl.c(88): warning:  #177-D: variable "kMotorNormal" was declared but never referenced
   static const u8 kMotorNormal = 0;
@@ -129,7 +121,9 @@ compiling robot.c...
     u32 motor_speed[MotorNum], odom_temp;
 ..\ROBOT\robot.c(15): warning:  #177-D: variable "kAutoMode" was declared but never referenced
   static const _Bool kAutoMode = 1;
-..\ROBOT\robot.c: 6 warnings, 0 errors
+..\ROBOT\robot.c(26): warning:  #177-D: variable "flashe_clear" was declared but never referenced
+  static const u32 flashe_clear = 0;
+..\ROBOT\robot.c: 7 warnings, 0 errors
 compiling state.c...
 ..\HARDWARE\MOTOR\motor.h(75): warning:  #1-D: last line of file ends without a newline
   #endif
@@ -140,41 +134,6 @@ compiling state.c...
 ..\STATE\state.c: 3 warnings, 0 errors
 compiling stmflash.c...
 linking...
-Program Size: Code=39494 RO-data=1142 RW-data=532 ZI-data=79996  
+Program Size: Code=39514 RO-data=1134 RW-data=532 ZI-data=79996  
 FromELF: creating hex file...
-"..\OBJ\cwr_sz.axf" - 0 Error(s), 31 Warning(s).
-Load "..\\OBJ\\cwr_sz.axf" 
-Set JLink Project File to "E:\share\CWR1_SZ\USER\JLinkSettings.ini"
-* JLink Info: Device "STM32F407ZE" selected (512 KB flash, 128 KB RAM).
- 
-JLink info:
-------------
-DLL: V4.80g, compiled Feb 13 2014 20:50:02
-Firmware: J-Link ARM-OB STM32 compiled Aug 22 2012 19:52:04
-Hardware: V7.00
-S/N : 20090928 
-Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull 
- 
-* JLink Info: Found SWD-DP with ID 0x2BA01477
-* JLink Info: Found SWD-DP with ID 0x2BA01477
-* JLink Info: Found Cortex-M4 r0p1, Little endian.
-* JLink Info: FPUnit: 6 code (BP) slots and 2 literal slots
-* JLink Info: TPIU fitted.
-* JLink Info: ETM fitted.
-ROMTableAddr = 0xE00FF003
- 
-Target info:
-------------
-Device: STM32F407ZE
-VTarget = 3.300V
-State of Pins: 
-TCK: 0, TDI: 0, TDO: 1, TMS: 0, TRES: 1, TRST: 1
-Hardware-Breakpoints: 6
-Software-Breakpoints: 8192
-Watchpoints:          4
-JTAG speed: 2000 kHz
- 
-Erase Done.
-Programming Done.
-Verify OK.
-Application running ...
+"..\OBJ\cwr_sz.axf" - 0 Error(s), 32 Warning(s).

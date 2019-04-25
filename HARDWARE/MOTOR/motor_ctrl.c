@@ -38,10 +38,10 @@ const u16 kStopTime = 500;
 
 // acceleration phase parameters, default 0.5s
 const u32 kAccelerationPhaseTime = 500;
-const u32 kAccelerationStageNum = 50;
+const u32 kAccelerationStageNum = 10;
 
 const u32 kDecelerationPhaseTime = 500;
-const u32 kDecelerationStageNum = 50;
+const u32 kDecelerationStageNum = 10;
 
 volatile u32 cmd_speed_last_time;
 volatile u32 cmd_speed_this_time;
@@ -189,11 +189,11 @@ u8 MotorCtrlManual(struct MOTOR_DATA *motor, struct PID_DATA *pid,
     break;
   }
 
-  /*  // motor stall detection
+   // motor stall detection
   if (motor_state == kConstantState && motor->MotorSpeed_mmps == 0)
   {
     state = kMotorStall;
-  } */
+  }
 
   return state;
 }
@@ -278,7 +278,16 @@ u32 MotorSetCmdSpeed(u32 cmd_speed, u32 motor_feedback_speed)
 
 u32 Acceleration(u8 N, u32 cmd_speed)
 {
-  return (N * cmd_speed / kAccelerationStageNum);
+  u32 speed_temp;
+  speed_temp = N * cmd_speed / kAccelerationStageNum;
+  if (speed_temp <= cmd_speed)
+  {
+    return speed_temp;
+  }
+  else
+  {
+    return cmd_speed;
+  }
 }
 
 u32 Deceleration(u8 N, u32 cmd_speed)
