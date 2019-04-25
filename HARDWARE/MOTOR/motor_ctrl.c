@@ -130,11 +130,11 @@ u8 MotorCtrlManual(struct MOTOR_DATA *motor, struct PID_DATA *pid,
   dir_last_time = dir;
 
   // acceleration down
-  if (motor_state == kAccelerationState && dir == movedown)
+  if (motor_state == kAccelerationState /* && dir == movedown */)
   {
     // scale the pwm 2 times
     motor->PWM = motor->PWM +
-                 2*pid_Controller(motor->CmdSpeed, motor->MotorSpeed_mmps, pid) / 2;
+                 pid_Controller(3*motor->CmdSpeed, motor->MotorSpeed_mmps, pid) / 2;
   }
   else
   {

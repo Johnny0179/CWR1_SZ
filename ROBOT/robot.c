@@ -150,7 +150,7 @@ u32 dis_down = 0;
 u32 offset_correct = 0;
 
 const u32 stop_speed = 0;
-const u32 fine_tuning_speed = 100;
+const u32 fine_tuning_speed = 150;
 
 volatile _Bool auto_dir;
 
