@@ -3,7 +3,7 @@
 <title>Static Call Graph - [..\OBJ\cwr_sz.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ..\OBJ\cwr_sz.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Mon Apr 22 15:25:33 2019
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Thu Apr 25 09:33:46 2019
 <BR><P>
 <H3>Maximum Stack Usage =        240 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -1369,7 +1369,7 @@ Global Symbols
 <P><STRONG><a name="[2b5]"></a>FLASH_InstructionCacheCmd</STRONG> (Thumb, 30 bytes, Stack size 0 bytes, stm32f4xx_flash.o(.text), UNUSED)
 
 <P><STRONG><a name="[1c0]"></a>FLASH_DataCacheCmd</STRONG> (Thumb, 30 bytes, Stack size 0 bytes, stm32f4xx_flash.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[1bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;STMFLASH_Write
+<BR><BR>[Called By]<UL><LI><a href="#[1be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;STMFLASH_Write
 </UL>
 
 <P><STRONG><a name="[2b6]"></a>FLASH_InstructionCacheReset</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, stm32f4xx_flash.o(.text), UNUSED)
@@ -1377,11 +1377,11 @@ Global Symbols
 <P><STRONG><a name="[2b7]"></a>FLASH_DataCacheReset</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, stm32f4xx_flash.o(.text), UNUSED)
 
 <P><STRONG><a name="[1bf]"></a>FLASH_Unlock</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, stm32f4xx_flash.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[1bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;STMFLASH_Write
+<BR><BR>[Called By]<UL><LI><a href="#[1be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;STMFLASH_Write
 </UL>
 
 <P><STRONG><a name="[1c3]"></a>FLASH_Lock</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, stm32f4xx_flash.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[1bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;STMFLASH_Write
+<BR><BR>[Called By]<UL><LI><a href="#[1be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;STMFLASH_Write
 </UL>
 
 <P><STRONG><a name="[cc]"></a>FLASH_GetStatus</STRONG> (Thumb, 90 bytes, Stack size 0 bytes, stm32f4xx_flash.o(.text))
@@ -1415,7 +1415,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FLASH_WaitForLastOperation
 </UL>
-<BR>[Called By]<UL><LI><a href="#[1bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;STMFLASH_Write
+<BR>[Called By]<UL><LI><a href="#[1be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;STMFLASH_Write
 </UL>
 
 <P><STRONG><a name="[ce]"></a>FLASH_EraseAllSectors</STRONG> (Thumb, 112 bytes, Stack size 12 bytes, stm32f4xx_flash.o(.text), UNUSED)
@@ -1439,7 +1439,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FLASH_WaitForLastOperation
 </UL>
-<BR>[Called By]<UL><LI><a href="#[1bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;STMFLASH_Write
+<BR>[Called By]<UL><LI><a href="#[1be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;STMFLASH_Write
 </UL>
 
 <P><STRONG><a name="[d3]"></a>FLASH_ProgramHalfWord</STRONG> (Thumb, 96 bytes, Stack size 12 bytes, stm32f4xx_flash.o(.text), UNUSED)
@@ -1693,7 +1693,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RobotEnable
 </UL>
 
-<P><STRONG><a name="[1be]"></a>MotorReset</STRONG> (Thumb, 42 bytes, Stack size 0 bytes, motor.o(.text))
+<P><STRONG><a name="[1bd]"></a>MotorReset</STRONG> (Thumb, 42 bytes, Stack size 0 bytes, motor.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RobotReset
 </UL>
 
@@ -3301,15 +3301,15 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[1c1]"></a>STMFLASH_ReadWord</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, stmflash.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[1bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;STMFLASH_Write
-<LI><a href="#[1bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;STMFLASH_Read
+<BR><BR>[Called By]<UL><LI><a href="#[1be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;STMFLASH_Write
+<LI><a href="#[1bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;STMFLASH_Read
 </UL>
 
 <P><STRONG><a name="[1c2]"></a>STMFLASH_GetFlashSector</STRONG> (Thumb, 116 bytes, Stack size 0 bytes, stmflash.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[1bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;STMFLASH_Write
+<BR><BR>[Called By]<UL><LI><a href="#[1be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;STMFLASH_Write
 </UL>
 
-<P><STRONG><a name="[1bc]"></a>STMFLASH_Write</STRONG> (Thumb, 146 bytes, Stack size 32 bytes, stmflash.o(.text))
+<P><STRONG><a name="[1be]"></a>STMFLASH_Write</STRONG> (Thumb, 146 bytes, Stack size 32 bytes, stmflash.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = STMFLASH_Write &rArr; FLASH_EraseSector &rArr; FLASH_WaitForLastOperation
 </UL>
 <BR>[Calls]<UL><LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FLASH_ProgramWord
@@ -3321,10 +3321,9 @@ Global Symbols
 <LI><a href="#[1c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;STMFLASH_ReadWord
 </UL>
 <BR>[Called By]<UL><LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RobotAuto
-<LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RobotInit
 </UL>
 
-<P><STRONG><a name="[1bd]"></a>STMFLASH_Read</STRONG> (Thumb, 32 bytes, Stack size 12 bytes, stmflash.o(.text))
+<P><STRONG><a name="[1bc]"></a>STMFLASH_Read</STRONG> (Thumb, 32 bytes, Stack size 12 bytes, stmflash.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = STMFLASH_Read
 </UL>
 <BR>[Calls]<UL><LI><a href="#[1c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;STMFLASH_ReadWord
@@ -3997,15 +3996,14 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xMBASCIITransmitFSM
 </UL>
 
-<P><STRONG><a name="[80]"></a>RobotInit</STRONG> (Thumb, 208 bytes, Stack size 8 bytes, robot.o(.text))
+<P><STRONG><a name="[80]"></a>RobotInit</STRONG> (Thumb, 198 bytes, Stack size 8 bytes, robot.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 116<LI>Call Chain = RobotInit &rArr; MotorInit &rArr; MotorFGInit &rArr; TIM12_CH1_Cap_Init &rArr; TIM_ICInit &rArr; TI1_Config
 </UL>
 <BR>[Calls]<UL><LI><a href="#[1ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorInitConfig
 <LI><a href="#[10e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorInit
 <LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LED_Init
 <LI><a href="#[de]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_init
-<LI><a href="#[1bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;STMFLASH_Write
-<LI><a href="#[1bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;STMFLASH_Read
+<LI><a href="#[1bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;STMFLASH_Read
 <LI><a href="#[1bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pid_Init
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> robot.o(.text)
@@ -4027,7 +4025,7 @@ Local Symbols
 <P><STRONG><a name="[85]"></a>RobotReset</STRONG> (Thumb, 8 bytes, Stack size 8 bytes, robot.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = RobotReset
 </UL>
-<BR>[Calls]<UL><LI><a href="#[1be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorReset
+<BR>[Calls]<UL><LI><a href="#[1bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorReset
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> robot.o(.text)
 </UL>
@@ -4038,13 +4036,13 @@ Local Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> robot.o(.text)
 </UL>
-<P><STRONG><a name="[84]"></a>RobotAuto</STRONG> (Thumb, 1260 bytes, Stack size 72 bytes, robot.o(.text))
+<P><STRONG><a name="[84]"></a>RobotAuto</STRONG> (Thumb, 1258 bytes, Stack size 72 bytes, robot.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 128<LI>Call Chain = RobotAuto &rArr; MotorCtrlManual &rArr; StateCheck &rArr; Tim4Disable
 </UL>
 <BR>[Calls]<UL><LI><a href="#[115]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorCtrlManual
 <LI><a href="#[116]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorVelCalc
-<LI><a href="#[1bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;STMFLASH_Write
-<LI><a href="#[1bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;STMFLASH_Read
+<LI><a href="#[1be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;STMFLASH_Write
+<LI><a href="#[1bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;STMFLASH_Read
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> robot.o(.text)
 </UL><P>

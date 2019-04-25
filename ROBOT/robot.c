@@ -56,7 +56,7 @@ static void RobotInit(void)
   // light up led
   LED2 = 1;
 
-#if 1
+#if 0
   // clear flash
   STMFLASH_Write(0x080E0000, (u32 *)(&flashe_clear), 1);
 #endif

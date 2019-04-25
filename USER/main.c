@@ -81,7 +81,7 @@ extern uint32_t usRegHoldingBuf[REG_HOLDING_NREGS];
 extern u32 cycle_counter;
 
 const UCHAR kRobotAddr = 0x0A;
-static const u8 kModbusRefreshRate = 100;
+static const u8 kModbusRefreshRate = 20;
 static const _Bool kManualMode = 0;
 static const _Bool kManualAuto = 1;
 // battery voltage threhold 23V
