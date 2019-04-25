@@ -56,7 +56,7 @@ static void RobotInit(void)
   pid_Init(1 * P, 1 * I, 0 * D, &PIDMotor[5]);
 
   // acceleration pid
-  pid_Init(3 * P, 1 * I, 0 * D, &pid_acc);
+  pid_Init(1 * P, 1 * I, 0 * D, &pid_acc);
 
   // light up led
   LED2 = 1;

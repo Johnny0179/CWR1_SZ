@@ -131,18 +131,21 @@ u8 MotorCtrlManual(struct MOTOR_DATA *motor, struct PID_DATA *pid,
   // update dirction
   dir_last_time = dir;
 
-  // acceleration down
-  if (motor_state == kAccelerationState /* && dir == movedown */)
+  /*   // acceleration down
+  if (motor_state == kAccelerationState && dir == movedown)
   {
     // scale the pwm 2 times
     motor->PWM = motor->PWM +
-                 pid_Controller(motor->CmdSpeed, motor->MotorSpeed_mmps, &pid_acc) / 2;
+                 pid_Controller(motor->CmdSpeed, motor->MotorSpeed_mmps, pid) / 2;
   }
   else
   {
     motor->PWM = motor->PWM +
                  pid_Controller(motor->CmdSpeed, motor->MotorSpeed_mmps, pid) / 2;
-  }
+  } */
+
+  motor->PWM = motor->PWM +
+               pid_Controller(motor->CmdSpeed, motor->MotorSpeed_mmps, pid) / 2;
 
   // PWM 0~100%
   if (motor->PWM < 0)
@@ -202,10 +205,10 @@ u8 MotorCtrlManual(struct MOTOR_DATA *motor, struct PID_DATA *pid,
   }
 
   // motor stall detection
-  if (motor_state == kConstantState && motor->MotorSpeed_mmps == 0)
+/*   if (motor_state == kConstantState && motor->MotorSpeed_mmps == 0)
   {
     state = kMotorStall;
-  }
+  } */
 
   return state;
 }
