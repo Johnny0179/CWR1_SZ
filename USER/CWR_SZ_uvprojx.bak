@@ -364,7 +364,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\CORE;..\USER;..\SYSTEM\delay;..\SYSTEM\sys;..\HARDWARE\LED;..\FreeRTOS\include;..\FreeRTOS\portable\RVDS\ARM_CM4F;..\FreeModbus\port;..\FreeModbus\modbus\rtu;..\FreeModbus\modbus\include;..\FreeModbus\modbus\ascii;..\FreeModbus;..\HARDWARE\MOTOR;..\HARDWARE\CAN;..\FWLIB\inc;..\HARDWARE\TIMER;..\PID;..\HARDWARE\ADC;..\ROBOT</IncludePath>
+              <IncludePath>..\CORE;..\USER;..\SYSTEM\delay;..\SYSTEM\sys;..\HARDWARE\LED;..\FreeRTOS\include;..\FreeRTOS\portable\RVDS\ARM_CM4F;..\FreeModbus\port;..\FreeModbus\modbus\rtu;..\FreeModbus\modbus\include;..\FreeModbus\modbus\ascii;..\FreeModbus;..\HARDWARE\MOTOR;..\HARDWARE\CAN;..\FWLIB\inc;..\HARDWARE\TIMER;..\PID;..\HARDWARE\ADC;..\ROBOT;..\STATE</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -696,6 +696,16 @@
               <FileName>robot.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\ROBOT\robot.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>STATE</GroupName>
+          <Files>
+            <File>
+              <FileName>state.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\STATE\state.c</FilePath>
             </File>
           </Files>
         </Group>

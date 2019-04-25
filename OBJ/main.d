@@ -1,5 +1,5 @@
 ..\obj\main.o: main.c
-..\obj\main.o: ..\HARDWARE\MOTOR\Motor.h
+..\obj\main.o: ..\HARDWARE\MOTOR\motor.h
 ..\obj\main.o: D:\Keil_v5\ARM\ARMCC\bin\..\include\math.h
 ..\obj\main.o: ..\PID\PID.h
 ..\obj\main.o: ..\HARDWARE\TIMER\timer.h

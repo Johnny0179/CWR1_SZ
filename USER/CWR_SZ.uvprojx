@@ -364,7 +364,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\CORE;..\USER;..\SYSTEM\delay;..\SYSTEM\sys;..\HARDWARE\LED;..\FreeRTOS\include;..\FreeRTOS\portable\RVDS\ARM_CM4F;..\FreeModbus\port;..\FreeModbus\modbus\rtu;..\FreeModbus\modbus\include;..\FreeModbus\modbus\ascii;..\FreeModbus;..\HARDWARE\MOTOR;..\HARDWARE\CAN;..\FWLIB\inc;..\HARDWARE\TIMER;..\PID;..\HARDWARE\ADC;..\ROBOT;..\STATE</IncludePath>
+              <IncludePath>..\CORE;..\USER;..\SYSTEM\delay;..\SYSTEM\sys;..\HARDWARE\LED;..\FreeRTOS\include;..\FreeRTOS\portable\RVDS\ARM_CM4F;..\FreeModbus\port;..\FreeModbus\modbus\rtu;..\FreeModbus\modbus\include;..\FreeModbus\modbus\ascii;..\FreeModbus;..\HARDWARE\MOTOR;..\HARDWARE\CAN;..\FWLIB\inc;..\HARDWARE\TIMER;..\PID;..\HARDWARE\ADC;..\ROBOT;..\STATE;..\FLASH</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -481,6 +481,11 @@
               <FileName>stm32f4xx_adc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\FWLIB\src\stm32f4xx_adc.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\FWLIB\src\stm32f4xx_flash.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -706,6 +711,16 @@
               <FileName>state.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\STATE\state.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>FLASH</GroupName>
+          <Files>
+            <File>
+              <FileName>stmflash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\FLASH\stmflash.c</FilePath>
             </File>
           </Files>
         </Group>

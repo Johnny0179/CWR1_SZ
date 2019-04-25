@@ -6,17 +6,15 @@
 //
 /*-------------------------------Includes-------------------------------*/
 /*STM32*/
-#include "Motor.h"
+#include "motor.h"
 #include "adc.h"
 #include "delay.h"
 #include "led.h"
-#include "pid.h"
+#include "PID.h"
 #include "state.h"
 #include "sys.h"
 #include "timer.h"
 
-/*PID*/
-#include "pid.h"
 
 /*FreeRTOS*/
 #include "FreeRTOS.h"
@@ -36,7 +34,7 @@
 //任务句柄
 TaskHandle_t StartTask_Handler;
 //任务函数
-void start_task(void* pvParameters);
+void start_task(void *pvParameters);
 
 //任务优先级
 #define Modbus_TASK_PRIO 5
@@ -45,7 +43,7 @@ void start_task(void* pvParameters);
 //任务句柄
 TaskHandle_t ModbusTask_Handler;
 //任务函数
-void Modbus_task(void* pvParameters);
+void Modbus_task(void *pvParameters);
 
 //任务优先级
 #define StateCheck_TASK_PRIO 4
@@ -54,7 +52,7 @@ void Modbus_task(void* pvParameters);
 //任务句柄
 TaskHandle_t StateCheckTask_Handler;
 //任务函数
-void StateCheck_task(void* pvParameters);
+void StateCheck_task(void *pvParameters);
 
 //任务优先级
 #define ADC_TASK_PRIO 2
@@ -63,7 +61,7 @@ void StateCheck_task(void* pvParameters);
 //任务句柄
 TaskHandle_t ADCTask_Handler;
 //任务函数
-void ADC_task(void* pvParameters);
+void ADC_task(void *pvParameters);
 
 #define Robot_TASK_PRIO 3
 //任务堆栈大小
@@ -71,7 +69,7 @@ void ADC_task(void* pvParameters);
 //任务句柄
 TaskHandle_t RobotTask_Handler;
 //任务函数
-void Robot_task(void* pvParameters);
+void Robot_task(void *pvParameters);
 
 /*----------------------------Configuration----------------------------------*/
 // extern variables
@@ -83,7 +81,7 @@ extern uint32_t usRegHoldingBuf[REG_HOLDING_NREGS];
 extern u32 cycle_counter;
 
 const UCHAR kRobotAddr = 0x0A;
-static const u8 kModbusRefreshRate = 500;
+static const u8 kModbusRefreshRate = 100;
 static const _Bool kManualMode = 0;
 static const _Bool kManualAuto = 1;
 // battery voltage threhold 23V
@@ -121,7 +119,8 @@ extern const u8 kComFail;
 
 /*----------------------------Start Implemention-------------------------*/
 
-int main(void) {
+int main(void)
+{
   // power on state
   robot_state = kPowerOn;
 
@@ -129,12 +128,12 @@ int main(void) {
   NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
 
   //创建开始任务
-  xTaskCreate((TaskFunction_t)start_task,    //任务函数
-              (const char*)"start_task",     //任务名称
-              (uint16_t)START_STK_SIZE,      //任务堆栈大小
-              (void*)NULL,                   //传递给任务函数的参数
-              (UBaseType_t)START_TASK_PRIO,  //任务优先级
-              (TaskHandle_t*)&StartTask_Handler);  //任务句柄
+  xTaskCreate((TaskFunction_t)start_task,          //任务函数
+              (const char *)"start_task",          //任务名称
+              (uint16_t)START_STK_SIZE,            //任务堆栈大小
+              (void *)NULL,                        //传递给任务函数的参数
+              (UBaseType_t)START_TASK_PRIO,        //任务优先级
+              (TaskHandle_t *)&StartTask_Handler); //任务句柄
   vTaskStartScheduler();                           //开启任务调度
   return 0;
 }
@@ -142,47 +141,53 @@ int main(void) {
 /*------------------------------TASK Functions------------------------------*/
 
 //开始任务任务函数
-static void start_task(void* pvParameters) {
+static void start_task(void *pvParameters)
+{
   //进入临界区
   taskENTER_CRITICAL();
   //创建ADC任务
-  xTaskCreate((TaskFunction_t)ADC_task, (const char*)"ADC_task",
-              (uint16_t)ADC_STK_SIZE, (void*)NULL, (UBaseType_t)ADC_TASK_PRIO,
-              (TaskHandle_t*)&ADCTask_Handler);
-  xTaskCreate((TaskFunction_t)Robot_task, (const char*)"Robot_task",
-              (uint16_t)Robot_STK_SIZE, (void*)NULL,
-              (UBaseType_t)Robot_TASK_PRIO, (TaskHandle_t*)&RobotTask_Handler);
+  xTaskCreate((TaskFunction_t)ADC_task, (const char *)"ADC_task",
+              (uint16_t)ADC_STK_SIZE, (void *)NULL, (UBaseType_t)ADC_TASK_PRIO,
+              (TaskHandle_t *)&ADCTask_Handler);
+  xTaskCreate((TaskFunction_t)Robot_task, (const char *)"Robot_task",
+              (uint16_t)Robot_STK_SIZE, (void *)NULL,
+              (UBaseType_t)Robot_TASK_PRIO, (TaskHandle_t *)&RobotTask_Handler);
   //创建Modbus任务
-  xTaskCreate((TaskFunction_t)Modbus_task, (const char*)"Modbus_task",
-              (uint16_t)Modbus_STK_SIZE, (void*)NULL,
+  xTaskCreate((TaskFunction_t)Modbus_task, (const char *)"Modbus_task",
+              (uint16_t)Modbus_STK_SIZE, (void *)NULL,
               (UBaseType_t)Modbus_TASK_PRIO,
-              (TaskHandle_t*)&ModbusTask_Handler);
+              (TaskHandle_t *)&ModbusTask_Handler);
   // StateCheck task
-  xTaskCreate((TaskFunction_t)StateCheck_task, (const char*)"StateCheck_task",
-              (uint16_t)StateCheck_STK_SIZE, (void*)NULL,
+  xTaskCreate((TaskFunction_t)StateCheck_task, (const char *)"StateCheck_task",
+              (uint16_t)StateCheck_STK_SIZE, (void *)NULL,
               (UBaseType_t)StateCheck_TASK_PRIO,
-              (TaskHandle_t*)&StateCheckTask_Handler);
+              (TaskHandle_t *)&StateCheckTask_Handler);
 
-  vTaskDelete(StartTask_Handler);  //删除开始任务
-  taskEXIT_CRITICAL();             //退出临界区
+  vTaskDelete(StartTask_Handler); //删除开始任务
+  taskEXIT_CRITICAL();            //退出临界区
 }
 
 // ADC任务函数
-static void ADC_task(void* pvParameters) {
+static void ADC_task(void *pvParameters)
+{
   u16 adcx;
   float temp;
   Adc_Init();
-  while (1) {
+  while (1)
+  {
     adcx = Get_Adc_Average(ADC_Channel_5, 20);
     // mv
     temp = (float)adcx * (3.3 / 4096) * 12000;
     adcx = temp;
     usRegHoldingBuf[20] = adcx;
 
-    if (adcx < kBatVoltTHR && (state == kIdle || state == kWait)) {
+    if (adcx < kBatVoltTHR && (state == kIdle || state == kWait))
+    {
       // low voltage error.
       err_code = ErrCodeSet(kLowVolt, &err_code);
-    } else {
+    }
+    else
+    {
       err_code = ErrCodeClear(kLowVolt, &err_code);
     }
 
@@ -191,7 +196,8 @@ static void ADC_task(void* pvParameters) {
 }
 
 // Robot task
-static void Robot_task(void* pvParameters) {
+static void Robot_task(void *pvParameters)
+{
   // robot class
   robot cwr;
   RobotNew(&cwr);
@@ -200,20 +206,25 @@ static void Robot_task(void* pvParameters) {
   // ready state
   robot_state = kReady;
 
-  while (1) {
+  while (1)
+  {
     cwr.dir_ = usRegHoldingBuf[2];
     cwr.mode_ = usRegHoldingBuf[21];
     cwr.cycle_ = usRegHoldingBuf[22];
     cwr.cmd_speed_ = usRegHoldingBuf[23];
 
     // reset
-    if (usRegHoldingBuf[9] == 1) {
+    if (usRegHoldingBuf[9] == 1)
+    {
       cwr.Reset();
     }
 
-    if (state != kMotorStall) {
+    if (state != kMotorStall)
+    {
       state = cwr.Auto(cwr.cmd_speed_, cwr.dir_, cwr.cycle_, &state);
-    } else {
+    }
+    else
+    {
       // stall error
       err_code = ErrCodeSet(kStall, &err_code);
 
@@ -228,15 +239,20 @@ static void Robot_task(void* pvParameters) {
 }
 
 // Modbus task
-static void Modbus_task(void* pvParameters) {
+static void Modbus_task(void *pvParameters)
+{
   // Modbus Init
   eMBInit(MB_RTU, kRobotAddr, 0x01, 19200, MB_PAR_NONE);
   eMBEnable();
-  while (1) {
+  while (1)
+  {
     // communication error check.
-    if (usRegHoldingBuf[7] != 1) {
+    if (usRegHoldingBuf[7] != 1)
+    {
       err_code = ErrCodeSet(kComFail, &err_code);
-    } else if (usRegHoldingBuf[7] == 1) {
+    }
+    else if (usRegHoldingBuf[7] == 1)
+    {
       err_code = ErrCodeClear(kComFail, &err_code);
     }
     eMBPoll();
@@ -245,15 +261,20 @@ static void Modbus_task(void* pvParameters) {
 }
 
 // RobotState task
-static void StateCheck_task(void* pvParameters) {
+static void StateCheck_task(void *pvParameters)
+{
   _Bool err;
-  while (1) {
+  while (1)
+  {
     err = ErrCheck(&err_code);
-    if (err == 1) {
+    if (err == 1)
+    {
       // error
       robot_state = kAlarm;
       RobotAlarmEnable();
-    } else {
+    }
+    else
+    {
       RobotAlarmDisable();
       LED2 = 1;
     }
@@ -261,14 +282,17 @@ static void StateCheck_task(void* pvParameters) {
     usRegHoldingBuf[5] = err_code;
 
     // enable state check
-    if (usRegHoldingBuf[3] == 1) {
+    if (usRegHoldingBuf[3] == 1)
+    {
       robot_state = kEnabled;
-    } else {
+    }
+    else
+    {
       robot_state = kReady;
     }
 
     // robot state
-    usRegHoldingBuf[4] = RobotStateCheck(err,&robot_state);
+    usRegHoldingBuf[4] = RobotStateCheck(err, &robot_state);
     vTaskDelay(100);
   }
 }

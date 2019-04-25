@@ -1,6 +1,6 @@
 Dependencies for Project 'CWR_SZ', Target 'CWR_SZ': (DO NOT MODIFY !)
-F (.\main.c)(0x5CB6E6DF)(-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork -I..\CORE -I..\USER -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\HARDWARE\LED -I..\FreeRTOS\include -I..\FreeRTOS\portable\RVDS\ARM_CM4F -I..\FreeModbus\port -I..\FreeModbus\modbus\rtu -I..\FreeModbus\modbus\include -I..\FreeModbus\modbus\ascii -I..\FreeModbus -I..\HARDWARE\MOTOR -I..\HARDWARE\CAN -I..\FWLIB\inc -I..\HARDWARE\TIMER -I..\PID -I..\HARDWARE\ADC -I..\ROBOT -I..\STATE -I..\FLASH-I D:\Keil_v5\ARM\RV31\INC-I D:\Keil_v5\ARM\PACK\ARM\CMSIS\4.1.1\CMSIS\Include-I D:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\1.0.8\Device\Include-DSTM32F40_41xxx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER -DSTM32F40_41xxx-o ..\obj\main.o --omf_browse ..\obj\main.crf --depend ..\obj\main.d)
-I (..\HARDWARE\MOTOR\Motor.h)(0x5CB6CD34)
+F (.\main.c)(0x5CBD17F8)(-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork -I..\CORE -I..\USER -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\HARDWARE\LED -I..\FreeRTOS\include -I..\FreeRTOS\portable\RVDS\ARM_CM4F -I..\FreeModbus\port -I..\FreeModbus\modbus\rtu -I..\FreeModbus\modbus\include -I..\FreeModbus\modbus\ascii -I..\FreeModbus -I..\HARDWARE\MOTOR -I..\HARDWARE\CAN -I..\FWLIB\inc -I..\HARDWARE\TIMER -I..\PID -I..\HARDWARE\ADC -I..\ROBOT -I..\STATE -I..\FLASH-I D:\Keil_v5\ARM\RV31\INC-I D:\Keil_v5\ARM\PACK\ARM\CMSIS\4.1.1\CMSIS\Include-I D:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\1.0.8\Device\Include-DSTM32F40_41xxx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER -DSTM32F40_41xxx-o ..\obj\main.o --omf_browse ..\obj\main.crf --depend ..\obj\main.d)
+I (..\HARDWARE\MOTOR\motor.h)(0x5CB6CD34)
 I (D:\Keil_v5\ARM\ARMCC\include\math.h)(0x53463A44)
 I (..\PID\PID.h)(0x5CB6CD34)
 I (..\HARDWARE\TIMER\timer.h)(0x5CB6CD34)
@@ -42,8 +42,8 @@ I (..\FWLIB\inc\stm32f4xx_fsmc.h)(0x5CB6CD34)
 I (..\SYSTEM\delay\delay.h)(0x5CB6CD34)
 I (..\HARDWARE\ADC\adc.h)(0x5CB6CD34)
 I (..\HARDWARE\LED\led.h)(0x5CB6CD34)
-I (..\STATE\state.h)(0x5CB6EA2A)
-I (..\ROBOT\robot.h)(0x5CB6CD34)
+I (..\STATE\state.h)(0x5CBD1979)
+I (..\ROBOT\robot.h)(0x5CBD10B9)
 I (..\FreeModbus\FreeModbus.h)(0x5CB6CD34)
 I (..\FreeModbus\modbus\include\mb.h)(0x5CB6CD34)
 I (..\FreeModbus\port\port.h)(0x5CB6CD34)
@@ -792,7 +792,7 @@ I (..\HARDWARE\LED\led.h)(0x5CB6CD34)
 I (..\HARDWARE\MOTOR\motor.h)(0x5CB6CD34)
 I (D:\Keil_v5\ARM\ARMCC\include\math.h)(0x53463A44)
 I (..\SYSTEM\delay\delay.h)(0x5CB6CD34)
-F (..\HARDWARE\MOTOR\motor_ctrl.c)(0x5CB6D749)(-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork -I..\CORE -I..\USER -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\HARDWARE\LED -I..\FreeRTOS\include -I..\FreeRTOS\portable\RVDS\ARM_CM4F -I..\FreeModbus\port -I..\FreeModbus\modbus\rtu -I..\FreeModbus\modbus\include -I..\FreeModbus\modbus\ascii -I..\FreeModbus -I..\HARDWARE\MOTOR -I..\HARDWARE\CAN -I..\FWLIB\inc -I..\HARDWARE\TIMER -I..\PID -I..\HARDWARE\ADC -I..\ROBOT -I..\STATE -I..\FLASH-I D:\Keil_v5\ARM\RV31\INC-I D:\Keil_v5\ARM\PACK\ARM\CMSIS\4.1.1\CMSIS\Include-I D:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\1.0.8\Device\Include-DSTM32F40_41xxx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER -DSTM32F40_41xxx-o ..\obj\motor_ctrl.o --omf_browse ..\obj\motor_ctrl.crf --depend ..\obj\motor_ctrl.d)
+F (..\HARDWARE\MOTOR\motor_ctrl.c)(0x5CBD6C61)(-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork -I..\CORE -I..\USER -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\HARDWARE\LED -I..\FreeRTOS\include -I..\FreeRTOS\portable\RVDS\ARM_CM4F -I..\FreeModbus\port -I..\FreeModbus\modbus\rtu -I..\FreeModbus\modbus\include -I..\FreeModbus\modbus\ascii -I..\FreeModbus -I..\HARDWARE\MOTOR -I..\HARDWARE\CAN -I..\FWLIB\inc -I..\HARDWARE\TIMER -I..\PID -I..\HARDWARE\ADC -I..\ROBOT -I..\STATE -I..\FLASH-I D:\Keil_v5\ARM\RV31\INC-I D:\Keil_v5\ARM\PACK\ARM\CMSIS\4.1.1\CMSIS\Include-I D:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\1.0.8\Device\Include-DSTM32F40_41xxx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER -DSTM32F40_41xxx-o ..\obj\motor_ctrl.o --omf_browse ..\obj\motor_ctrl.crf --depend ..\obj\motor_ctrl.d)
 I (..\FreeModbus\FreeModbus.h)(0x5CB6CD34)
 I (..\FreeModbus\modbus\include\mb.h)(0x5CB6CD34)
 I (..\FreeModbus\port\port.h)(0x5CB6CD34)
@@ -1746,8 +1746,8 @@ I (..\FWLIB\inc\stm32f4xx_can.h)(0x5CB6CD34)
 I (..\FWLIB\inc\stm32f4xx_dac.h)(0x5CB6CD34)
 I (..\FWLIB\inc\stm32f4xx_dcmi.h)(0x5CB6CD34)
 I (..\FWLIB\inc\stm32f4xx_fsmc.h)(0x5CB6CD34)
-F (..\ROBOT\robot.c)(0x5CB6F944)(-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork -I..\CORE -I..\USER -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\HARDWARE\LED -I..\FreeRTOS\include -I..\FreeRTOS\portable\RVDS\ARM_CM4F -I..\FreeModbus\port -I..\FreeModbus\modbus\rtu -I..\FreeModbus\modbus\include -I..\FreeModbus\modbus\ascii -I..\FreeModbus -I..\HARDWARE\MOTOR -I..\HARDWARE\CAN -I..\FWLIB\inc -I..\HARDWARE\TIMER -I..\PID -I..\HARDWARE\ADC -I..\ROBOT -I..\STATE -I..\FLASH-I D:\Keil_v5\ARM\RV31\INC-I D:\Keil_v5\ARM\PACK\ARM\CMSIS\4.1.1\CMSIS\Include-I D:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\1.0.8\Device\Include-DSTM32F40_41xxx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER -DSTM32F40_41xxx-o ..\obj\robot.o --omf_browse ..\obj\robot.crf --depend ..\obj\robot.d)
-I (..\ROBOT\robot.h)(0x5CB6CD34)
+F (..\ROBOT\robot.c)(0x5CBD6C12)(-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork -I..\CORE -I..\USER -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\HARDWARE\LED -I..\FreeRTOS\include -I..\FreeRTOS\portable\RVDS\ARM_CM4F -I..\FreeModbus\port -I..\FreeModbus\modbus\rtu -I..\FreeModbus\modbus\include -I..\FreeModbus\modbus\ascii -I..\FreeModbus -I..\HARDWARE\MOTOR -I..\HARDWARE\CAN -I..\FWLIB\inc -I..\HARDWARE\TIMER -I..\PID -I..\HARDWARE\ADC -I..\ROBOT -I..\STATE -I..\FLASH-I D:\Keil_v5\ARM\RV31\INC-I D:\Keil_v5\ARM\PACK\ARM\CMSIS\4.1.1\CMSIS\Include-I D:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\1.0.8\Device\Include-DSTM32F40_41xxx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER -DSTM32F40_41xxx-o ..\obj\robot.o --omf_browse ..\obj\robot.crf --depend ..\obj\robot.d)
+I (..\ROBOT\robot.h)(0x5CBD10B9)
 I (..\FreeModbus\FreeModbus.h)(0x5CB6CD34)
 I (..\FreeModbus\modbus\include\mb.h)(0x5CB6CD34)
 I (..\FreeModbus\port\port.h)(0x5CB6CD34)
@@ -1798,9 +1798,9 @@ I (..\HARDWARE\LED\led.h)(0x5CB6CD34)
 I (..\HARDWARE\MOTOR\motor.h)(0x5CB6CD34)
 I (D:\Keil_v5\ARM\ARMCC\include\math.h)(0x53463A44)
 I (..\FLASH\stmflash.h)(0x5CB6EE26)
-F (..\STATE\state.c)(0x5CB6CD34)(-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork -I..\CORE -I..\USER -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\HARDWARE\LED -I..\FreeRTOS\include -I..\FreeRTOS\portable\RVDS\ARM_CM4F -I..\FreeModbus\port -I..\FreeModbus\modbus\rtu -I..\FreeModbus\modbus\include -I..\FreeModbus\modbus\ascii -I..\FreeModbus -I..\HARDWARE\MOTOR -I..\HARDWARE\CAN -I..\FWLIB\inc -I..\HARDWARE\TIMER -I..\PID -I..\HARDWARE\ADC -I..\ROBOT -I..\STATE -I..\FLASH-I D:\Keil_v5\ARM\RV31\INC-I D:\Keil_v5\ARM\PACK\ARM\CMSIS\4.1.1\CMSIS\Include-I D:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\1.0.8\Device\Include-DSTM32F40_41xxx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER -DSTM32F40_41xxx-o ..\obj\state.o --omf_browse ..\obj\state.crf --depend ..\obj\state.d)
-I (..\STATE\state.h)(0x5CB6EA2A)
-I (..\ROBOT\robot.h)(0x5CB6CD34)
+F (..\STATE\state.c)(0x5CBD187C)(-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork -I..\CORE -I..\USER -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\HARDWARE\LED -I..\FreeRTOS\include -I..\FreeRTOS\portable\RVDS\ARM_CM4F -I..\FreeModbus\port -I..\FreeModbus\modbus\rtu -I..\FreeModbus\modbus\include -I..\FreeModbus\modbus\ascii -I..\FreeModbus -I..\HARDWARE\MOTOR -I..\HARDWARE\CAN -I..\FWLIB\inc -I..\HARDWARE\TIMER -I..\PID -I..\HARDWARE\ADC -I..\ROBOT -I..\STATE -I..\FLASH-I D:\Keil_v5\ARM\RV31\INC-I D:\Keil_v5\ARM\PACK\ARM\CMSIS\4.1.1\CMSIS\Include-I D:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\1.0.8\Device\Include-DSTM32F40_41xxx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER -DSTM32F40_41xxx-o ..\obj\state.o --omf_browse ..\obj\state.crf --depend ..\obj\state.d)
+I (..\STATE\state.h)(0x5CBD1979)
+I (..\ROBOT\robot.h)(0x5CBD10B9)
 I (..\FreeModbus\FreeModbus.h)(0x5CB6CD34)
 I (..\FreeModbus\modbus\include\mb.h)(0x5CB6CD34)
 I (..\FreeModbus\port\port.h)(0x5CB6CD34)

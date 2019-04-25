@@ -29,21 +29,19 @@ static const u32 flashe_clear = 0;
 static MOTOR Motor[MotorNum];
 static pidData_t PIDMotor[MotorNum];
 
-static void RobotInit(void) {
+static void RobotInit(void)
+{
   u8 i;
 
   //初始化延时函数
   delay_init(168);
-
-  //初始化LED端口
   LED_Init();
-
-  // Adc_Init();
 
   // Motor Init
   MotorInit();
 
-  for (i = 0; i < MotorNum; i++) {
+  for (i = 0; i < MotorNum; i++)
+  {
     MotorInitConfig(i + 1, &Motor[i]);
   }
 
@@ -92,16 +90,19 @@ static void RobotEnable(void) { MotorEnable(); }
 static void RobotDisable(void) { MotorDisable(); }
 static void RobotReset(void) { MotorReset(); }
 
-static void RobotManual(u32 cmd_speed, int8_t dir) {
+static void RobotManual(u32 cmd_speed, int8_t dir)
+{
   u8 i;
   /*motor control*/
-  for (i = 0; i < MotorNum; ++i) {
+  for (i = 0; i < MotorNum; ++i)
+  {
     /* code */
     MotorCtrlManual(&Motor[i], &PIDMotor[i], &cmd_speed, dir);
   }
 
   /*monitor speed*/
-  for (i = 0; i < MotorNum; ++i) {
+  for (i = 0; i < MotorNum; ++i)
+  {
     /* code */
     usRegHoldingBuf[i + 24] = Motor[i].MotorSpeed_mmps;
   }
@@ -153,11 +154,13 @@ const u32 fine_tuning_speed = 100;
 
 volatile _Bool auto_dir;
 
-static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state) {
+static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state)
+{
   u8 i, motor_state[MotorNum];
   u32 motor_speed[MotorNum], odom_temp;
 
-  for (i = 0; i < MotorNum; ++i) {
+  for (i = 0; i < MotorNum; ++i)
+  {
     motor_speed[i] = MotorVelCalc(delta_turn[i]);
   }
 
@@ -170,233 +173,289 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state) {
 
   /*indicate the dir*/
   // up
-  if (auto_dir == 0) {
+  if (auto_dir == 0)
+  {
     usRegHoldingBuf[8] = 1;
-  } else if (auto_dir == 1) {
+  }
+  else if (auto_dir == 1)
+  {
     // down
     usRegHoldingBuf[8] = 2;
   }
 
   // state machine
-  switch (*state) {
-    case kIdle:
-      if (usRegHoldingBuf[21] == kManualDisable && usRegHoldingBuf[3] == 1) {
-        // auto mode, defualt dir;
-        auto_dir = init_dir;
-        *state = kAuto;
-      } else if (usRegHoldingBuf[21] == kManualEnable) {
-        *state = kManual;
-      } else if (usRegHoldingBuf[3] == 0 || cycle_counter == cycle) {
-        /*        // clear the counter
+  switch (*state)
+  {
+  case kIdle:
+    if (usRegHoldingBuf[21] == kManualDisable && usRegHoldingBuf[3] == 1)
+    {
+      // auto mode, defualt dir;
+      auto_dir = init_dir;
+      *state = kAuto;
+    }
+    else if (usRegHoldingBuf[21] == kManualEnable)
+    {
+      *state = kManual;
+    }
+    else if (usRegHoldingBuf[3] == 0 || cycle_counter == cycle)
+    {
+      /*        // clear the counter
                 cycle_counter = 0;*/
 
-        //
-        usRegHoldingBuf[3] = 0;
-        *state = kIdle;
-      }
-      break;
-
-    case kAuto:
-      if (usRegHoldingBuf[3] == 1) {
-        // clear the counter
-        cycle_counter = 0;
-        // clear odom
-        for (i = 0; i < MotorNum; ++i) {
-          odometer[i] = 0;
-        }
-        cycle_odometer_last_time = 0;
-        cycle_odometer_this_time = 0;
-
-        *state = kCounterCheck;
-      } else if (usRegHoldingBuf[21] == kManualEnable) {
-        // back to manual mode
-        *state = kManual;
-      } else if (usRegHoldingBuf[3] == 0) {
-        // stop
-        for (i = 0; i < MotorNum; ++i) {
-          motor_state[i] = MotorCtrlManual(&Motor[i], &PIDMotor[i], &stop_speed,
-                                           usRegHoldingBuf[2]);
-        }
-        // wait cmd
-        *state = kAuto;
-      }
-      break;
-
-    case kManual:
-      if (usRegHoldingBuf[21] == kManualEnable) {
-        usRegHoldingBuf[3] = 1;
-        // motor control
-        for (i = 0; i < MotorNum; ++i) {
-          motor_state[i] = MotorCtrlManual(
-              &Motor[i], &PIDMotor[i], &fine_tuning_speed, usRegHoldingBuf[2]);
-        }
-        *state = kManual;
-      } else if (usRegHoldingBuf[21] == kManualDisable) {
-        usRegHoldingBuf[3] = 0;
-
-        // rst
-        // RobotReset();
-
-        // // clear odom
-        // for (i = 0; i < MotorNum; ++i) {
-        //   odometer[i] = 0;
-        // }
-        // cycle_odometer_last_time = 0;
-        // cycle_odometer_this_time = 0;
-
-        *state = kAuto;
-      }
-      break;
-
-    case kCounterCheck:
-      if (cycle_counter < cycle) {
-        // up
-        if (auto_dir == 0) {
-          dis_up_start = cycle_odometer_this_time;
-          usRegHoldingBuf[40] = dis_up_start;
-        } else if (auto_dir == 1) {
-          // down
-          dis_down_start = cycle_odometer_this_time;
-          usRegHoldingBuf[41] = dis_down_start;
-        }
-        *state = kMotion;
-      } else if (cycle_counter == cycle) {
-        // disable
-        usRegHoldingBuf[3] = 0;
-        *state = kIdle;
-      }
-      break;
-
-    case kFirstCheck:
-      if (cycle_counter == 0) {
-        auto_dir = init_dir;
-        *state = kMotion;
-      } else {
-        *state = kChangeDir;
-      }
-      break;
-
-    case kChangeDir:
-      // change direction
-      auto_dir = !auto_dir;
-
       //
-      usRegHoldingBuf[2] = auto_dir;
-
-      *state = kWait;
-      break;
-
-    case kMotion:
-      /*offset correction*/
-      // complete 2 step?
-      if (cycle_counter < 2) {
-        // up?
-        if (auto_dir == 0) {
-          // dis up > dis down
-          if (dis_up > dis_down) {
-            // upward correction
-            offset_correct = dis_up - dis_down;
-          } else {
-            // no correction
-            offset_correct = 0;
-          }
-        } else {
-          // down
-          if (dis_down > dis_up) {
-            offset_correct = dis_down - dis_up;
-          } else {
-            // no correction
-            offset_correct = 0;
-          }
-        }
-      } else {
-        // no correction
-        offset_correct = 0;
-      }
-
-      if ((cycle_odometer_this_time - cycle_odometer_last_time) <=
-          usRegHoldingBuf[17] - offset_correct) {
-        // motor control
-        for (i = 0; i < MotorNum; ++i) {
-          motor_state[i] =
-              MotorCtrlManual(&Motor[i], &PIDMotor[i], &cmd_speed, auto_dir);
-        }
-
-        *state = kMotion;
-      } else {
-        *state = kStop;
-      }
-
-      break;
-
-    case kStop:
-      // all motors have been stopped
-      if (motor_speed[0] != 0 || motor_speed[1] != 0 || motor_speed[2] != 0 ||
-          motor_speed[3] != 0 || motor_speed[4] != 0 || motor_speed[5] != 0) {
-        // stop
-        for (i = 0; i < MotorNum; ++i) {
-          motor_state[i] =
-              MotorCtrlManual(&Motor[i], &PIDMotor[i], &stop_speed, auto_dir);
-        }
-        *state = kStop;
-      } else {
-        // update the odometer
-        cycle_odometer_last_time = (odometer[0] + odometer[1] + odometer[2] +
-                                    odometer[3] + odometer[4] + odometer[5]) /
-                                   MotorNum;
-
-        // up
-        if (auto_dir == 0) {
-          dis_up_end = cycle_odometer_this_time;
-          usRegHoldingBuf[42] = dis_up_end;
-        } else if (auto_dir == 1) {
-          // down
-          dis_down_end = cycle_odometer_this_time;
-          usRegHoldingBuf[43] = dis_down_end;
-        }
-
-        // claculate the distance
-        dis_up = dis_up_end - dis_up_start;
-        dis_down = dis_down_end - dis_down_start;
-
-        usRegHoldingBuf[18] = dis_up;
-        usRegHoldingBuf[19] = dis_down;
-
-        // update cycle counter
-        cycle_counter++;
-
-        // read from flash
-        STMFLASH_Read(0x080E0000, (u32 *)(&flash_step), 1);
-
-        flash_step++;
-
-        // write to flash
-        STMFLASH_Write(0x080E0000, (u32 *)(&flash_step), 1);
-
-        // read from flash
-        STMFLASH_Read(0x080E0000, (u32 *)(&flash_step), 1);
-
-        usRegHoldingBuf[1] = flash_step;
-
-        *state = kChangeDir;
-      }
-      break;
-
-    case kWait:
-      if (usRegHoldingBuf[3] == 0) {
-        *state = kWait;
-      } else {
-        *state = kCounterCheck;
-      }
-      break;
-
-    default:
+      usRegHoldingBuf[3] = 0;
       *state = kIdle;
-      break;
+    }
+    break;
+
+  case kAuto:
+    if (usRegHoldingBuf[3] == 1)
+    {
+      // clear the counter
+      cycle_counter = 0;
+      // clear odom
+      for (i = 0; i < MotorNum; ++i)
+      {
+        odometer[i] = 0;
+      }
+      cycle_odometer_last_time = 0;
+      cycle_odometer_this_time = 0;
+
+      *state = kCounterCheck;
+    }
+    else if (usRegHoldingBuf[21] == kManualEnable)
+    {
+      // back to manual mode
+      *state = kManual;
+    }
+    else if (usRegHoldingBuf[3] == 0)
+    {
+      // stop
+      for (i = 0; i < MotorNum; ++i)
+      {
+        motor_state[i] = MotorCtrlManual(&Motor[i], &PIDMotor[i], &stop_speed,
+                                         usRegHoldingBuf[2]);
+      }
+      // wait cmd
+      *state = kAuto;
+    }
+    break;
+
+  case kManual:
+    if (usRegHoldingBuf[21] == kManualEnable)
+    {
+      usRegHoldingBuf[3] = 1;
+      // motor control
+      for (i = 0; i < MotorNum; ++i)
+      {
+        motor_state[i] = MotorCtrlManual(
+            &Motor[i], &PIDMotor[i], &fine_tuning_speed, usRegHoldingBuf[2]);
+      }
+      *state = kManual;
+    }
+    else if (usRegHoldingBuf[21] == kManualDisable)
+    {
+      usRegHoldingBuf[3] = 0;
+
+      // rst
+      // RobotReset();
+
+      // // clear odom
+      // for (i = 0; i < MotorNum; ++i) {
+      //   odometer[i] = 0;
+      // }
+      // cycle_odometer_last_time = 0;
+      // cycle_odometer_this_time = 0;
+
+      *state = kAuto;
+    }
+    break;
+
+  case kCounterCheck:
+    if (cycle_counter < cycle)
+    {
+      // up
+      if (auto_dir == 0)
+      {
+        dis_up_start = cycle_odometer_this_time;
+        usRegHoldingBuf[40] = dis_up_start;
+      }
+      else if (auto_dir == 1)
+      {
+        // down
+        dis_down_start = cycle_odometer_this_time;
+        usRegHoldingBuf[41] = dis_down_start;
+      }
+      *state = kMotion;
+    }
+    else if (cycle_counter == cycle)
+    {
+      // disable
+      usRegHoldingBuf[3] = 0;
+      *state = kIdle;
+    }
+    break;
+
+  case kFirstCheck:
+    if (cycle_counter == 0)
+    {
+      auto_dir = init_dir;
+      *state = kMotion;
+    }
+    else
+    {
+      *state = kChangeDir;
+    }
+    break;
+
+  case kChangeDir:
+    // change direction
+    auto_dir = !auto_dir;
+
+    //
+    usRegHoldingBuf[2] = auto_dir;
+
+    *state = kWait;
+    break;
+
+  case kMotion:
+    /*offset correction*/
+    // complete 2 step?
+    if (cycle_counter < 2)
+    {
+      // up?
+      if (auto_dir == 0)
+      {
+        // dis up > dis down
+        if (dis_up > dis_down)
+        {
+          // upward correction
+          offset_correct = dis_up - dis_down;
+        }
+        else
+        {
+          // no correction
+          offset_correct = 0;
+        }
+      }
+      else
+      {
+        // down
+        if (dis_down > dis_up)
+        {
+          offset_correct = dis_down - dis_up;
+        }
+        else
+        {
+          // no correction
+          offset_correct = 0;
+        }
+      }
+    }
+    else
+    {
+      // no correction
+      offset_correct = 0;
+    }
+
+    if ((cycle_odometer_this_time - cycle_odometer_last_time) <=
+        usRegHoldingBuf[17] - offset_correct)
+    {
+      // motor control
+      for (i = 0; i < MotorNum; ++i)
+      {
+        motor_state[i] =
+            MotorCtrlManual(&Motor[i], &PIDMotor[i], &cmd_speed, auto_dir);
+      }
+
+      *state = kMotion;
+    }
+    else
+    {
+      *state = kStop;
+    }
+
+    break;
+
+  case kStop:
+    // all motors have been stopped
+    if (motor_speed[0] != 0 || motor_speed[1] != 0 || motor_speed[2] != 0 ||
+        motor_speed[3] != 0 || motor_speed[4] != 0 || motor_speed[5] != 0)
+    {
+      // stop
+      for (i = 0; i < MotorNum; ++i)
+      {
+        motor_state[i] =
+            MotorCtrlManual(&Motor[i], &PIDMotor[i], &stop_speed, auto_dir);
+      }
+      *state = kStop;
+    }
+    else
+    {
+      // update the odometer
+      cycle_odometer_last_time = (odometer[0] + odometer[1] + odometer[2] +
+                                  odometer[3] + odometer[4] + odometer[5]) /
+                                 MotorNum;
+
+      // up
+      if (auto_dir == 0)
+      {
+        dis_up_end = cycle_odometer_this_time;
+        usRegHoldingBuf[42] = dis_up_end;
+      }
+      else if (auto_dir == 1)
+      {
+        // down
+        dis_down_end = cycle_odometer_this_time;
+        usRegHoldingBuf[43] = dis_down_end;
+      }
+
+      // claculate the distance
+      dis_up = dis_up_end - dis_up_start;
+      dis_down = dis_down_end - dis_down_start;
+
+      usRegHoldingBuf[18] = dis_up;
+      usRegHoldingBuf[19] = dis_down;
+
+      // update cycle counter
+      cycle_counter++;
+
+      // read from flash
+      STMFLASH_Read(0x080E0000, (u32 *)(&flash_step), 1);
+
+      flash_step++;
+
+      // write to flash
+      STMFLASH_Write(0x080E0000, (u32 *)(&flash_step), 1);
+
+      // read from flash
+      // STMFLASH_Read(0x080E0000, (u32 *)(&flash_step), 1);
+
+      usRegHoldingBuf[1] = flash_step;
+
+      *state = kChangeDir;
+    }
+    break;
+
+  case kWait:
+    if (usRegHoldingBuf[3] == 0)
+    {
+      *state = kWait;
+    }
+    else
+    {
+      *state = kCounterCheck;
+    }
+    break;
+
+  default:
+    *state = kIdle;
+    break;
   }
 
   /*monitor speed*/
-  for (i = 0; i < MotorNum; ++i) {
+  for (i = 0; i < MotorNum; ++i)
+  {
     /* code */
     usRegHoldingBuf[i + 24] = Motor[i].MotorSpeed_mmps;
   }
@@ -410,7 +469,8 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state) {
 
   // motor stall
   if (motor_state[0] == 1 || motor_state[1] == 1 || motor_state[2] == 1 ||
-      motor_state[3] == 1 || motor_state[4] == 1 || motor_state[5] == 1) {
+      motor_state[3] == 1 || motor_state[4] == 1 || motor_state[5] == 1)
+  {
     *state = kMotorStall;
   }
 
@@ -421,7 +481,8 @@ void RobotAlarmEnable(void) { Tim13Enable(); }
 
 void RobotAlarmDisable(void) { Tim13Disable(); }
 
-void RobotNew(robot *r) {
+void RobotNew(robot *r)
+{
   // robot parameters
   r->no_ = 0;
   r->cycle_ = 0;

@@ -30,20 +30,21 @@ void RobotReset(void);
 // function pointer
 typedef void (*robot_reset)(void);
 
-void RobotManual(u32 cmd_speed,int8_t dir);
+void RobotManual(u32 cmd_speed, int8_t dir);
 // function pointer
-typedef void (*robot_manual)(u32,int8_t);
+typedef void (*robot_manual)(u32, int8_t);
 
-u8 RobotAuto(u32 cmd_speed,_Bool init_dir,u8 cycle,u8 *state);
+u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state);
 // function pointer
-typedef u8 (*robot_auto)(u32,_Bool,u8,u8 *);
+typedef u8 (*robot_auto)(u32, _Bool, u8, u8 *);
 
 // alarm
 void RobotAlarmEnable(void);
 void RobotAlarmDisable(void);
 
 // robot class definition
-typedef struct {
+typedef struct
+{
   /*data members*/
   u8 no_;
   u8 cycle_;

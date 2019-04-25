@@ -16,7 +16,8 @@ static u8 exit_int_time_motor6 = 0;
 
 /*Init TIM1 in PWM mode*/
 /*Frequency in Hz*/
-void TIM1_PWM_Init(u32 freq) {
+void TIM1_PWM_Init(u32 freq)
+{
   /* Private typedef
    * -----------------------------------------------------------*/
   TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
@@ -31,7 +32,7 @@ void TIM1_PWM_Init(u32 freq) {
 
   /* Compute the value to be set in ARR register to generate the desired signal
    * frequency */
-  TimerPeriod = ((168000000 / 1) / freq) - 1;  // SystemCoreClock is 168MHz.
+  TimerPeriod = ((168000000 / 1) / freq) - 1; // SystemCoreClock is 168MHz.
 
   /* Time Base configuration */
   TIM_TimeBaseStructure.TIM_Prescaler = 0;
@@ -89,7 +90,8 @@ void TIM1_PWM_Init(u32 freq) {
   TIM1_PWM_SET(freq, 100);
 }
 
-void TIM8_PWM_Init(u32 freq) {
+void TIM8_PWM_Init(u32 freq)
+{
   /* Private typedef
    * -----------------------------------------------------------*/
   TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
@@ -104,7 +106,7 @@ void TIM8_PWM_Init(u32 freq) {
 
   /* Compute the value to be set in ARR register to generate the desired signal
    * frequency */
-  TimerPeriod = ((168000000 / 1) / freq) - 1;  // SystemCoreClock is 168MHz.
+  TimerPeriod = ((168000000 / 1) / freq) - 1; // SystemCoreClock is 168MHz.
 
   /* Time Base configuration */
   TIM_TimeBaseStructure.TIM_Prescaler = 0;
@@ -147,7 +149,8 @@ void TIM8_PWM_Init(u32 freq) {
 /**
  *  Configure the TIM1 Pins.
  */
-void TIM1_Config(void) {
+void TIM1_Config(void)
+{
   GPIO_InitTypeDef GPIO_InitStructure;
 
   /* GPIOE, GPIOB and GPIOC clocks enable */
@@ -173,7 +176,8 @@ void TIM1_Config(void) {
   GPIO_PinAFConfig(GPIOE, GPIO_PinSource14, GPIO_AF_TIM1);
 }
 
-void TIM8_Config(void) {
+void TIM8_Config(void)
+{
   GPIO_InitTypeDef GPIO_InitStructure;
 
   /* GPIOE, GPIOB and GPIOC clocks enable */
@@ -196,25 +200,27 @@ void TIM8_Config(void) {
   GPIO_PinAFConfig(GPIOC, GPIO_PinSource7, GPIO_AF_TIM8);
 }
 //电机对应IO初始化
-void Motor_Init(void) {
+void Motor_Init(void)
+{
   GPIO_InitTypeDef GPIO_InitStructure;
 
-  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);  //使能GPIOD时钟
+  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE); //使能GPIOD时钟
 
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 |
-                                GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5;  //
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;       //普通输出模式
-  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;      //推挽输出
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;  // 100MHz
-  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;        //上拉
-  GPIO_Init(GPIOD, &GPIO_InitStructure);              //初始化GPIO
+                                GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5; //
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;                       //普通输出模式
+  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;                      //推挽输出
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;                  // 100MHz
+  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;                        //上拉
+  GPIO_Init(GPIOD, &GPIO_InitStructure);                              //初始化GPIO
 
   // GPIO_ResetBits(GPIOD, GPIO_Pin_0 | GPIO_Pin_3 );
   GPIO_SetBits(GPIOD, GPIO_Pin_0 | GPIO_Pin_3 | GPIO_Pin_1 | GPIO_Pin_2 |
                           GPIO_Pin_4 | GPIO_Pin_5);
 }
 
-void TIM1_PWM_SET(u32 freq, u32 Duty) {
+void TIM1_PWM_SET(u32 freq, u32 Duty)
+{
   TIM1->CCR1 = (((168000000 / 1) / freq) - 1) * Duty / 100;
   TIM1->CCR2 = (((168000000 / 1) / freq) - 1) * Duty / 100;
 
@@ -222,48 +228,52 @@ void TIM1_PWM_SET(u32 freq, u32 Duty) {
   TIM1->CCR4 = (((168000000 / 1) / freq) - 1) * Duty / 100;
 }
 
-void TIM8_PWM_SET(u32 freq, u32 Duty) {
+void TIM8_PWM_SET(u32 freq, u32 Duty)
+{
   TIM8->CCR1 = (((168000000 / 1) / freq) - 1) * Duty / 100;
   TIM8->CCR2 = (((168000000 / 1) / freq) - 1) * Duty / 100;
 }
 
-
-
-void MoveDir(int8_t dir) {
-  switch (dir) {
-    // move down
-    case 1:
-      GPIO_ResetBits(GPIOD, GPIO_Pin_0 | GPIO_Pin_3 | GPIO_Pin_1 | GPIO_Pin_2 |
-                                GPIO_Pin_4 | GPIO_Pin_5);
-      break;
-      // move up
-    case 0:
-      GPIO_SetBits(GPIOD, GPIO_Pin_0 | GPIO_Pin_3 | GPIO_Pin_1 | GPIO_Pin_2 |
+void MoveDir(int8_t dir)
+{
+  switch (dir)
+  {
+  // move down
+  case 1:
+    GPIO_ResetBits(GPIOD, GPIO_Pin_0 | GPIO_Pin_3 | GPIO_Pin_1 | GPIO_Pin_2 |
                               GPIO_Pin_4 | GPIO_Pin_5);
-      break;
-      // defualt move up
-    default:
-      GPIO_SetBits(GPIOD, GPIO_Pin_0 | GPIO_Pin_3 | GPIO_Pin_1 | GPIO_Pin_2 |
-                              GPIO_Pin_4 | GPIO_Pin_5);
-      break;
+    break;
+    // move up
+  case 0:
+    GPIO_SetBits(GPIOD, GPIO_Pin_0 | GPIO_Pin_3 | GPIO_Pin_1 | GPIO_Pin_2 |
+                            GPIO_Pin_4 | GPIO_Pin_5);
+    break;
+    // defualt move up
+  default:
+    GPIO_SetBits(GPIOD, GPIO_Pin_0 | GPIO_Pin_3 | GPIO_Pin_1 | GPIO_Pin_2 |
+                            GPIO_Pin_4 | GPIO_Pin_5);
+    break;
   }
 }
 
-void MoveDown(void) {
+void MoveDown(void)
+{
   GPIO_SetBits(GPIOD, GPIO_Pin_0 | GPIO_Pin_3 | GPIO_Pin_1 | GPIO_Pin_2 |
                           GPIO_Pin_4 | GPIO_Pin_5);
 }
 
-void MoveUp(void) {
+void MoveUp(void)
+{
   GPIO_ResetBits(GPIOD, GPIO_Pin_0 | GPIO_Pin_3 | GPIO_Pin_1 | GPIO_Pin_2 |
                             GPIO_Pin_4 | GPIO_Pin_5);
 }
 
-void MotorFGInit(void) {
+void MotorFGInit(void)
+{
   NVIC_InitTypeDef NVIC_InitStructure;
   EXTI_InitTypeDef EXTI_InitStructure;
   TIM12_CH1_Cap_Init(0XFFFF, 84 - 1);
-  EXTIX_Init();  //
+  EXTIX_Init(); //
 
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
   /*FG1*/
@@ -314,7 +324,8 @@ void MotorFGInit(void) {
   NVIC_Init(&NVIC_InitStructure);
 }
 
-void EXTIX_Init(void) {
+void EXTIX_Init(void)
+{
   GPIO_InitTypeDef GPIO_InitStructure;
 
   RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA | RCC_AHB1Periph_GPIOD, ENABLE);
@@ -333,54 +344,71 @@ void EXTIX_Init(void) {
   GPIO_Init(GPIOD, &GPIO_InitStructure);
 }
 
-void EXTI15_10_IRQHandler(void) {
+void EXTI15_10_IRQHandler(void)
+{
   /*motor 3*/
-  if (EXTI_GetITStatus(EXTI_Line12)) {
+  if (EXTI_GetITStatus(EXTI_Line12))
+  {
     /*interrupted first time */
-    if (exit_int_time_motor3 == 0) {
+    if (exit_int_time_motor3 == 0)
+    {
       motor_turn[2] = 1;
       // Tim5Enable();
       exit_int_time_motor3 = 1;
-    } else {
+    }
+    else
+    {
       motor_turn[2] = motor_turn[2] + 1;
     }
     // usRegHoldingBuf[9] = motor_turn[2];
     EXTI_ClearITPendingBit(EXTI_Line12);
   }
   /*motor 4*/
-  if (EXTI_GetITStatus(EXTI_Line13)) {
+  if (EXTI_GetITStatus(EXTI_Line13))
+  {
     /*interrupted first time */
-    if (exit_int_time_motor4 == 0) {
+    if (exit_int_time_motor4 == 0)
+    {
       motor_turn[3] = 1;
       // Tim5Enable();
       exit_int_time_motor4 = 1;
-    } else {
+    }
+    else
+    {
       motor_turn[3] = motor_turn[3] + 1;
     }
     // usRegHoldingBuf[9] = motor_turn[0];
     EXTI_ClearITPendingBit(EXTI_Line13);
   }
   /*motor 5*/
-  if (EXTI_GetITStatus(EXTI_Line14)) {
+  if (EXTI_GetITStatus(EXTI_Line14))
+  {
     /*interrupted first time */
-    if (exit_int_time_motor5 == 0) {
+    if (exit_int_time_motor5 == 0)
+    {
       motor_turn[4] = 1;
       // Tim5Enable();
       exit_int_time_motor5 = 1;
-    } else {
+    }
+    else
+    {
       motor_turn[4] = motor_turn[4] + 1;
     }
     // usRegHoldingBuf[9] = motor_turn[0];
     EXTI_ClearITPendingBit(EXTI_Line14);
   }
   /*motor 6*/
-  if (EXTI_GetITStatus(EXTI_Line15)) {
+  if (EXTI_GetITStatus(EXTI_Line15))
+  {
     /*interrupted first time */
-    if (exit_int_time_motor6 == 0) {
+    if (exit_int_time_motor6 == 0)
+    {
       motor_turn[5] = 1;
       // Tim5Enable();
       exit_int_time_motor6 = 1;
-    } else {
+    }
+    else
+    {
       motor_turn[5] = motor_turn[5] + 1;
     }
     // usRegHoldingBuf[9] = motor_turn[0];
@@ -388,22 +416,27 @@ void EXTI15_10_IRQHandler(void) {
   }
 }
 
-void EXTI9_5_IRQHandler(void) {
+void EXTI9_5_IRQHandler(void)
+{
   /*interrupted first time */
-  if (exit_int_time_motor2 == 0) {
+  if (exit_int_time_motor2 == 0)
+  {
     motor_turn[1] = 1;
     Tim5Enable();
     exit_int_time_motor2 = 1;
-  } else {
+  }
+  else
+  {
     motor_turn[1] = motor_turn[1] + 1;
   }
   EXTI_ClearITPendingBit(EXTI_Line6);
 }
 
-void MotorEnable(void) {
+void MotorEnable(void)
+{
 
-    /*------------------------reset the registors----------------------*/
-/*    // defualt auto mode
+  /*------------------------reset the registors----------------------*/
+  /*    // defualt auto mode
     usRegHoldingBuf[21]=1;
     // defualt 6 cycles
     usRegHoldingBuf[22]=6;
@@ -424,18 +457,20 @@ void MotorEnable(void) {
   Tim5Enable();
 }
 
-void MotorReset(void) {
+void MotorReset(void)
+{
   // rst the core
   __set_FAULTMASK(1);
   NVIC_SystemReset();
 }
 
-void MotorDisable(void){
+void MotorDisable(void)
+{
   TIM_CtrlPWMOutputs(TIM1, DISABLE);
   TIM_CtrlPWMOutputs(TIM8, DISABLE);
   Tim5Disable();
 
-   //   for (i = 0; i < MotorNum; ++i) {
-    
-   //  delta_turn[i + 3] = 0;}
+  //   for (i = 0; i < MotorNum; ++i) {
+
+  //  delta_turn[i + 3] = 0;}
 }
