@@ -60,6 +60,8 @@ static const u8 kAccelerationState = 1;
 static const u8 kConstantState = 2;
 static const u8 kDecelerationState = 3;
 
+extern struct PID_DATA pid_acc;
+
 // odometer
 u32 odometer[MotorNum] = {0};
 
@@ -134,7 +136,7 @@ u8 MotorCtrlManual(struct MOTOR_DATA *motor, struct PID_DATA *pid,
   {
     // scale the pwm 2 times
     motor->PWM = motor->PWM +
-                 pid_Controller(3*motor->CmdSpeed, motor->MotorSpeed_mmps, pid) / 2;
+                 pid_Controller(motor->CmdSpeed, motor->MotorSpeed_mmps, &pid_acc) / 2;
   }
   else
   {

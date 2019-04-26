@@ -28,6 +28,8 @@ static const u32 flashe_clear = 0;
 // Motor Define
 static MOTOR Motor[MotorNum];
 static pidData_t PIDMotor[MotorNum];
+// PID
+struct PID_DATA pid_acc;
 
 static void RobotInit(void)
 {
@@ -52,6 +54,9 @@ static void RobotInit(void)
   pid_Init(1 * P, 1 * I, 0 * D, &PIDMotor[3]);
   pid_Init(1 * P, 1 * I, 0 * D, &PIDMotor[4]);
   pid_Init(1 * P, 1 * I, 0 * D, &PIDMotor[5]);
+
+  // acceleration pid
+  pid_Init(3 * P, 1 * I, 0 * D, &pid_acc);
 
   // light up led
   LED2 = 1;
