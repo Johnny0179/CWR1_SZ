@@ -129,8 +129,18 @@ u8 MotorCtrlManual(struct MOTOR_DATA *motor, struct PID_DATA *pid,
   // update dirction
   dir_last_time = dir;
 
-  motor->PWM = motor->PWM +
-               pid_Controller(motor->CmdSpeed, motor->MotorSpeed_mmps, pid) / 2;
+  // acceleration down
+  if (motor_state == kAccelerationState && dir == movedown)
+  {
+    // scale the pwm 2 times
+    motor->PWM = motor->PWM +
+                 2*pid_Controller(motor->CmdSpeed, motor->MotorSpeed_mmps, pid) / 2;
+  }
+  else
+  {
+    motor->PWM = motor->PWM +
+                 pid_Controller(motor->CmdSpeed, motor->MotorSpeed_mmps, pid) / 2;
+  }
 
   // PWM 0~100%
   if (motor->PWM < 0)
@@ -189,7 +199,7 @@ u8 MotorCtrlManual(struct MOTOR_DATA *motor, struct PID_DATA *pid,
     break;
   }
 
-   // motor stall detection
+  // motor stall detection
   if (motor_state == kConstantState && motor->MotorSpeed_mmps == 0)
   {
     state = kMotorStall;
@@ -253,7 +263,7 @@ u32 DeltaTurnCalc(u32 *motor_turn, u8 motor_num)
 
 u32 MotorSetCmdSpeed(u32 cmd_speed, u32 motor_feedback_speed)
 {
-  u32 motor_cmd_speed;
+  /*   u32 motor_cmd_speed;
 
   if (abs(cmd_speed - motor_feedback_speed) > 100)
   {
@@ -273,7 +283,7 @@ u32 MotorSetCmdSpeed(u32 cmd_speed, u32 motor_feedback_speed)
   }
 
   // motor_cmd_speed=cmd_speed;
-  return motor_cmd_speed;
+  return motor_cmd_speed; */
 }
 
 u32 Acceleration(u8 N, u32 cmd_speed)
@@ -319,9 +329,10 @@ u8 StateCheck(u8 state, u32 this_time, u32 last_time, u32 motor_speed)
       state = kAccelerationState;
     }
     // have not been speed up, return to stop state.
-    else if (motor_speed == 0 /*abs(this_time - motor_speed) > 100*/)
+    else if (motor_speed == 0)
     {
       state = kStopState;
+      Tim4Disable();
     }
     // change to the constantState
     else
