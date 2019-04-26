@@ -60,6 +60,8 @@ static const u8 kAccelerationState = 1;
 static const u8 kConstantState = 2;
 static const u8 kDecelerationState = 3;
 
+static volatile u32 motor_speed_last_time = 0;
+
 extern struct PID_DATA pid_acc;
 
 // odometer
@@ -205,10 +207,13 @@ u8 MotorCtrlManual(struct MOTOR_DATA *motor, struct PID_DATA *pid,
   }
 
   // motor stall detection
-/*   if (motor_state == kConstantState && motor->MotorSpeed_mmps == 0)
+  if (motor_state == kConstantState && motor->MotorSpeed_mmps == 0 && motor_speed_last_time != 0)
   {
     state = kMotorStall;
-  } */
+  }
+
+  // update motor speed recorder
+  motor_speed_last_time = motor->MotorSpeed_mmps;
 
   return state;
 }
