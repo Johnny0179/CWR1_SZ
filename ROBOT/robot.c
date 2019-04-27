@@ -32,7 +32,7 @@ static pidData_t PIDMotor[MotorNum];
 struct PID_DATA pid_acc;
 
 static const u32 kPWMUp = 100;
-static const u32 kPWMDown = 0.5 * kPWMUp;
+static const u32 kPWMDown = 0.6 * kPWMUp;
 
 static void RobotInit(void)
 {
