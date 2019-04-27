@@ -31,6 +31,9 @@ static pidData_t PIDMotor[MotorNum];
 // PID
 struct PID_DATA pid_acc;
 
+static const u32 kPWMUp = 100;
+static const u32 kPWMDown = 100;
+
 static void RobotInit(void)
 {
   u8 i;
@@ -105,7 +108,7 @@ static void RobotManual(u32 cmd_speed, int8_t dir)
     /* code */
     MotorCtrlManual(&Motor[i], &PIDMotor[i], &cmd_speed, dir);
 #else
-    MotorPWMSet(i + 1, 100);
+    MotorPWMSet(i + 1, 100, dir);
 #endif
   }
 
@@ -254,7 +257,7 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state)
         motor_state[i] = MotorCtrlManual(&Motor[i], &PIDMotor[i], &stop_speed,
                                          usRegHoldingBuf[2]);
 #else
-        MotorPWMSet(i + 1, 0);
+        MotorPWMSet(i + 1, 0, usRegHoldingBuf[2]);
 #endif
       }
       // wait cmd
@@ -274,7 +277,7 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state)
         motor_state[i] = MotorCtrlManual(
             &Motor[i], &PIDMotor[i], &fine_tuning_speed, usRegHoldingBuf[2]);
 #else
-        MotorPWMSet(i + 1, 100);
+        MotorPWMSet(i + 1, 100, usRegHoldingBuf[2]);
 #endif
       }
       *state = kManual;
@@ -394,7 +397,7 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state)
         motor_state[i] =
             MotorCtrlManual(&Motor[i], &PIDMotor[i], &cmd_speed, auto_dir);
 #else
-        MotorPWMSet(i + 1, 100);
+        MotorPWMSet(i + 1, 100, auto_dir);
 #endif
       }
 
@@ -419,7 +422,7 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state)
         motor_state[i] =
             MotorCtrlManual(&Motor[i], &PIDMotor[i], &stop_speed, auto_dir);
 #else
-        MotorPWMSet(i + 1, 0);
+        MotorPWMSet(i + 1, 0, auto_dir);
 #endif
       }
       *state = kStop;

@@ -64,7 +64,7 @@ u8 MotorCtrlAuto(struct MOTOR_DATA *motor, struct PID_DATA *pid,
 void MotorDisable(void);
 void MotorEnable(void);
 void MotorReset(void);
-void MotorPWMSet(u8 motor_id,u32 pwm);
+void MotorPWMSet(u8 motor_id, u32 pwm,_Bool dir);
 
 u32 DeltaTurnCalc(u32 *motor_turn, u8 motor_num);
 u32 MotorVelCalc(u32 delta_turn);

@@ -415,8 +415,21 @@ u32 SetSpeed(u8 state, u32 cmd_speed)
   return set_motor_speed;
 }
 
-void MotorPWMSet(u8 motor_id, u32 pwm)
+void MotorPWMSet(u8 motor_id, u32 pwm,_Bool dir)
 {
+  // Direction
+  switch (dir)
+  {
+  case moveup:
+    MoveUp();
+    break;
+  case movedown:
+    MoveDown();
+    break;
+  case stop:;
+  default:;
+  }
+  // PWM
   switch (motor_id)
   {
   case 1:
