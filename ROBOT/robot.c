@@ -30,6 +30,8 @@ static MOTOR Motor[MotorNum];
 static pidData_t PIDMotor[MotorNum];
 // PID
 struct PID_DATA pid_acc;
+struct PID_DATA pid_up;
+struct PID_DATA pid_down;
 
 static const u32 kPWMUp = 100;
 static const u32 kPWMDown = 0.6 * kPWMUp;
@@ -60,6 +62,11 @@ static void RobotInit(void)
 
   // acceleration pid
   pid_Init(1 * P, 1 * I, 0 * D, &pid_acc);
+  // up pid
+  // pid_Init(0.5 * P, 2.5 * I, 0 * D, &pid_up);
+  pid_Init(1 * P, 1 * I, 0 * D, &pid_up);
+  // down pid
+  pid_Init(1 * P, 1 * I, 0 * D, &pid_down);
 
   // light up led
   LED2 = 1;
@@ -82,15 +89,15 @@ static void RobotInit(void)
   usRegHoldingBuf[21] = 0;
   // defualt 10 cycles
   usRegHoldingBuf[22] = 10;
-  // defualt speed 150
-  usRegHoldingBuf[23] = 150;
+  // defualt speed 120
+  usRegHoldingBuf[23] = 120;
   // disable reset
   usRegHoldingBuf[9] = 0;
   // default direction up
   usRegHoldingBuf[2] = 0;
 
   // default step distance
-  usRegHoldingBuf[17] = 50;
+  usRegHoldingBuf[17] = 70;
 }
 
 static void RobotEnable(void) { MotorEnable(); }
@@ -105,8 +112,18 @@ static void RobotManual(u32 cmd_speed, int8_t dir)
   for (i = 0; i < MotorNum; ++i)
   {
 #if CLOSELOOP
-    /* code */
-    MotorCtrlManual(&Motor[i], &PIDMotor[i], &cmd_speed, dir);
+    if (usRegHoldingBuf[2] == 0)
+    {
+      MotorCtrlManual(&Motor[i], &pid_up, &cmd_speed,
+                      dir);
+    }
+    else
+    {
+      MotorCtrlManual(&Motor[i], &pid_down, &cmd_speed,
+                      dir);
+    }
+    // MotorCtrlManual(&Motor[i], &PIDMotor[i], &cmd_speed, dir);
+
 #else
     if (dir == 0)
     {
@@ -230,6 +247,27 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state)
 
       //
       usRegHoldingBuf[3] = 0;
+      // stop
+      for (i = 0; i < MotorNum; ++i)
+      {
+#if CLOSELOOP
+        if (usRegHoldingBuf[2] == 0)
+        {
+          motor_state[i] = MotorCtrlManual(&Motor[i], &pid_up, &stop_speed,
+                                           usRegHoldingBuf[2]);
+        }
+        else
+        {
+          motor_state[i] = MotorCtrlManual(&Motor[i], &pid_down, &stop_speed,
+                                           usRegHoldingBuf[2]);
+        }
+
+/*         motor_state[i] = MotorCtrlManual(&Motor[i], &PIDMotor[i], &stop_speed,
+                                         usRegHoldingBuf[2]); */
+#else
+        MotorPWMSet(i + 1, 0, usRegHoldingBuf[2]);
+#endif
+      }
       *state = kIdle;
     }
     break;
@@ -263,8 +301,18 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state)
       for (i = 0; i < MotorNum; ++i)
       {
 #if CLOSELOOP
-        motor_state[i] = MotorCtrlManual(&Motor[i], &PIDMotor[i], &stop_speed,
-                                         usRegHoldingBuf[2]);
+        if (usRegHoldingBuf[2] == 0)
+        {
+          motor_state[i] = MotorCtrlManual(&Motor[i], &pid_up, &stop_speed,
+                                           usRegHoldingBuf[2]);
+        }
+        else
+        {
+          motor_state[i] = MotorCtrlManual(&Motor[i], &pid_down, &stop_speed,
+                                           usRegHoldingBuf[2]);
+        }
+/*         motor_state[i] = MotorCtrlManual(&Motor[i], &PIDMotor[i], &stop_speed,
+                                         usRegHoldingBuf[2]); */
 #else
         MotorPWMSet(i + 1, 0, usRegHoldingBuf[2]);
 #endif
@@ -283,8 +331,20 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state)
       {
 
 #if CLOSELOOP
-        motor_state[i] = MotorCtrlManual(
-            &Motor[i], &PIDMotor[i], &fine_tuning_speed, usRegHoldingBuf[2]);
+        if (usRegHoldingBuf[2] == 0)
+        {
+          motor_state[i] = MotorCtrlManual(&Motor[i], &pid_up, &fine_tuning_speed,
+                                           usRegHoldingBuf[2]);
+        }
+        else
+        {
+          motor_state[i] = MotorCtrlManual(&Motor[i], &pid_down, &fine_tuning_speed,
+                                           usRegHoldingBuf[2]);
+        }
+
+        /*         motor_state[i] = MotorCtrlManual(
+            &Motor[i], &PIDMotor[i], &fine_tuning_speed, usRegHoldingBuf[2]); */
+
 #else
         if (usRegHoldingBuf[2] == 0)
         {
@@ -338,6 +398,7 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state)
     }
     else if (cycle_counter == cycle)
     {
+
       // disable
       usRegHoldingBuf[3] = 0;
       *state = kIdle;
@@ -413,8 +474,18 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state)
       for (i = 0; i < MotorNum; ++i)
       {
 #if CLOSELOOP
-        motor_state[i] =
-            MotorCtrlManual(&Motor[i], &PIDMotor[i], &cmd_speed, auto_dir);
+        if (usRegHoldingBuf[2] == 0)
+        {
+          motor_state[i] = MotorCtrlManual(&Motor[i], &pid_up, &cmd_speed,
+                                           auto_dir);
+        }
+        else
+        {
+          motor_state[i] = MotorCtrlManual(&Motor[i], &pid_down, &cmd_speed,
+                                           auto_dir);
+        }
+/*         motor_state[i] =
+            MotorCtrlManual(&Motor[i], &PIDMotor[i], &cmd_speed, auto_dir); */
 #else
         if (auto_dir == 0)
         {
@@ -447,8 +518,18 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state)
       for (i = 0; i < MotorNum; ++i)
       {
 #if CLOSELOOP
-        motor_state[i] =
-            MotorCtrlManual(&Motor[i], &PIDMotor[i], &stop_speed, auto_dir);
+        if (usRegHoldingBuf[2] == 0)
+        {
+          motor_state[i] = MotorCtrlManual(&Motor[i], &pid_up, &stop_speed,
+                                           auto_dir);
+        }
+        else
+        {
+          motor_state[i] = MotorCtrlManual(&Motor[i], &pid_down, &stop_speed,
+                                           auto_dir);
+        }
+/*         motor_state[i] =
+            MotorCtrlManual(&Motor[i], &PIDMotor[i], &stop_speed, auto_dir); */
 #else
         MotorPWMSet(i + 1, 0, auto_dir);
 #endif
@@ -461,6 +542,9 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state)
       cycle_odometer_last_time = (odometer[0] + odometer[1] + odometer[2] +
                                   odometer[3] + odometer[4] + odometer[5]) /
                                  MotorNum;
+
+      // wait the current to fall down
+      delay_ms(100);
 
       // up
       if (auto_dir == 0)
@@ -531,15 +615,15 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state)
     /* code */
     usRegHoldingBuf[i + 24] = Motor[i].MotorSpeed_mmps;
   }
-  /*Debug*/
-  #if CLOSELOOP
+/*Debug*/
+#if CLOSELOOP
   usRegHoldingBuf[10] = Motor[0].PWM;
   usRegHoldingBuf[11] = Motor[1].PWM;
   usRegHoldingBuf[12] = Motor[2].PWM;
   usRegHoldingBuf[13] = Motor[3].PWM;
   usRegHoldingBuf[14] = Motor[4].PWM;
   usRegHoldingBuf[15] = Motor[5].PWM;
-  #endif
+#endif
 
   // motor stall
   if (motor_state[0] == 1 || motor_state[1] == 1 || motor_state[2] == 1 ||

@@ -18,7 +18,7 @@ const float kPI = 3.14;
 // diameter
 const u8 kDiameter = 45;
 // reduction ratio
-const u8 kReductionRatio = 43;
+const u8 kReductionRatio = 64;
 /*motor turns*/
 static volatile u32 motor_turn_this_time[MotorNum] = {0};
 static volatile u32 motor_turn_last_time[MotorNum] = {0};
@@ -206,11 +206,11 @@ u8 MotorCtrlManual(struct MOTOR_DATA *motor, struct PID_DATA *pid,
     break;
   }
 
-  // motor stall detection
+/*   // motor stall detection
   if (motor_state == kConstantState && motor->MotorSpeed_mmps == 0 && motor_speed_last_time != 0)
   {
     state = kMotorStall;
-  }
+  } */
 
   // update motor speed recorder
   motor_speed_last_time = motor->MotorSpeed_mmps;
