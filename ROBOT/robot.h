@@ -14,6 +14,9 @@
 #include "motor.h"
 #include "timer.h"
 
+#define CLOSELOOP 0
+
+
 void RobotInit(void);
 // function pointer
 typedef void (*robot_init)(void);

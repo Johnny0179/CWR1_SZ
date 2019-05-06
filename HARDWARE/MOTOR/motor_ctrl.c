@@ -414,3 +414,30 @@ u32 SetSpeed(u8 state, u32 cmd_speed)
   }
   return set_motor_speed;
 }
+
+void MotorPWMSet(u8 motor_id, u32 pwm)
+{
+  switch (motor_id)
+  {
+  case 1:
+    TIM1->CCR4 = (((168000000 / 1) / PWMfreq) - 1) * (100 - pwm) / 100;
+    break;
+  case 2:
+    TIM1->CCR3 = (((168000000 / 1) / PWMfreq) - 1) * (100 - pwm) / 100;
+    break;
+  case 3:
+    TIM1->CCR2 = (((168000000 / 1) / PWMfreq) - 1) * (100 - pwm) / 100;
+    break;
+  case 4:
+    TIM1->CCR1 = (((168000000 / 1) / PWMfreq) - 1) * (100 - pwm) / 100;
+    break;
+  case 5:
+    TIM8->CCR1 = (((168000000 / 1) / PWMfreq) - 1) * (100 - pwm) / 100;
+    break;
+  case 6:
+    TIM8->CCR2 = (((168000000 / 1) / PWMfreq) - 1) * (100 - pwm) / 100;
+    break;
+  default:
+    break;
+  }
+}

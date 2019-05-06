@@ -166,7 +166,12 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state)
 
   for (i = 0; i < MotorNum; ++i)
   {
+#if CLOSELOOP
+    // close loop
     motor_speed[i] = MotorVelCalc(delta_turn[i]);
+#else
+
+#endif
   }
 
   cycle_odometer_this_time = (odometer[0] + odometer[1] + odometer[2] +
@@ -241,8 +246,12 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state)
       // stop
       for (i = 0; i < MotorNum; ++i)
       {
+#if CLOSELOOP
         motor_state[i] = MotorCtrlManual(&Motor[i], &PIDMotor[i], &stop_speed,
                                          usRegHoldingBuf[2]);
+#else
+        MotorPWMSet(i + 1, 0);
+#endif
       }
       // wait cmd
       *state = kAuto;
@@ -256,8 +265,13 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state)
       // motor control
       for (i = 0; i < MotorNum; ++i)
       {
+
+#if CLOSELOOP
         motor_state[i] = MotorCtrlManual(
             &Motor[i], &PIDMotor[i], &fine_tuning_speed, usRegHoldingBuf[2]);
+#else
+        MotorPWMSet(i + 1, 100);
+#endif
       }
       *state = kManual;
     }
@@ -372,8 +386,12 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state)
       // motor control
       for (i = 0; i < MotorNum; ++i)
       {
+#if CLOSELOOP
         motor_state[i] =
             MotorCtrlManual(&Motor[i], &PIDMotor[i], &cmd_speed, auto_dir);
+#else
+        MotorPWMSet(i + 1, 100);
+#endif
       }
 
       *state = kMotion;
@@ -393,8 +411,12 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state)
       // stop
       for (i = 0; i < MotorNum; ++i)
       {
+#if CLOSELOOP
         motor_state[i] =
             MotorCtrlManual(&Motor[i], &PIDMotor[i], &stop_speed, auto_dir);
+#else
+        MotorPWMSet(i + 1, 0);
+#endif
       }
       *state = kStop;
     }
