@@ -101,8 +101,12 @@ static void RobotManual(u32 cmd_speed, int8_t dir)
   /*motor control*/
   for (i = 0; i < MotorNum; ++i)
   {
+#if CLOSELOOP
     /* code */
     MotorCtrlManual(&Motor[i], &PIDMotor[i], &cmd_speed, dir);
+#else
+    MotorPWMSet(i + 1, 100);
+#endif
   }
 
   /*monitor speed*/
