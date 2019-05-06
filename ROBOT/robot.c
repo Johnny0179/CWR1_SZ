@@ -32,7 +32,7 @@ static pidData_t PIDMotor[MotorNum];
 struct PID_DATA pid_acc;
 
 static const u32 kPWMUp = 100;
-static const u32 kPWMDown = 100;
+static const u32 kPWMDown = 0.5 * kPWMUp;
 
 static void RobotInit(void)
 {
@@ -108,7 +108,16 @@ static void RobotManual(u32 cmd_speed, int8_t dir)
     /* code */
     MotorCtrlManual(&Motor[i], &PIDMotor[i], &cmd_speed, dir);
 #else
-    MotorPWMSet(i + 1, 100, dir);
+    if (dir == 0)
+    {
+      // up
+      MotorPWMSet(i + 1, kPWMUp, dir);
+    }
+    else
+    {
+      MotorPWMSet(i + 1, kPWMDown, dir);
+    }
+
 #endif
   }
 
@@ -277,7 +286,17 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state)
         motor_state[i] = MotorCtrlManual(
             &Motor[i], &PIDMotor[i], &fine_tuning_speed, usRegHoldingBuf[2]);
 #else
-        MotorPWMSet(i + 1, 100, usRegHoldingBuf[2]);
+        if (usRegHoldingBuf[2] == 0)
+        {
+          // up
+          MotorPWMSet(i + 1, kPWMUp, usRegHoldingBuf[2]);
+        }
+        else
+        {
+          // down
+          MotorPWMSet(i + 1, kPWMDown, usRegHoldingBuf[2]);
+        }
+
 #endif
       }
       *state = kManual;
@@ -397,7 +416,16 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state)
         motor_state[i] =
             MotorCtrlManual(&Motor[i], &PIDMotor[i], &cmd_speed, auto_dir);
 #else
-        MotorPWMSet(i + 1, 100, auto_dir);
+        if (auto_dir == 0)
+        {
+          // up
+          MotorPWMSet(i + 1, kPWMUp, auto_dir);
+        }
+        else
+        {
+          // down
+          MotorPWMSet(i + 1, kPWMDown, auto_dir);
+        }
 #endif
       }
 
@@ -504,12 +532,14 @@ static u8 RobotAuto(u32 cmd_speed, _Bool init_dir, u8 cycle, u8 *state)
     usRegHoldingBuf[i + 24] = Motor[i].MotorSpeed_mmps;
   }
   /*Debug*/
+  #if CLOSELOOP
   usRegHoldingBuf[10] = Motor[0].PWM;
   usRegHoldingBuf[11] = Motor[1].PWM;
   usRegHoldingBuf[12] = Motor[2].PWM;
   usRegHoldingBuf[13] = Motor[3].PWM;
   usRegHoldingBuf[14] = Motor[4].PWM;
   usRegHoldingBuf[15] = Motor[5].PWM;
+  #endif
 
   // motor stall
   if (motor_state[0] == 1 || motor_state[1] == 1 || motor_state[2] == 1 ||
