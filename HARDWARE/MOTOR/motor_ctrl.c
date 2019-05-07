@@ -417,11 +417,7 @@ u32 SetSpeed(u8 state, u32 cmd_speed)
 
 void MotorPWMSet(u8 motor_id, u32 pwm, _Bool dir)
 {
-  u16 motor_speed[MotorNum];
 
-  // motor speed feedback
-  usRegHoldingBuf[24 + motor_id - 1] = MotorVelCalc(delta_turn[motor_id - 1]);
-  
   // Direction
   switch (dir)
   {
@@ -458,5 +454,6 @@ void MotorPWMSet(u8 motor_id, u32 pwm, _Bool dir)
   default:
     break;
   }
-
+  // motor speed feedback
+  usRegHoldingBuf[24 + motor_id - 1] = MotorVelCalc(delta_turn[motor_id - 1]);
 }

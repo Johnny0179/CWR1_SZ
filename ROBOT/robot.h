@@ -14,7 +14,7 @@
 #include "motor.h"
 #include "timer.h"
 
-#define CLOSELOOP 0
+#define CLOSELOOP 1
 
 
 void RobotInit(void);
